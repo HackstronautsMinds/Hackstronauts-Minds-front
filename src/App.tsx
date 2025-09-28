@@ -5,6 +5,7 @@ import { HeroSection } from './components/HeroSection';
 import { FeatureSection } from './components/FeatureSection';
 import { CTASection } from './components/CTASection';
 import { BackendTest } from './components/BackendTest';
+import { NEOList } from './components/neo/NEOList';
 
 export default function App() {
   const [showMainContent, setShowMainContent] = useState(false);
@@ -20,7 +21,7 @@ export default function App() {
       
       {/* Contenido principal */}
       {showMainContent && (
-        <div className="relative min-h-screen bg-black text-white overflow-x-hidden">
+        <div className="relative min-h-screen bg-black text-white overflow-x-hidden" style={{ position: 'relative' }}>
           {/* Fondo animado con partículas */}
           <AnimatedBackground />
           
@@ -34,6 +35,9 @@ export default function App() {
             
             {/* Sección de Call to Action */}
             <CTASection />
+            
+            {/* Lista de NEOs */}
+            <NEOList />
             
             {/* Prueba de conexión backend - TEMPORAL */}
             <div className="py-16 px-6">

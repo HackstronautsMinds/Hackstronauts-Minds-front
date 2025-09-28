@@ -8,6 +8,16 @@ export interface NEO {
   diameter_min_m: number;        // Diámetro mínimo en metros
   diameter_max_m: number;        // Diámetro máximo en metros
   is_potentially_hazardous: boolean;  // ¿Es peligroso?
+  
+  // Datos adicionales para el modal
+  close_approach_date?: string;  // Fecha de acercamiento
+  relative_velocity_km_per_sec?: number;  // Velocidad relativa
+  miss_distance_km?: number;     // Distancia de aproximación
+  orbital_period_days?: number;  // Período orbital
+  composition_estimate?: string;  // Composición estimada
+  image_url?: string;            // URL de la imagen
+  next_approach?: string;        // Próximo acercamiento
+  impact_probability?: number;   // Probabilidad de impacto
 }
 
 // Respuesta cuando pedimos una lista de NEOs
