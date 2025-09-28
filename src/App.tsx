@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { PlanetIntro } from './components/PlanetIntro';
 import { AnimatedBackground } from './components/AnimatedBackground';
 import { HeroSection } from './components/HeroSection';
 import { FeatureSection } from './components/FeatureSection';
 import { CTASection } from './components/CTASection';
+import { BackendTest } from './components/BackendTest';
 
 export default function App() {
   const [showMainContent, setShowMainContent] = useState(false);
@@ -33,6 +34,13 @@ export default function App() {
             
             {/* Sección de Call to Action */}
             <CTASection />
+            
+            {/* Prueba de conexión backend - TEMPORAL */}
+            <div className="py-16 px-6">
+              <div className="max-w-6xl mx-auto">
+                <BackendTest />
+              </div>
+            </div>
             
             {/* Footer minimalista estilo Cult Holdings */}
             <footer className="relative py-16 px-6 border-t border-white/10">
