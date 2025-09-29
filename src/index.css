@@ -252,6 +252,95 @@
   }
 }
 
+/* Flip Card 3D Effects - Carta de juego */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.flip-card-container {
+  perspective: 1000px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.7s ease-in-out;
+  transform-style: preserve-3d;
+}
+
+.flip-card-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  top: 0;
+  left: 0;
+}
+
+  .flip-card-back {
+    transform: rotateY(180deg);
+  }
+
+  /* Animación de giro para el modal */
+  @keyframes flipIn {
+    0% {
+      transform: rotateY(-90deg) scale(0.8);
+      opacity: 0;
+    }
+    50% {
+      transform: rotateY(-45deg) scale(0.9);
+      opacity: 0.5;
+    }
+    100% {
+      transform: rotateY(0deg) scale(1);
+      opacity: 1;
+    }
+  }
+
+  .animate-flip-in {
+    animation: flipIn 0.4s ease-out;
+  }
+
+  /* Animación de salida para el modal */
+  @keyframes flipOut {
+    0% {
+      transform: rotateY(0deg) scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: rotateY(45deg) scale(0.9);
+      opacity: 0.5;
+    }
+    100% {
+      transform: rotateY(90deg) scale(0.8);
+      opacity: 0;
+    }
+  }
+
+  .animate-flip-out {
+    animation: flipOut 0.4s ease-in;
+  }
+
 /* Responsive */
 @media (max-width: 768px) {
   .asteroid-card {
