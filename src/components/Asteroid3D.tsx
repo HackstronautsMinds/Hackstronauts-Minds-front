@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import asteroidImage from '../assets/images/asteroid-psyche.png';
+// @ts-ignore
+import asteroidImage from '../assets/images/asteroid-psyche.jpg';
 
 interface Asteroid3DProps {
   asteroidType: 'metallic' | 'rocky' | 'icy';
@@ -23,7 +24,7 @@ export function Asteroid3D({ asteroidType, dangerLevel, composition }: Asteroid3
             saturate(1.3)
             hue-rotate(5deg)
           `,
-          animation: 'rotateAsteroid 20s linear infinite',
+          animation: 'rotateAsteroid 15s linear infinite',
           width: '100%',
           height: '100%',
           objectFit: 'cover',
@@ -40,42 +41,42 @@ export function Asteroid3D({ asteroidType, dangerLevel, composition }: Asteroid3
       <motion.div
         className="absolute inset-0 rounded-full overflow-hidden pointer-events-none"
         initial={{ opacity: 0 }}
-        animate={{ opacity: [0, 0.4, 0] }}
-        transition={{ duration: 8, repeat: Infinity, delay: 2 }}
+        animate={{ opacity: [0, 0.6, 0] }}
+        transition={{ duration: 6, repeat: Infinity, delay: 1 }}
       >
         {/* Horizontal scan line */}
         <motion.div
-          className="absolute w-full h-0.5 bg-gradient-to-r from-transparent via-cyan-300 to-transparent"
+          className="absolute w-full h-1 bg-gradient-to-r from-transparent via-cyan-300 to-transparent"
           animate={{ 
-            y: [-30, 320],
-            opacity: [0, 0.8, 0.8, 0]
+            y: [-20, 300],
+            opacity: [0, 1, 1, 0]
           }}
           transition={{ 
-            duration: 4, 
+            duration: 3, 
             repeat: Infinity, 
-            delay: 2,
+            delay: 1,
             ease: "easeInOut"
           }}
           style={{
-            boxShadow: '0 0 15px rgba(0, 255, 255, 0.9), 0 0 30px rgba(0, 255, 255, 0.5)'
+            boxShadow: '0 0 20px rgba(0, 255, 255, 1), 0 0 40px rgba(0, 255, 255, 0.6)'
           }}
         />
         
         {/* Vertical scan line */}
         <motion.div
-          className="absolute h-full w-0.5 bg-gradient-to-b from-transparent via-orange-300 to-transparent"
+          className="absolute h-full w-1 bg-gradient-to-b from-transparent via-orange-300 to-transparent"
           animate={{ 
-            x: [-30, 320],
-            opacity: [0, 0.6, 0.6, 0]
+            x: [-20, 300],
+            opacity: [0, 0.8, 0.8, 0]
           }}
           transition={{ 
-            duration: 5, 
+            duration: 4, 
             repeat: Infinity, 
-            delay: 4,
+            delay: 2.5,
             ease: "easeInOut"
           }}
           style={{
-            boxShadow: '0 0 12px rgba(255, 165, 0, 0.8), 0 0 25px rgba(255, 165, 0, 0.4)'
+            boxShadow: '0 0 15px rgba(255, 165, 0, 1), 0 0 30px rgba(255, 165, 0, 0.6)'
           }}
         />
       </motion.div>
