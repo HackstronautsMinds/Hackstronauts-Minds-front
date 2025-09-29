@@ -1,5 +1,6 @@
 import React from 'react';
 import type { NEO } from '../types/api.types';
+import { Asteroid3D } from './Asteroid3D';
 
 interface NEOCardProps {
   neo: NEO;
@@ -22,6 +23,22 @@ export const NEOCard: React.FC<NEOCardProps> = ({ neo, onClick }) => {
     return 'Rocoso';
   };
 
+  // Mapear composición a tipo de asteroide para el componente 3D
+  const getAsteroidType = (): 'metallic' | 'rocky' | 'icy' => {
+    if (averageDiameter > 1000) return 'metallic';
+    if (averageDiameter > 500) return 'rocky';
+    return 'rocky'; // Por defecto rocoso
+  };
+
+  // Mapear nivel de peligro
+  const getDangerLevel = (): 'low' | 'medium' | 'high' | 'extreme' => {
+    if (!isHazardous) return 'low';
+    if (neo.risk_category === 'Crítico') return 'extreme';
+    if (neo.risk_category === 'Alto') return 'high';
+    if (neo.risk_category === 'Moderado') return 'medium';
+    return 'low';
+  };
+
   return (
     <div 
       className="asteroid-card group cursor-pointer"
@@ -37,36 +54,42 @@ export const NEOCard: React.FC<NEOCardProps> = ({ neo, onClick }) => {
 
       {/* Visualización 3D del asteroide */}
       <div className="asteroid-visual">
-        <div className="asteroid-placeholder">
-          <div className="asteroid-icon">☄️</div>
-        </div>
-        <span className="badge top-right">
-          Composición: {getComposition()}
-        </span>
-        <span className={`badge bottom-left ${isHazardous ? 'danger' : 'safe'}`}>
-          {isHazardous ? '⚠ Peligroso' : '✓ Seguro'}
-        </span>
+        <Asteroid3D 
+          asteroidType={getAsteroidType()}
+          dangerLevel={getDangerLevel()}
+          composition={[getComposition()]}
+        />
       </div>
 
-      {/* Grid de datos */}
-      <div className="asteroid-data">
-        <div className="metric">
-          <label>DIÁMETRO</label>
-          <span>{averageDiameter.toFixed(1)} km</span>
+      {/* Grid de datos - estilo de la imagen de referencia */}
+      <div className="asteroid-data-grid">
+        <div className="data-card">
+          <div className="data-icon">📏</div>
+          <div className="data-content">
+            <label>DIÁMETRO</label>
+            <span>{averageDiameter.toFixed(1)} km</span>
+          </div>
         </div>
-        <div className="metric">
-          <label>COMPOSICIÓN</label>
-          <span>{getComposition()}</span>
+        <div className="data-card">
+          <div className="data-icon">🌍</div>
+          <div className="data-content">
+            <label>DISTANCIA</label>
+            <span>{neo.miss_distance_km ? `${(neo.miss_distance_km / 1000).toFixed(2)} km` : 'N/A'}</span>
+          </div>
         </div>
-        <div className="metric">
-          <label>VELOCIDAD</label>
-          <span>{neo.velocity_km_s ? `${neo.velocity_km_s.toFixed(2)} km/s` : 'N/A'}</span>
+        <div className="data-card">
+          <div className="data-icon">⚡</div>
+          <div className="data-content">
+            <label>VELOCIDAD</label>
+            <span>{neo.velocity_km_s ? `${neo.velocity_km_s.toFixed(2)} km/s` : 'N/A'}</span>
+          </div>
         </div>
-        <div className="metric">
-          <label>RIESGO</label>
-          <span className={isHazardous ? 'text-red-400' : 'text-green-400'}>
-            {isHazardous ? 'ALTO' : 'BAJO'}
-          </span>
+        <div className="data-card">
+          <div className="data-icon">⚛️</div>
+          <div className="data-content">
+            <label>MASA</label>
+            <span>{(averageDiameter * 1000).toFixed(0)} kg</span>
+          </div>
         </div>
       </div>
 

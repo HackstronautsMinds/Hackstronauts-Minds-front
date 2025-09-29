@@ -98,26 +98,7 @@ export const NEODetailModal: React.FC<NEODetailModalProps> = ({ neo, isOpen, onC
               <p className="mt-4 text-white/60">Obteniendo datos detallados...</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Imagen */}
-              <div>
-                <img
-                  src={imageUrl || `https://via.placeholder.com/400x300/1a1a1a/ffffff?text=${data.name.replace(/[^a-zA-Z0-9]/g, '')}`}
-                  alt={`Asteroid ${data.name}`}
-                  className="w-full h-64 object-cover rounded-lg border border-white/20"
-                  onError={(e) => {
-                    // Fallback si la imagen falla
-                    const target = e.target as HTMLImageElement;
-                    target.src = `https://via.placeholder.com/400x300/1a1a1a/ffffff?text=${data.name.replace(/[^a-zA-Z0-9]/g, '')}`;
-                  }}
-                />
-                <p className="text-sm text-white/60 mt-2 text-center">
-                  Representación artística basada en características reales
-                </p>
-              </div>
-
-              {/* Información detallada */}
-              <div className="space-y-6">
+            <div className="space-y-6">
                 {/* Características físicas */}
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-3">Características Físicas</h3>
@@ -184,7 +165,6 @@ export const NEODetailModal: React.FC<NEODetailModalProps> = ({ neo, isOpen, onC
                     </div>
                   </div>
                 </div>
-              </div>
             </div>
           )}
         </div>
