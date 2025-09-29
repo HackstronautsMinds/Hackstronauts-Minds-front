@@ -12,99 +12,73 @@ export const NEOCard: React.FC<NEOCardProps> = ({ neo, onClick }) => {
     ? (neo.diameter_min_m + neo.diameter_max_m) / 2 
     : 0;
   
-  // Determinar el color basado en si es peligroso
+  // Determinar si es peligroso
   const isHazardous = neo.is_potentially_hazardous;
-  const hazardColor = isHazardous ? 'text-red-400' : 'text-green-400';
-  const borderColor = isHazardous ? 'border-red-500/30' : 'border-white/20';
-  const bgColor = isHazardous ? 'bg-red-500/5' : 'bg-white/5';
+  
+  // Estimar composición basada en el diámetro
+  const getComposition = () => {
+    if (averageDiameter > 1000) return 'Metálico';
+    if (averageDiameter > 500) return 'Mixto';
+    return 'Rocoso';
+  };
 
   return (
     <div 
-      className={`relative p-6 rounded-lg border ${borderColor} ${bgColor} 
-                  backdrop-blur-sm hover:bg-white/10 transition-all duration-300
-                  group hover:scale-105 cursor-pointer`}
+      className="asteroid-card group cursor-pointer"
       onClick={onClick}
     >
-      
-      {/* Header con nombre y estado de peligro */}
-      <div className="flex items-start justify-between mb-4">
-        <h3 className="text-lg font-medium text-white group-hover:text-blue-300 
-                      transition-colors duration-300">
-          {neo.name}
-        </h3>
-        
-        {/* Indicador de peligro */}
-        <div className={`px-3 py-1 rounded-full text-xs font-medium ${hazardColor} 
-                        ${isHazardous ? 'bg-red-500/20' : 'bg-green-500/20'}`}>
-          {isHazardous ? 'PELIGROSO' : 'SEGURO'}
+      {/* Header */}
+      <header className="card-header">
+        <h2 className="text-lg font-bold tracking-wider">
+          {neo.name.toUpperCase()}
+        </h2>
+        <span className="fav-star text-yellow-400 text-xl">★</span>
+      </header>
+
+      {/* Visualización 3D del asteroide */}
+      <div className="asteroid-visual">
+        <div className="asteroid-placeholder">
+          <div className="asteroid-icon">☄️</div>
+        </div>
+        <span className="badge top-right">
+          Composición: {getComposition()}
+        </span>
+        <span className={`badge bottom-left ${isHazardous ? 'danger' : 'safe'}`}>
+          {isHazardous ? '⚠ Peligroso' : '✓ Seguro'}
+        </span>
+      </div>
+
+      {/* Grid de datos */}
+      <div className="asteroid-data">
+        <div className="metric">
+          <label>DIÁMETRO</label>
+          <span>{averageDiameter.toFixed(1)} km</span>
+        </div>
+        <div className="metric">
+          <label>COMPOSICIÓN</label>
+          <span>{getComposition()}</span>
+        </div>
+        <div className="metric">
+          <label>VELOCIDAD</label>
+          <span>{neo.velocity_km_s ? `${neo.velocity_km_s.toFixed(2)} km/s` : 'N/A'}</span>
+        </div>
+        <div className="metric">
+          <label>RIESGO</label>
+          <span className={isHazardous ? 'text-red-400' : 'text-green-400'}>
+            {isHazardous ? 'ALTO' : 'BAJO'}
+          </span>
         </div>
       </div>
 
-      {/* Información del asteroide */}
-      <div className="space-y-3">
-        {/* Diámetro */}
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-white/60 uppercase tracking-wider">
-            Diámetro
-          </span>
-          <span className="text-white font-mono">
-            {averageDiameter.toFixed(0)}m
-          </span>
-        </div>
-
-        {/* Rango de diámetro */}
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-white/60 uppercase tracking-wider">
-            Rango
-          </span>
-          <span className="text-white/80 font-mono text-sm">
-            {neo.diameter_min_m ? neo.diameter_min_m.toFixed(0) : 'N/A'}m - {neo.diameter_max_m ? neo.diameter_max_m.toFixed(0) : 'N/A'}m
-          </span>
-        </div>
-
-        {/* ID del NEO */}
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-white/60 uppercase tracking-wider">
-            ID
-          </span>
-          <span className="text-white/60 font-mono text-sm">
-            #{neo.neo_id}
-          </span>
-        </div>
-
-        {/* Velocidad */}
-        {neo.velocity_km_s && (
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-white/60 uppercase tracking-wider">
-              Velocidad
-            </span>
-            <span className="text-white/80 font-mono text-sm">
-              {neo.velocity_km_s.toFixed(2)} km/s
-            </span>
-          </div>
-        )}
-
-        {/* Categoría de riesgo */}
-        {neo.risk_category && (
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-white/60 uppercase tracking-wider">
-              Riesgo
-            </span>
-            <span className={`text-sm font-medium ${
-              neo.risk_category === 'Crítico' ? 'text-red-400' :
-              neo.risk_category === 'Alto' ? 'text-orange-400' :
-              neo.risk_category === 'Moderado' ? 'text-yellow-400' :
-              'text-green-400'
-            }`}>
-              {neo.risk_category}
-            </span>
-          </div>
-        )}
+      {/* Acciones */}
+      <div className="actions">
+        <button className="btn-sim">
+          SIMULAR IMPACTO
+        </button>
+        <button className="btn-details">
+          VER DETALLES
+        </button>
       </div>
-
-      {/* Línea decorativa inferior */}
-      <div className={`absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r 
-                      ${isHazardous ? 'from-red-500/50 to-transparent' : 'from-blue-500/50 to-transparent'}`} />
     </div>
   );
 };
