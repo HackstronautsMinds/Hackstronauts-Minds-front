@@ -5,7 +5,7 @@ import { HeroSection } from './components/HeroSection';
 import { FeatureSection } from './components/FeatureSection';
 import { CTASection } from './components/CTASection';
 import { BackendTest } from './components/BackendTest';
-import { NEOList } from './components/neo/NEOList';
+import { NEOList } from './components/NEOList';
 
 export default function App() {
   const [showMainContent, setShowMainContent] = useState(false);
