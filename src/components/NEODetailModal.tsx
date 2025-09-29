@@ -17,22 +17,20 @@ export const NEODetailModal: React.FC<NEODetailModalProps> = ({ neo, isOpen, onC
     if (isOpen && neo.neo_id) {
       setLoading(true);
       
-      // Obtener imagen del asteroide
+      // Generar imagen SVG del asteroide (no hay imágenes reales)
       const loadImage = async () => {
         try {
           const averageDiameter = neo.diameter_min_m && neo.diameter_max_m 
             ? (neo.diameter_min_m + neo.diameter_max_m) / 2 
             : 100;
           
-          const image = await asteroidImageService.getAsteroidImage(neo.neo_id, neo.name);
+          // Generar imagen SVG personalizada basada en características reales
+          const image = asteroidImageService.generateSVGAsteroidImage(neo.neo_id, neo.name, averageDiameter);
           setImageUrl(image);
         } catch (error) {
-          console.error('Error loading image:', error);
-          // Fallback a imagen SVG personalizada
-          const averageDiameter = neo.diameter_min_m && neo.diameter_max_m 
-            ? (neo.diameter_min_m + neo.diameter_max_m) / 2 
-            : 100;
-          setImageUrl(asteroidImageService.generateSVGAsteroidImage(neo.neo_id, neo.name, averageDiameter));
+          console.error('Error generating image:', error);
+          // Fallback a placeholder simple
+          setImageUrl(`https://via.placeholder.com/400x300/1a1a1a/ffffff?text=${neo.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)}`);
         }
       };
 
@@ -114,9 +112,7 @@ export const NEODetailModal: React.FC<NEODetailModalProps> = ({ neo, isOpen, onC
                   }}
                 />
                 <p className="text-sm text-white/60 mt-2 text-center">
-                  {imageUrl.includes('data:image/svg') 
-                    ? 'Representación artística del asteroide' 
-                    : 'Imagen del asteroide'}
+                  Representación artística basada en características reales
                 </p>
               </div>
 
