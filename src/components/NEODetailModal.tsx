@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { nasaApiService } from '../../services/nasaApiService';
-import type { NEO } from '../../types/api.types';
+import { nasaApiService } from '../services/nasaApiService';
+import type { NEO } from '../types/api.types';
 
 interface NEODetailModalProps {
   neo: NEO;

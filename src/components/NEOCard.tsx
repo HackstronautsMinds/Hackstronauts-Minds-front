@@ -1,5 +1,5 @@
 import React from 'react';
-import type { NEO } from '../../types/api.types';
+import type { NEO } from '../types/api.types';
 
 interface NEOCardProps {
   neo: NEO;
@@ -7,8 +7,10 @@ interface NEOCardProps {
 }
 
 export const NEOCard: React.FC<NEOCardProps> = ({ neo, onClick }) => {
-  // Calcular el diámetro promedio
-  const averageDiameter = (neo.diameter_min_m + neo.diameter_max_m) / 2;
+  // Calcular el diámetro promedio (manejar valores null)
+  const averageDiameter = neo.diameter_min_m && neo.diameter_max_m 
+    ? (neo.diameter_min_m + neo.diameter_max_m) / 2 
+    : 0;
   
   // Determinar el color basado en si es peligroso
   const isHazardous = neo.is_potentially_hazardous;
@@ -56,7 +58,7 @@ export const NEOCard: React.FC<NEOCardProps> = ({ neo, onClick }) => {
             Rango
           </span>
           <span className="text-white/80 font-mono text-sm">
-            {neo.diameter_min_m.toFixed(0)}m - {neo.diameter_max_m.toFixed(0)}m
+            {neo.diameter_min_m ? neo.diameter_min_m.toFixed(0) : 'N/A'}m - {neo.diameter_max_m ? neo.diameter_max_m.toFixed(0) : 'N/A'}m
           </span>
         </div>
 
@@ -66,9 +68,38 @@ export const NEOCard: React.FC<NEOCardProps> = ({ neo, onClick }) => {
             ID
           </span>
           <span className="text-white/60 font-mono text-sm">
-            #{neo.id}
+            #{neo.neo_id}
           </span>
         </div>
+
+        {/* Velocidad */}
+        {neo.velocity_km_s && (
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-white/60 uppercase tracking-wider">
+              Velocidad
+            </span>
+            <span className="text-white/80 font-mono text-sm">
+              {neo.velocity_km_s.toFixed(2)} km/s
+            </span>
+          </div>
+        )}
+
+        {/* Categoría de riesgo */}
+        {neo.risk_category && (
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-white/60 uppercase tracking-wider">
+              Riesgo
+            </span>
+            <span className={`text-sm font-medium ${
+              neo.risk_category === 'Crítico' ? 'text-red-400' :
+              neo.risk_category === 'Alto' ? 'text-orange-400' :
+              neo.risk_category === 'Moderado' ? 'text-yellow-400' :
+              'text-green-400'
+            }`}>
+              {neo.risk_category}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Línea decorativa inferior */}

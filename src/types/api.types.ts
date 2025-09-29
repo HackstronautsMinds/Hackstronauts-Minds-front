@@ -29,12 +29,7 @@ export interface NEO {
 // Respuesta cuando pedimos una lista de NEOs
 export interface NEOResponse {
   neos: NEO[];           // Lista de asteroides
-  pagination: {          // Información de paginación
-    page: number;        // Página actual
-    limit: number;       // Cuántos por página
-    total: number;       // Total de asteroides
-    total_pages: number; // Total de páginas
-  };
+  // Nota: El backend actual no devuelve pagination, solo neos
 }
 
 // Propiedades físicas para analizar un asteroide
