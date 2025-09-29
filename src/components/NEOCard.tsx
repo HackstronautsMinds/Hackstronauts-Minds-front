@@ -112,90 +112,195 @@ export const NEOCard: React.FC<NEOCardProps> = ({ neo, onClick }) => {
 
             {/* BACK SIDE - Información detallada */}
             <div className="flip-card-back">
-              <div className="w-full h-full bg-gradient-to-b from-slate-800 via-slate-900 to-black rounded-2xl border-2 border-cyan-400/30 shadow-2xl shadow-cyan-400/20 overflow-hidden relative">
+              <div 
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  background: 'linear-gradient(to bottom, #1e3a8a, #374151, #1f2937)',
+                  borderRadius: '16px',
+                  border: '2px solid rgba(34, 211, 238, 0.6)',
+                  boxShadow: `
+                    0 0 20px rgba(34, 211, 238, 0.4),
+                    0 0 40px rgba(34, 211, 238, 0.2),
+                    0 0 60px rgba(34, 211, 238, 0.1),
+                    inset 0 0 20px rgba(34, 211, 238, 0.1)
+                  `,
+                  overflow: 'hidden',
+                  position: 'relative'
+                }}
+              >
+                {/* Efecto de resplandor cian */}
+                <div 
+                  style={{
+                    position: 'absolute',
+                    top: '-2px',
+                    left: '-2px',
+                    right: '-2px',
+                    bottom: '-2px',
+                    background: 'linear-gradient(45deg, rgba(34, 211, 238, 0.3), rgba(168, 85, 247, 0.2), rgba(34, 211, 238, 0.3))',
+                    borderRadius: '18px',
+                    filter: 'blur(8px)',
+                    zIndex: -1
+                  }}
+                ></div>
+                
                 {/* Holographic border effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent animate-pulse"></div>
+                <div 
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'linear-gradient(to right, transparent, rgba(34, 211, 238, 0.1), transparent)',
+                    animation: 'pulse 2s infinite'
+                  }}
+                ></div>
                 
-                {/* Card frame */}
-                <div className="absolute inset-2 bg-gradient-to-b from-slate-700/50 via-slate-800/50 to-slate-900/50 rounded-xl border border-cyan-300/20"></div>
-                
-                <div className="relative p-6 h-full flex flex-col">
+                <div style={{ position: 'relative', padding: '16px', height: '100%', display: 'flex', flexDirection: 'column' }}>
                   {/* Header */}
-                  <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-600/50">
-                    <div>
-                      <h3 className="text-cyan-400 text-lg tracking-wide">
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '12px' }}>
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{ 
+                        color: '#f472b6', 
+                        fontSize: '16px', 
+                        fontWeight: 'bold', 
+                        letterSpacing: '0.05em',
+                        marginBottom: '2px',
+                        margin: 0
+                      }}>
                         {neo.neo_id} ({neo.close_approach_date ? new Date(neo.close_approach_date).getFullYear().toString() : 'N/A'} {neo.name.split(' ').slice(1).join(' ') || 'NEO'})
                       </h3>
                       {neo.is_potentially_hazardous ? (
-                        <p className="text-red-400 text-xs mt-1 uppercase tracking-widest">
+                        <p style={{ 
+                          color: '#fca5a5', 
+                          fontSize: '10px', 
+                          fontWeight: '600', 
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.1em',
+                          margin: 0
+                        }}>
                           Potencialmente Peligroso
                         </p>
                       ) : (
-                        <p className="text-green-400 text-xs mt-1 uppercase tracking-widest">
+                        <p style={{ 
+                          color: '#86efac', 
+                          fontSize: '10px', 
+                          fontWeight: '600', 
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.1em',
+                          margin: 0
+                        }}>
                           Seguro
                         </p>
                       )}
                     </div>
                     <button 
                       onClick={handleCloseFlip}
-                      className="text-slate-400 hover:text-white transition-colors"
+                      style={{
+                        color: '#f472b6',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        marginLeft: '8px',
+                        transition: 'all 0.3s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#f9a8d4';
+                        e.currentTarget.style.transform = 'rotate(180deg)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#f472b6';
+                        e.currentTarget.style.transform = 'rotate(0deg)';
+                      }}
                       aria-label="Cerrar"
                     >
-                      <X className="w-5 h-5" />
+                      <X size={18} />
                     </button>
                   </div>
 
-                  {/* Content sections */}
-                  <div className="flex-1 space-y-4 overflow-y-auto">
+                  {/* Content sections - Ocupa todo el espacio disponible */}
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px', justifyContent: 'space-between' }}>
                     {/* Características Físicas */}
-                    <div className="bg-gradient-to-r from-slate-700/30 to-slate-800/30 rounded-lg p-4 border border-slate-600/30">
-                      <h4 className="text-white text-sm mb-3 tracking-wide">Características Físicas</h4>
-                      <div className="space-y-2 text-xs">
-                        <div className="flex justify-between">
-                          <span className="text-slate-300">Diámetro promedio:</span>
-                          <span className="text-white">{averageDiameter.toFixed(0)}m</span>
+                    <div style={{
+                      background: 'linear-gradient(to right, rgba(55, 65, 81, 0.4), rgba(31, 41, 55, 0.4))',
+                      borderRadius: '6px',
+                      padding: '16px',
+                      border: '1px solid rgba(75, 85, 99, 0.3)',
+                      flex: 1,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between'
+                    }}>
+                      <h4 style={{ 
+                        color: 'white', 
+                        fontSize: '15px', 
+                        fontWeight: 'bold', 
+                        letterSpacing: '0.05em',
+                        marginBottom: '12px',
+                        textAlign: 'center',
+                        margin: '0 0 12px 0'
+                      }}>Características Físicas</h4>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1, justifyContent: 'space-around' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', padding: '4px 0' }}>
+                          <span style={{ color: '#d1d5db' }}>Diámetro promedio:</span>
+                          <span style={{ color: 'white', fontWeight: '600' }}>{averageDiameter.toFixed(0)}m</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-300">Rango de diámetro:</span>
-                          <span className="text-white">{neo.diameter_min_m?.toFixed(0) || 'N/A'}m - {neo.diameter_max_m?.toFixed(0) || 'N/A'}m</span>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', padding: '4px 0' }}>
+                          <span style={{ color: '#d1d5db' }}>Rango de diámetro:</span>
+                          <span style={{ color: 'white', fontWeight: '600' }}>{neo.diameter_min_m?.toFixed(0) || 'N/A'}m - {neo.diameter_max_m?.toFixed(0) || 'N/A'}m</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-300">Composición estimada:</span>
-                          <span className="text-white">{getComposition()}</span>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', padding: '4px 0' }}>
+                          <span style={{ color: '#d1d5db' }}>Composición estimada:</span>
+                          <span style={{ color: 'white', fontWeight: '600' }}>{getComposition()}</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Datos Orbitales */}
-                    <div className="bg-gradient-to-r from-blue-700/30 to-purple-700/30 rounded-lg p-4 border border-blue-600/30">
-                      <h4 className="text-white text-sm mb-3 tracking-wide">Datos Orbitales</h4>
-                      <div className="space-y-2 text-xs">
-                        <div className="flex justify-between">
-                          <span className="text-slate-300">Último acercamiento:</span>
-                          <span className="text-white">{neo.close_approach_date || 'N/A'}</span>
+                    <div style={{
+                      background: 'linear-gradient(to right, rgba(37, 99, 235, 0.3), rgba(147, 51, 234, 0.3))',
+                      borderRadius: '6px',
+                      padding: '16px',
+                      border: '1px solid rgba(59, 130, 246, 0.3)',
+                      flex: 1,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between'
+                    }}>
+                      <h4 style={{ 
+                        color: 'white', 
+                        fontSize: '15px', 
+                        fontWeight: 'bold', 
+                        letterSpacing: '0.05em',
+                        marginBottom: '12px',
+                        textAlign: 'center',
+                        margin: '0 0 12px 0'
+                      }}>Datos Orbitales</h4>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1, justifyContent: 'space-around' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', padding: '4px 0' }}>
+                          <span style={{ color: '#d1d5db' }}>Último acercamiento:</span>
+                          <span style={{ color: 'white', fontWeight: '600' }}>{neo.close_approach_date || 'N/A'}</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-300">Velocidad relativa:</span>
-                          <span className="text-white">{neo.velocity_km_s ? `${neo.velocity_km_s.toFixed(2)} km/s` : 'N/A'}</span>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', padding: '4px 0' }}>
+                          <span style={{ color: '#d1d5db' }}>Velocidad relativa:</span>
+                          <span style={{ color: 'white', fontWeight: '600' }}>{neo.velocity_km_s ? `${neo.velocity_km_s.toFixed(2)} km/s` : 'N/A'}</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-300">Distancia de aproximación:</span>
-                          <span className="text-white">{neo.miss_distance_km ? `${(neo.miss_distance_km / 1000).toFixed(2)} km` : 'N/A'}</span>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', padding: '4px 0' }}>
+                          <span style={{ color: '#d1d5db' }}>Distancia de aproximación:</span>
+                          <span style={{ color: 'white', fontWeight: '600' }}>{neo.miss_distance_km ? `${(neo.miss_distance_km / 1000).toFixed(2)} km` : 'N/A'}</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-300">Probabilidad de impacto:</span>
-                          <span className="text-white">{neo.is_potentially_hazardous ? '0.010000%' : '0%'}</span>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', padding: '4px 0' }}>
+                          <span style={{ color: '#d1d5db' }}>Probabilidad de impacto:</span>
+                          <span style={{ color: 'white', fontWeight: '600' }}>{neo.is_potentially_hazardous ? '0.010000%' : '0%'}</span>
                         </div>
                       </div>
                     </div>
                   </div>
-
-                  {/* Footer hint */}
-                  
                 </div>
               </div>
             </div>
-          </div>
+        </div>
         </div>
       </div>
 
@@ -203,7 +308,7 @@ export const NEOCard: React.FC<NEOCardProps> = ({ neo, onClick }) => {
       {!isFlipped && (
         <div className="mt-4 flex justify-center">
           <button className="btn-sim">SIMULAR IMPACTO</button>
-        </div>
+    </div>
       )}
 
     </>
