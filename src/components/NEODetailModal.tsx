@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { nasaApiService } from '../services/nasaApiService';
+import { asteroidImageService } from '../services/asteroidImageService';
 import type { NEO } from '../types/api.types';
 
 interface NEODetailModalProps {
@@ -11,12 +11,36 @@ interface NEODetailModalProps {
 export const NEODetailModal: React.FC<NEODetailModalProps> = ({ neo, isOpen, onClose }) => {
   const [detailedData, setDetailedData] = useState<NEO | null>(null);
   const [loading, setLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string>('');
 
   useEffect(() => {
     if (isOpen && neo.neo_id) {
       setLoading(true);
-      // Usar datos reales del backend, no simular
-      setTimeout(() => {
+      
+      // Obtener imagen del asteroide
+      const loadImage = async () => {
+        try {
+          const averageDiameter = neo.diameter_min_m && neo.diameter_max_m 
+            ? (neo.diameter_min_m + neo.diameter_max_m) / 2 
+            : 100;
+          
+          const image = await asteroidImageService.getAsteroidImage(neo.neo_id, neo.name);
+          setImageUrl(image);
+        } catch (error) {
+          console.error('Error loading image:', error);
+          // Fallback a imagen SVG personalizada
+          const averageDiameter = neo.diameter_min_m && neo.diameter_max_m 
+            ? (neo.diameter_min_m + neo.diameter_max_m) / 2 
+            : 100;
+          setImageUrl(asteroidImageService.generateSVGAsteroidImage(neo.neo_id, neo.name, averageDiameter));
+        }
+      };
+
+      // Cargar datos y imagen en paralelo
+      Promise.all([
+        loadImage(),
+        new Promise(resolve => setTimeout(resolve, 500)) // Simular carga de datos
+      ]).then(() => {
         const realData: NEO = {
           ...neo,
           // Calcular composición basada en el diámetro (estimación simple)
@@ -27,14 +51,12 @@ export const NEODetailModal: React.FC<NEODetailModalProps> = ({ neo, isOpen, onC
               ? 'Mixto (Roca-Metal)'
               : 'Rocoso (Silicatos)'
             : 'Desconocida',
-          // Usar imagen placeholder simple
-          image_url: `https://via.placeholder.com/400x300/1a1a1a/ffffff?text=${neo.name.replace(/[^a-zA-Z0-9]/g, '')}`,
           // Calcular probabilidad de impacto basada en si es peligroso
           impact_probability: neo.is_potentially_hazardous ? 0.0001 : 0
         };
         setDetailedData(realData);
         setLoading(false);
-      }, 500); // Reducir tiempo de carga
+      });
     }
   }, [isOpen, neo]);
 
@@ -82,12 +104,19 @@ export const NEODetailModal: React.FC<NEODetailModalProps> = ({ neo, isOpen, onC
               {/* Imagen */}
               <div>
                 <img
-                  src={data.image_url}
+                  src={imageUrl || `https://via.placeholder.com/400x300/1a1a1a/ffffff?text=${data.name.replace(/[^a-zA-Z0-9]/g, '')}`}
                   alt={`Asteroid ${data.name}`}
                   className="w-full h-64 object-cover rounded-lg border border-white/20"
+                  onError={(e) => {
+                    // Fallback si la imagen falla
+                    const target = e.target as HTMLImageElement;
+                    target.src = `https://via.placeholder.com/400x300/1a1a1a/ffffff?text=${data.name.replace(/[^a-zA-Z0-9]/g, '')}`;
+                  }}
                 />
                 <p className="text-sm text-white/60 mt-2 text-center">
-                  Representación artística del asteroide
+                  {imageUrl.includes('data:image/svg') 
+                    ? 'Representación artística del asteroide' 
+                    : 'Imagen del asteroide'}
                 </p>
               </div>
 
