@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { neoService } from '../services/neoService';
 import { NEOCard } from './NEOCard';
 import { NEODetailModal } from './NEODetailModal';
+import { Carousel } from './Carousel';
 import type { NEO } from '../types/api.types';
 
 export const NEOList: React.FC = () => {
@@ -26,6 +27,7 @@ export const NEOList: React.FC = () => {
     setIsModalOpen(false);
     setSelectedNEO(null);
   };
+
 
   if (isLoading) {
     return (
@@ -69,10 +71,10 @@ export const NEOList: React.FC = () => {
   }
 
   return (
-    <div className="py-16 px-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header de la sección */}
-        <div className="text-center mb-12">
+    <div className="py-16">
+      {/* Header de la sección */}
+      <div className="text-center mb-12 px-6">
+        <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-white mb-4">
             Near Earth Objects
           </h2>
@@ -88,20 +90,27 @@ export const NEOList: React.FC = () => {
             </div>
           )}
         </div>
+      </div>
 
-        {/* Grid de asteroides */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {data?.neos?.map((neo) => (
-            <NEOCard 
-              key={neo.neo_id} 
-              neo={neo} 
-              onClick={() => handleNEOClick(neo)}
-            />
-          ))}
-        </div>
+      {/* Carrusel de asteroides - Sin restricción de ancho */}
+      <Carousel
+        items={data?.neos || []}
+        renderItem={(neo, index, isActive) => (
+          <NEOCard 
+            key={neo.neo_id} 
+            neo={neo} 
+            onClick={() => handleNEOClick(neo)}
+          />
+        )}
+        keyExtractor={(neo) => neo.neo_id}
+        autoPlay={false}
+        showIndicators={true}
+        showNavigation={true}
+      />
 
-        {/* Información adicional */}
-        <div className="mt-12 text-center">
+      {/* Información adicional */}
+      <div className="mt-12 text-center px-6">
+        <div className="max-w-6xl mx-auto">
           <div className="inline-flex items-center space-x-6 text-sm text-white/40">
             <div className="flex items-center space-x-2">
               <div className="w-3 h-3 rounded-full bg-green-500"></div>
