@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { PlanetIntro } from './components/PlanetIntro';
 import { AnimatedBackground } from './components/AnimatedBackground';
 import { HeroSection } from './components/HeroSection';
-import { FeatureSection } from './components/FeatureSection';
+import NASAScientistSelector from './components/NASAScientistSelector';
 import { CTASection } from './components/CTASection';
 import { BackendTest } from './components/BackendTest';
 import { NEOList } from './components/NEOList';
@@ -30,8 +30,8 @@ export default function App() {
             {/* Sección Hero */}
             <HeroSection />
             
-            {/* Sección de Características */}
-            <FeatureSection />
+            {/* Sección de Selección de Científicos NASA */}
+            <NASAScientistSelector />
             
             {/* Sección de Call to Action */}
             <CTASection />

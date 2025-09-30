@@ -170,7 +170,7 @@ export const NEOCard: React.FC<NEOCardProps> = ({ neo, onClick }) => {
                         margin: 0
                       }}>
                         {neo.neo_id} ({neo.close_approach_date ? new Date(neo.close_approach_date).getFullYear().toString() : 'N/A'} {neo.name.split(' ').slice(1).join(' ') || 'NEO'})
-                      </h3>
+        </h3>
                       {neo.is_potentially_hazardous ? (
                         <p style={{ 
                           color: '#fca5a5', 
@@ -254,8 +254,8 @@ export const NEOCard: React.FC<NEOCardProps> = ({ neo, onClick }) => {
                           <span style={{ color: '#d1d5db' }}>Composición estimada:</span>
                           <span style={{ color: 'white', fontWeight: '600' }}>{getComposition()}</span>
                         </div>
-                      </div>
-                    </div>
+        </div>
+      </div>
 
                     {/* Datos Orbitales */}
                     <div style={{
@@ -299,7 +299,7 @@ export const NEOCard: React.FC<NEOCardProps> = ({ neo, onClick }) => {
                   </div>
                 </div>
               </div>
-            </div>
+        </div>
         </div>
         </div>
       </div>

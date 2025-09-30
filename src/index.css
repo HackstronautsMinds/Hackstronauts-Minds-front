@@ -298,9 +298,257 @@
   left: 0;
 }
 
-  .flip-card-back {
-    transform: rotateY(180deg);
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+/* Estilos de agent/scientist eliminados */
+
+
+
+
+
+
+
+
+
+/* Selected Agent Display */
+
+
+.selected-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  border: 4px solid rgba(0, 212, 255, 0.8);
+  box-shadow: 
+    0 0 40px rgba(0, 212, 255, 0.6),
+    0 0 80px rgba(0, 212, 255, 0.4),
+    0 0 120px rgba(0, 212, 255, 0.2);
+}
+
+.selected-avatar-glow {
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  border-radius: 30px;
+  background: linear-gradient(45deg, rgba(0, 212, 255, 0.3), rgba(139, 92, 246, 0.3));
+  filter: blur(20px);
+  z-index: -1;
+}
+
+/* Agent Info Panel */
+
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #00D4FF;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.close-button:hover {
+  background: rgba(0, 212, 255, 0.1);
+  transform: rotate(90deg);
+}
+
+.panel-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.panel-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+
+
+.specialty-badge {
+  display: inline-block;
+  background: linear-gradient(45deg, rgba(0, 212, 255, 0.2), rgba(139, 92, 246, 0.2));
+  border: 1px solid rgba(0, 212, 255, 0.4);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #00D4FF;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.panel-section {
+  border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+  padding-bottom: 16px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #00D4FF;
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.section-icon {
+  width: 16px;
+  height: 16px;
+  color: #8B5CF6;
+}
+
+.section-content {
+  font-size: 13px;
+  color: #ffffff;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.achievements-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.achievement-item {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #ffffff;
+  line-height: 1.5;
+}
+
+.achievement-item::before {
+  content: '★';
+  position: absolute;
+  left: 0;
+  color: #00D4FF;
+  font-size: 14px;
+}
+
+.expertise-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.expertise-tag {
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: 12px;
+  padding: 4px 12px;
+  font-size: 11px;
+  color: #00D4FF;
+  font-weight: 500;
+}
+
+.panel-actions {
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.profile-button {
+  width: 100%;
+  background: linear-gradient(45deg, #00D4FF, #8B5CF6);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  color: #000000;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.profile-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
+}
+
+/* Selection Overlay */
+.selection-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 999;
+  pointer-events: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .agent-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
   }
+  
+  .selected-agent-container {
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .selected-agent-avatar {
+    width: 300px;
+    height: 350px;
+    margin-bottom: 20px;
+  }
+  
+  .agent-info-panel {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    max-height: 500px;
+  }
+}
+
+@media (max-width: 768px) {
+  .agent-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .agent-card {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .agent-avatar-container {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .selected-agent-avatar {
+    width: 250px;
+    height: 300px;
+  }
+  
+  .agent-info-panel {
+    padding: 20px;
+  }
+  
+  .agent-name-large {
+    font-size: 24px;
+  }
+}
 
   /* Animación de giro para el modal */
   @keyframes flipIn {
