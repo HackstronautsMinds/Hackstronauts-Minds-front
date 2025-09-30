@@ -126,7 +126,7 @@ export default function NASAScientistSelector() {
                   key={scientist.id}
                   scientist={scientist}
                   isSelected={hoveredScientist?.id === scientist.id}
-                  isDimmed={hoveredScientist !== null && hoveredScientist?.id !== scientist.id}
+                  isDimmed={hoveredScientist !== null && hoveredScientist.id !== scientist.id}
                   onMouseEnter={() => setHoveredScientist(scientist)}
                   onMouseLeave={() => setHoveredScientist(null)}
                 />
@@ -140,7 +140,7 @@ export default function NASAScientistSelector() {
                   key={scientist.id}
                   scientist={scientist}
                   isSelected={hoveredScientist?.id === scientist.id}
-                  isDimmed={hoveredScientist !== null && hoveredScientist?.id !== scientist.id}
+                  isDimmed={hoveredScientist !== null && hoveredScientist.id !== scientist.id}
                   onMouseEnter={() => setHoveredScientist(scientist)}
                   onMouseLeave={() => setHoveredScientist(null)}
                 />
@@ -156,7 +156,7 @@ export default function NASAScientistSelector() {
                   key={scientist.id}
                   scientist={scientist}
                   isSelected={hoveredScientist?.id === scientist.id}
-                  isDimmed={hoveredScientist !== null && hoveredScientist?.id !== scientist.id}
+                  isDimmed={hoveredScientist !== null && hoveredScientist.id !== scientist.id}
                   onMouseEnter={() => setHoveredScientist(scientist)}
                   onMouseLeave={() => setHoveredScientist(null)}
                 />
@@ -225,10 +225,6 @@ function ScientistCard({ scientist, isSelected, isDimmed, onMouseEnter, onMouseL
         isDimmed
           ? 'opacity-25 blur-[2px] grayscale'
           : 'opacity-100'
-      } ${
-        isSelected
-          ? 'ring-4 ring-pink-500 shadow-[0_0_25px_rgba(255,28,141,0.8)]'
-          : ''
       }`}
       style={{
         width: '160px',
@@ -248,6 +244,111 @@ function ScientistCard({ scientist, isSelected, isDimmed, onMouseEnter, onMouseL
       
       {/* Overlay gradient */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+      
+      {/* Marco con esquinas angulares animado - solo cuando está seleccionado */}
+      <AnimatePresence>
+        {isSelected && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 pointer-events-none"
+          >
+            {/* Marco principal */}
+            <div 
+              className="absolute inset-0 border-4"
+              style={{
+                borderColor: '#00D4FF',
+                boxShadow: '0 0 30px #00D4FF, inset 0 0 30px rgba(0, 212, 255, 0.5)'
+              }}
+            />
+            
+            {/* Esquina superior izquierda */}
+            <motion.div
+              animate={{ 
+                x: [0, 5, 0],
+                y: [0, -5, 0],
+                rotate: [0, 5, 0]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="absolute -top-3 -left-3 w-8 h-8"
+              style={{
+                borderTop: '6px solid #00D4FF',
+                borderLeft: '6px solid #00D4FF',
+                boxShadow: '0 0 25px #00D4FF'
+              }}
+            />
+            
+            {/* Esquina superior derecha */}
+            <motion.div
+              animate={{ 
+                x: [0, -5, 0],
+                y: [0, -5, 0],
+                rotate: [0, -5, 0]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 0.5
+              }}
+              className="absolute -top-3 -right-3 w-8 h-8"
+              style={{
+                borderTop: '6px solid #00D4FF',
+                borderRight: '6px solid #00D4FF',
+                boxShadow: '0 0 25px #00D4FF'
+              }}
+            />
+            
+            {/* Esquina inferior izquierda */}
+            <motion.div
+              animate={{ 
+                x: [0, 5, 0],
+                y: [0, 5, 0],
+                rotate: [0, -5, 0]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1
+              }}
+              className="absolute -bottom-3 -left-3 w-8 h-8"
+              style={{
+                borderBottom: '6px solid #00D4FF',
+                borderLeft: '6px solid #00D4FF',
+                boxShadow: '0 0 25px #00D4FF'
+              }}
+            />
+            
+            {/* Esquina inferior derecha */}
+            <motion.div
+              animate={{ 
+                x: [0, -5, 0],
+                y: [0, 5, 0],
+                rotate: [0, 5, 0]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1.5
+              }}
+              className="absolute -bottom-3 -right-3 w-8 h-8"
+              style={{
+                borderBottom: '6px solid #00D4FF',
+                borderRight: '6px solid #00D4FF',
+                boxShadow: '0 0 25px #00D4FF'
+              }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
