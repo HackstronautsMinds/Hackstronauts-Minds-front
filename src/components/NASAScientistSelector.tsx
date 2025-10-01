@@ -110,99 +110,94 @@ export default function NASAScientistSelector() {
         }}
       />
 
-      {/* Contenedor principal de miniaturas */}
-      <div className="relative z-10 w-full min-h-screen flex items-end justify-center px-8 pb-20">
+      {/* Contenedor principal - para mover todo el bloque */}
+      <div className="relative z-10 w-full min-h-screen flex items-end justify-center px-8 pb-32">
         
-        {/* Grid container padre - flex column */}
-        <div className="flex flex-col gap-16 mb-[70px]">
+        {/* CONTENEDOR PRINCIPAL - envuelve animación central y científicos */}
+        <div className="relative w-full max-w-5xl flex flex-col items-center" style={{ marginRight: '500px', marginLeft: '-220px' }}>
           
-          {/* Container para las filas de 2 (superior) */}
-          <div className="flex justify-between items-center" style={{ width: '100%', gap: '500px' }}>
+          {/* CONTENEDOR DE ANIMACIÓN CENTRAL */}
+          <div className="absolute z-0 flex items-center justify-center pointer-events-none" style={{ top: '50%', transform: 'translateY(-170%)' }}>
+            <AnimatePresence mode="wait">
+              {hoveredScientist && (
+                <motion.div
+                  key={hoveredScientist.id}
+                  initial={{ scale: 0.5, opacity: 0, y: 30 }}
+                  animate={{ scale: 1.5, opacity: 1, y: 0 }}
+                  exit={{ scale: 0.5, opacity: 0, y: 30 }}
+                  transition={{ 
+                    type: 'spring', 
+                    stiffness: 400, 
+                    damping: 25,
+                    duration: 0.3
+                  }}
+                  className="relative"
+                >
+                  {/* Imagen grande - avatar1.png */}
+                  <img
+                    src="/src/assets/images/avatar1.png"
+                    alt="Avatar"
+                    className="w-[350px] h-[450px] sm:w-[400px] sm:h-[500px] md:w-[450px] md:h-[550px] object-cover rounded-3xl border-4 border-pink-500 shadow-[0_0_40px_rgba(255,28,141,0.9)] "
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* CONTENEDOR DE CIENTÍFICOS - abarca todas las imágenes de científicos */}
+          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center" style={{ bottom: '60px' }}>
             
-            {/* Fila izquierda: 2 científicos pegados */}
-            <div className="flex gap-2">
-              {nasaScientists.slice(0, 2).map((scientist) => (
-                <ScientistCard
-                  key={scientist.id}
-                  scientist={scientist}
-                  isSelected={hoveredScientist?.id === scientist.id}
-                  isDimmed={hoveredScientist !== null && hoveredScientist.id !== scientist.id}
-                  onMouseEnter={() => setHoveredScientist(scientist)}
-                  onMouseLeave={() => setHoveredScientist(null)}
-                />
-              ))}
+            {/* CONTENEDOR FILA SUPERIOR - 2+2 científicos */}
+            <div className="flex justify-between items-center mb-16" style={{ width: '100%', gap: '200px' }}>
+              
+              {/* Fila izquierda: 2 científicos */}
+              <div className="flex gap-2">
+                {nasaScientists.slice(0, 2).map((scientist) => (
+                  <ScientistCard
+                    key={scientist.id}
+                    scientist={scientist}
+                    isSelected={hoveredScientist?.id === scientist.id}
+                    isDimmed={hoveredScientist !== null && hoveredScientist.id !== scientist.id}
+                    onMouseEnter={() => setHoveredScientist(scientist)}
+                    onMouseLeave={() => setHoveredScientist(null)}
+                  />
+                ))}
+              </div>
+
+              {/* Fila derecha: 2 científicos */}
+              <div className="flex gap-2">
+                {nasaScientists.slice(2, 4).map((scientist) => (
+                  <ScientistCard
+                    key={scientist.id}
+                    scientist={scientist}
+                    isSelected={hoveredScientist?.id === scientist.id}
+                    isDimmed={hoveredScientist !== null && hoveredScientist.id !== scientist.id}
+                    onMouseEnter={() => setHoveredScientist(scientist)}
+                    onMouseLeave={() => setHoveredScientist(null)}
+                  />
+                ))}
+              </div>
             </div>
 
-            {/* Fila derecha: 2 científicos pegados */}
-            <div className="flex gap-2">
-              {nasaScientists.slice(2, 4).map((scientist) => (
-                <ScientistCard
-                  key={scientist.id}
-                  scientist={scientist}
-                  isSelected={hoveredScientist?.id === scientist.id}
-                  isDimmed={hoveredScientist !== null && hoveredScientist.id !== scientist.id}
-                  onMouseEnter={() => setHoveredScientist(scientist)}
-                  onMouseLeave={() => setHoveredScientist(null)}
-                />
-              ))}
+            {/* CONTENEDOR FILA INFERIOR - 3 científicos */}
+            <div className="flex justify-center">
+              <div className="flex gap-2">
+                {nasaScientists.slice(4).map((scientist) => (
+                  <ScientistCard
+                    key={scientist.id}
+                    scientist={scientist}
+                    isSelected={hoveredScientist?.id === scientist.id}
+                    isDimmed={hoveredScientist !== null && hoveredScientist.id !== scientist.id}
+                    onMouseEnter={() => setHoveredScientist(scientist)}
+                    onMouseLeave={() => setHoveredScientist(null)}
+                  />
+                ))}
+              </div>
             </div>
+            
           </div>
-
-          {/* Container para la fila de 3 (inferior) centrada */}
-          <div className="flex justify-center">
-            <div className="flex gap-2">
-              {nasaScientists.slice(4).map((scientist) => (
-                <ScientistCard
-                  key={scientist.id}
-                  scientist={scientist}
-                  isSelected={hoveredScientist?.id === scientist.id}
-                  isDimmed={hoveredScientist !== null && hoveredScientist.id !== scientist.id}
-                  onMouseEnter={() => setHoveredScientist(scientist)}
-                  onMouseLeave={() => setHoveredScientist(null)}
-                />
-              ))}
-            </div>
-          </div>
+          
         </div>
-      </div>
-
-      {/* Imagen grande central - aparece solo en hover, en el hueco del centro */}
-      <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
-        <AnimatePresence mode="wait">
-          {hoveredScientist ? (
-            <motion.div
-              key={hoveredScientist.id}
-              initial={{ scale: 0.5, opacity: 0, y: 50 }}
-              animate={{ scale: 2.4, opacity: 1, y: 0 }}
-              exit={{ scale: 0.5, opacity: 0, y: 50 }}
-              transition={{ 
-                type: 'spring', 
-                stiffness: 200, 
-                damping: 25,
-                duration: 0.6
-              }}
-              className="relative"
-            >
-              {/* Imagen grande - avatar.png */}
-              <img
-                src="/src/assets/images/avatar.png"
-                alt="Avatar"
-                className="w-[300px] h-[400px] sm:w-[350px] sm:h-[450px] md:w-[400px] md:h-[500px] object-cover rounded-3xl border-4 border-pink-500 shadow-[0_0_40px_rgba(255,28,141,0.9)]"
-              />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="title"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.3 }}
-              className="text-center"
-            >
-             
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
     </section>
   );
@@ -227,8 +222,8 @@ function ScientistCard({ scientist, isSelected, isDimmed, onMouseEnter, onMouseL
           : 'opacity-100'
       }`}
       style={{
-        width: '160px',
-        height: '200px',
+        width: '140px',
+        height: '175px',
         borderRadius: '16px',
         overflow: 'hidden',
         backgroundColor: 'rgba(0, 0, 0, 0.3)',

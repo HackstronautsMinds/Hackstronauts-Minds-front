@@ -74,7 +74,7 @@ export const NEOList: React.FC = () => {
     <div className="py-16">
       {/* Header de la sección */}
       <div className="text-center mb-12 px-6">
-        <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-white mb-4">
             Near Earth Objects
           </h2>
@@ -89,18 +89,18 @@ export const NEOList: React.FC = () => {
               ✅ Datos en tiempo real del backend
             </div>
           )}
+          </div>
         </div>
-      </div>
 
       {/* Carrusel de asteroides - Sin restricción de ancho */}
       <Carousel
         items={data?.neos || []}
         renderItem={(neo, index, isActive) => (
-          <NEOCard 
+            <NEOCard 
             key={neo.neo_id} 
-            neo={neo} 
-            onClick={() => handleNEOClick(neo)}
-          />
+              neo={neo} 
+              onClick={() => handleNEOClick(neo)}
+            />
         )}
         keyExtractor={(neo) => neo.neo_id}
         autoPlay={false}
@@ -108,7 +108,7 @@ export const NEOList: React.FC = () => {
         showNavigation={true}
       />
 
-      {/* Información adicional */}
+        {/* Información adicional */}
       <div className="mt-12 text-center px-6">
         <div className="max-w-6xl mx-auto">
           <div className="inline-flex items-center space-x-6 text-sm text-white/40">

@@ -98,7 +98,7 @@ export const NEODetailModal: React.FC<NEODetailModalProps> = ({ neo, isOpen, onC
               <p className="mt-4 text-white/60">Obteniendo datos detallados...</p>
             </div>
           ) : (
-            <div className="space-y-6">
+              <div className="space-y-6">
                 {/* Características físicas */}
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-3">Características Físicas</h3>
@@ -125,10 +125,10 @@ export const NEODetailModal: React.FC<NEODetailModalProps> = ({ neo, isOpen, onC
                   <h3 className="text-lg font-semibold text-white mb-3">Datos Orbitales</h3>
                   <div className="space-y-2">
                     {data.close_approach_date && (
-                      <div className="flex justify-between">
-                        <span className="text-white/60">Último acercamiento:</span>
+                    <div className="flex justify-between">
+                      <span className="text-white/60">Último acercamiento:</span>
                         <span className="text-white">{data.close_approach_date}</span>
-                      </div>
+                    </div>
                     )}
                   </div>
                 </div>
@@ -138,20 +138,20 @@ export const NEODetailModal: React.FC<NEODetailModalProps> = ({ neo, isOpen, onC
                   <h3 className="text-lg font-semibold text-white mb-3">Última Aproximación</h3>
                   <div className="space-y-2">
                     {data.velocity_km_s && (
-                      <div className="flex justify-between">
-                        <span className="text-white/60">Velocidad relativa:</span>
-                        <span className="text-white font-mono">
+                    <div className="flex justify-between">
+                      <span className="text-white/60">Velocidad relativa:</span>
+                      <span className="text-white font-mono">
                           {data.velocity_km_s.toFixed(2)} km/s
-                        </span>
-                      </div>
+                      </span>
+                    </div>
                     )}
                     {data.miss_distance_km && (
-                      <div className="flex justify-between">
-                        <span className="text-white/60">Distancia de aproximación:</span>
-                        <span className="text-white font-mono">
+                    <div className="flex justify-between">
+                      <span className="text-white/60">Distancia de aproximación:</span>
+                      <span className="text-white font-mono">
                           {(data.miss_distance_km / 1000).toFixed(2)} km
-                        </span>
-                      </div>
+                      </span>
+                    </div>
                     )}
                     <div className="flex justify-between">
                       <span className="text-white/60">Probabilidad de impacto:</span>
@@ -162,9 +162,9 @@ export const NEODetailModal: React.FC<NEODetailModalProps> = ({ neo, isOpen, onC
                       }`}>
                         {data.impact_probability ? `${(data.impact_probability * 100).toFixed(6)}%` : '0%'}
                       </span>
-                    </div>
                   </div>
                 </div>
+              </div>
             </div>
           )}
         </div>
