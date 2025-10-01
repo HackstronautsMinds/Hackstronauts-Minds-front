@@ -1,101 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { nasaScientists, NASAScientist } from '../data/nasaScientists';
 
-interface NASAScientist {
-  id: string;
-  name: string;
-  role: string;
-  bio: string;
-  achievements: string[];
-  image: string;
-}
-
-const nasaScientists: NASAScientist[] = [
-  {
-    id: "data",
-    name: "Dr. Data",
-    role: "Recolector de Datos",
-    bio: "Recolecta datos de telescopios y satélites para entender el cosmos.",
-    achievements: [
-      "Análisis de 10,000+ imágenes espaciales",
-      "Detección de exoplanetas ocultos",
-      "Creación de bases de datos astronómicas"
-    ],
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop&crop=face"
-  },
-  {
-    id: "orbital",
-    name: "Dra. Orbital",
-    role: "Calculadora de Órbitas",
-    bio: "Calcula trayectorias y órbitas de cuerpos celestes con precisión milimétrica.",
-    achievements: [
-      "Predicción de colisiones orbitales",
-      "Optimización de misiones espaciales",
-      "Modelado de sistemas planetarios"
-    ],
-    image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=600&fit=crop&crop=face"
-  },
-  {
-    id: "impact",
-    name: "Dr. Impact",
-    role: "Analista de Impactos",
-    bio: "Analiza qué pasaría si un asteroide impactara la Tierra o cualquier planeta.",
-    achievements: [
-      "Simulaciones de impactos catastróficos",
-      "Evaluación de riesgos planetarios",
-      "Desarrollo de modelos de defensa planetaria"
-    ],
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=600&fit=crop&crop=face"
-  },
-  {
-    id: "mitigation",
-    name: "Dra. Mitigation",
-    role: "Planificadora de Mitigación",
-    bio: "Planifica cómo evitar desastres cósmicos mediante estrategias de defensa.",
-    achievements: [
-      "Diseño de misiones de desviación",
-      "Coordinación internacional de defensa planetaria",
-      "Implementación de protocolos de emergencia"
-    ],
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=600&fit=crop&crop=face"
-  },
-  {
-    id: "visualization",
-    name: "Dr. Visualization",
-    role: "Creador de Gráficos",
-    bio: "Crea gráficos, mapas y visualizaciones para hacer comprensible lo complejo.",
-    achievements: [
-      "Visualización de campos gravitacionales",
-      "Mapas 3D de asteroides",
-      "Infografías interactivas para la NASA"
-    ],
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=600&fit=crop&crop=face"
-  },
-  {
-    id: "ml",
-    name: "Dra. ML",
-    role: "Experta en IA",
-    bio: "Entrena modelos de inteligencia artificial para predecir eventos cósmicos.",
-    achievements: [
-      "Predicción de trayectorias con IA",
-      "Clasificación automática de objetos espaciales",
-      "Reducción de falsos positivos en alertas"
-    ],
-    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=600&fit=crop&crop=face"
-  },
-  {
-    id: "explainer",
-    name: "Dr. Explainer",
-    role: "Explicador Científico",
-    bio: "Explica todo en lenguaje simple para que todos puedan entender la ciencia espacial.",
-    achievements: [
-      "Más de 1 millón de seguidores en redes",
-      "Videos educativos virales",
-      "Colaboración con canales de divulgación científica"
-    ],
-    image: "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=400&h=600&fit=crop&crop=face"
-  }
-];
 
 export default function NASAScientistSelector() {
   const [hoveredScientist, setHoveredScientist] = useState<NASAScientist | null>(null);
@@ -114,7 +20,7 @@ export default function NASAScientistSelector() {
       <div className="relative z-10 w-full min-h-screen flex items-end justify-center px-8 pb-32">
         
         {/* CONTENEDOR PRINCIPAL - envuelve animación central y científicos */}
-        <div className="relative w-full max-w-5xl flex flex-col items-center" style={{ marginRight: '500px', marginLeft: '-220px' }}>
+        <div className="relative w-full max-w-5xl flex flex-col items-center" style={{ marginRight: '420px', marginLeft: '-220px' }}>
           
           {/* CONTENEDOR DE ANIMACIÓN CENTRAL */}
           <div className="absolute z-0 flex items-center justify-center pointer-events-none" style={{ top: '50%', transform: 'translateY(-170%)' }}>
@@ -198,6 +104,26 @@ export default function NASAScientistSelector() {
           </div>
           
         </div>
+
+        {/* VENTANA DE INFORMACIÓN DEL CIENTÍFICO - Lado derecho */}
+        <AnimatePresence>
+          {hoveredScientist && (
+            <motion.div
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 100 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="absolute top-1/2 transform -translate-y-1/2 z-20"
+              style={{ 
+                left: '60%',
+                width: '380px',
+                marginLeft: '10px'
+              }}
+            >
+              <ScientistInfoWindow scientist={hoveredScientist} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
@@ -344,6 +270,200 @@ function ScientistCard({ scientist, isSelected, isDimmed, onMouseEnter, onMouseL
           </motion.div>
         )}
       </AnimatePresence>
+    </motion.div>
+  );
+}
+
+// Componente de ventana de información del científico
+interface ScientistInfoWindowProps {
+  scientist: NASAScientist;
+}
+
+function ScientistInfoWindow({ scientist }: ScientistInfoWindowProps) {
+  return (
+    <motion.div
+      className="relative w-full h-[600px] rounded-2xl overflow-hidden"
+      style={{
+        background: 'rgba(5, 10, 30, 0.4)',
+        backdropFilter: 'blur(40px)',
+        border: `2px solid ${scientist.color}`,
+        boxShadow: `0 0 80px ${scientist.color}30, 0 0 200px ${scientist.color}20, inset 0 0 100px rgba(0,0,0,0.3)`,
+      }}
+    >
+      {/* Grid de fondo */}
+      <div className="absolute inset-0 opacity-10">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(0,212,255,0.3) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0,212,255,0.3) 1px, transparent 1px)
+            `,
+            backgroundSize: '20px 20px'
+          }} 
+        />
+      </div>
+
+      {/* Marcos decorativos en las esquinas */}
+      <div className="absolute top-0 left-0 w-12 h-12 pointer-events-none">
+        <div 
+          className="absolute top-0 left-0 w-full h-full border-t-2 border-l-2 rounded-tl-xl"
+          style={{ 
+            borderColor: scientist.color,
+            boxShadow: `0 0 15px ${scientist.color}80`,
+          }}
+        />
+      </div>
+      <div className="absolute top-0 right-0 w-12 h-12 pointer-events-none">
+        <div 
+          className="absolute top-0 right-0 w-full h-full border-t-2 border-r-2 rounded-tr-xl"
+          style={{ 
+            borderColor: scientist.color,
+            boxShadow: `0 0 15px ${scientist.color}80`,
+          }}
+        />
+      </div>
+      <div className="absolute bottom-0 left-0 w-12 h-12 pointer-events-none">
+        <div 
+          className="absolute bottom-0 left-0 w-full h-full border-b-2 border-l-2 rounded-bl-xl"
+          style={{ 
+            borderColor: scientist.color,
+            boxShadow: `0 0 15px ${scientist.color}80`,
+          }}
+        />
+      </div>
+      <div className="absolute bottom-0 right-0 w-12 h-12 pointer-events-none">
+        <div 
+          className="absolute bottom-0 right-0 w-full h-full border-b-2 border-r-2 rounded-br-xl"
+          style={{ 
+            borderColor: scientist.color,
+            boxShadow: `0 0 15px ${scientist.color}80`,
+          }}
+        />
+      </div>
+
+      {/* Contenido */}
+      <div className="relative z-10 p-6 h-full flex flex-col">
+        {/* Header */}
+        <div className="flex items-center gap-4 mb-6">
+          <div
+            className="w-16 h-16 rounded-full overflow-hidden border-2"
+            style={{
+              borderColor: scientist.color,
+              boxShadow: `0 0 20px ${scientist.color}60`,
+            }}
+          >
+            <img
+              src={scientist.image}
+              alt={scientist.name}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div>
+            <h3 
+              className="text-white text-xl font-black uppercase"
+              style={{
+                textShadow: `0 0 20px ${scientist.color}60`,
+              }}
+            >
+              {scientist.name}
+            </h3>
+            <p 
+              className="text-sm font-bold uppercase tracking-wider"
+              style={{ color: scientist.color }}
+            >
+              {scientist.role}
+            </p>
+          </div>
+        </div>
+
+        {/* Especialidad */}
+        <div className="mb-4">
+          <h4 className="text-white text-sm font-bold uppercase mb-2">Especialidad</h4>
+          <p className="text-gray-300 text-sm">{scientist.specialty}</p>
+        </div>
+
+        {/* Descripción */}
+        <div className="mb-4">
+          <h4 className="text-white text-sm font-bold uppercase mb-2">Descripción</h4>
+          <p className="text-gray-300 text-sm leading-relaxed">{scientist.description}</p>
+        </div>
+
+        {/* Logros */}
+        <div className="flex-1">
+          <h4 className="text-white text-sm font-bold uppercase mb-3">Logros Destacados</h4>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {scientist.achievements.map((achievement, index) => (
+              <div
+                key={index}
+                className="flex items-start gap-2 p-2 rounded-lg"
+                style={{
+                  backgroundColor: `${scientist.color}10`,
+                  border: `1px solid ${scientist.color}30`,
+                }}
+              >
+                <div
+                  className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+                  style={{ backgroundColor: scientist.color }}
+                />
+                <span className="text-gray-300 text-xs">{achievement}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Stats si están disponibles */}
+        {scientist.stats && (
+          <div className="mt-4">
+            <h4 className="text-white text-sm font-bold uppercase mb-3">Atributos</h4>
+            <div className="space-y-2">
+              {Object.entries(scientist.stats).map(([key, value]) => (
+                <div key={key} className="flex items-center gap-2">
+                  <span className="text-gray-400 text-xs w-20 capitalize">{key}:</span>
+                  <div className="flex-1 h-2 bg-gray-700 rounded-full overflow-hidden">
+                    <motion.div
+                      className="h-full rounded-full"
+                      style={{
+                        background: `linear-gradient(90deg, ${scientist.color}, ${scientist.color}80)`,
+                      }}
+                      initial={{ width: 0 }}
+                      animate={{ width: `${value}%` }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                    />
+                  </div>
+                  <span className="text-white text-xs w-8">{value}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Información adicional si está disponible */}
+        {(scientist.yearsOfService || scientist.missionsCompleted || scientist.rank) && (
+          <div className="mt-4 pt-4 border-t border-gray-600">
+            <div className="grid grid-cols-3 gap-2 text-center">
+              {scientist.yearsOfService && (
+                <div>
+                  <p className="text-gray-400 text-xs">Años</p>
+                  <p className="text-white text-lg font-bold">{scientist.yearsOfService}</p>
+                </div>
+              )}
+              {scientist.missionsCompleted && (
+                <div>
+                  <p className="text-gray-400 text-xs">Misiones</p>
+                  <p className="text-white text-lg font-bold">{scientist.missionsCompleted}</p>
+                </div>
+              )}
+              {scientist.rank && (
+                <div>
+                  <p className="text-gray-400 text-xs">Rango</p>
+                  <p className="text-white text-sm font-bold">{scientist.rank}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
     </motion.div>
   );
 }

@@ -8,6 +8,16 @@ export interface NASAScientist {
   achievements: string[];
   image: string;
   color: string;
+  abilityType: 'orbit' | 'math' | 'rocket' | 'cosmos' | 'physics' | 'engineering' | 'medicine' | 'space';
+  stats: {
+    intelligence: number;
+    innovation: number;
+    leadership: number;
+    impact: number;
+  };
+  yearsOfService?: number;
+  missionsCompleted?: number;
+  rank?: string;
 }
 
 export const nasaScientists: NASAScientist[] = [
@@ -25,7 +35,17 @@ export const nasaScientists: NASAScientist[] = [
       "Contribuciones críticas al programa espacial"
     ],
     image: "https://images.unsplash.com/photo-1576174464184-fb78fe882bfd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    color: "#FF1B8D" // Rosa neón
+    color: "#FF1B8D",
+    abilityType: "math",
+    stats: {
+      intelligence: 98,
+      innovation: 95,
+      leadership: 85,
+      impact: 99
+    },
+    yearsOfService: 33,
+    missionsCompleted: 26,
+    rank: "LEGEND"
   },
   {
     id: 2,
@@ -41,7 +61,17 @@ export const nasaScientists: NASAScientist[] = [
       "Medalla de la NASA Distinguished Public Service"
     ],
     image: "https://images.unsplash.com/photo-1581008695823-bd71b9b3d2e6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    color: "#FF6B2C" // Naranja
+    color: "#FF6B2C",
+    abilityType: "cosmos",
+    stats: {
+      intelligence: 96,
+      innovation: 88,
+      leadership: 92,
+      impact: 94
+    },
+    yearsOfService: 25,
+    missionsCompleted: 0,
+    rank: "DIRECTOR"
   },
   {
     id: 3,
@@ -57,7 +87,17 @@ export const nasaScientists: NASAScientist[] = [
       "Fundadora de empresas tecnológicas"
     ],
     image: "https://images.unsplash.com/photo-1655814563963-0fe0a7d6c279?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    color: "#00FF7F" // Verde neón
+    color: "#00FF7F",
+    abilityType: "medicine",
+    stats: {
+      intelligence: 94,
+      innovation: 92,
+      leadership: 90,
+      impact: 91
+    },
+    yearsOfService: 15,
+    missionsCompleted: 1,
+    rank: "PIONEER"
   },
   {
     id: 4,
@@ -73,7 +113,17 @@ export const nasaScientists: NASAScientist[] = [
       "Contribuciones a misiones espaciales"
     ],
     image: "https://images.unsplash.com/photo-1701187260663-dc1ab7a67f4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    color: "#00D4FF" // Azul cyan
+    color: "#00D4FF",
+    abilityType: "orbit",
+    stats: {
+      intelligence: 97,
+      innovation: 96,
+      leadership: 89,
+      impact: 98
+    },
+    yearsOfService: 40,
+    missionsCompleted: 0,
+    rank: "MASTER"
   },
   {
     id: 5,
@@ -89,7 +139,17 @@ export const nasaScientists: NASAScientist[] = [
       "Defensora de la educación STEM"
     ],
     image: "https://images.unsplash.com/photo-1658632715383-f8c2b5cb7d61?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    color: "#B026FF" // Púrpura
+    color: "#B026FF",
+    abilityType: "rocket",
+    stats: {
+      intelligence: 93,
+      innovation: 90,
+      leadership: 88,
+      impact: 92
+    },
+    yearsOfService: 20,
+    missionsCompleted: 2,
+    rank: "HERO"
   },
   {
     id: 6,
@@ -105,7 +165,17 @@ export const nasaScientists: NASAScientist[] = [
       "Contribuciones a teoría del Big Bang"
     ],
     image: "https://images.unsplash.com/photo-1618053448748-b7251851d014?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    color: "#FFD700" // Amarillo dorado
+    color: "#FFD700",
+    abilityType: "physics",
+    stats: {
+      intelligence: 99,
+      innovation: 98,
+      leadership: 87,
+      impact: 100
+    },
+    yearsOfService: 50,
+    missionsCompleted: 0,
+    rank: "GENIUS"
   },
   {
     id: 7,
@@ -121,7 +191,17 @@ export const nasaScientists: NASAScientist[] = [
       "Patentes en sistemas ópticos"
     ],
     image: "https://images.unsplash.com/photo-1623389095188-4a397c919674?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    color: "#00FFFF" // Cyan
+    color: "#00FFFF",
+    abilityType: "engineering",
+    stats: {
+      intelligence: 95,
+      innovation: 94,
+      leadership: 96,
+      impact: 90
+    },
+    yearsOfService: 30,
+    missionsCompleted: 4,
+    rank: "EXPERT"
   },
   {
     id: 8,
@@ -137,6 +217,16 @@ export const nasaScientists: NASAScientist[] = [
       "Pionero en técnicas de acoplamiento orbital"
     ],
     image: "https://images.unsplash.com/photo-1581087725018-45eb42ace6eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    color: "#FF00FF" // Magenta
+    color: "#FF00FF",
+    abilityType: "space",
+    stats: {
+      intelligence: 92,
+      innovation: 91,
+      leadership: 93,
+      impact: 97
+    },
+    yearsOfService: 35,
+    missionsCompleted: 2,
+    rank: "LEGEND"
   }
 ];
