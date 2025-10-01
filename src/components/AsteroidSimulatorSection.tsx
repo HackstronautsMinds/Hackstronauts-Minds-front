@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { AsteroidData, ImpactData, SimulationState, LiveMetrics } from '../types/simulation.types';
 import { mockAsteroids, fetchAsteroidData, calculateImpactData } from '../data/mockAsteroidData';
+import AgentStatusPanel from './AgentStatusPanel';
 
 export default function AsteroidSimulatorSection() {
   const [selectedAsteroid, setSelectedAsteroid] = useState<AsteroidData | null>(null);
@@ -259,6 +260,16 @@ export default function AsteroidSimulatorSection() {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Panel de Agentes */}
+        {selectedAsteroid && (
+          <div className="mt-8">
+            <AgentStatusPanel 
+              currentPhase={simulationState.phase}
+              progress={simulationState.progress}
+            />
           </div>
         )}
       </div>
