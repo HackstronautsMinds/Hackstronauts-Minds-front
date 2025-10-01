@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { AsteroidData, ImpactData, SimulationState, LiveMetrics } from '../types/simulation.types';
+import { AsteroidData, ImpactData, SimulationState, LiveMetrics, TrajectoryPoint } from '../types/simulation.types';
 import { mockAsteroids, fetchAsteroidData, calculateImpactData } from '../data/mockAsteroidData';
 import AgentStatusPanel from './AgentStatusPanel';
+import IntegratedAsteroidSimulator from './IntegratedAsteroidSimulator';
 
 export default function AsteroidSimulatorSection() {
   const [selectedAsteroid, setSelectedAsteroid] = useState<AsteroidData | null>(null);
@@ -22,9 +23,35 @@ export default function AsteroidSimulatorSection() {
     timeToImpact: 0
   });
 
+  const [trajectory, setTrajectory] = useState<TrajectoryPoint[]>([]);
+
+  // Generar trayectoria mock
+  const generateTrajectory = (): TrajectoryPoint[] => {
+    const points: TrajectoryPoint[] = [];
+    const steps = 50;
+    
+    for (let i = 0; i < steps; i++) {
+      const t = i / steps;
+      const angle = t * Math.PI * 2;
+      const radius = 200 - t * 100; // Se acerca a la Tierra
+      
+      points.push({
+        x: Math.cos(angle) * radius,
+        y: 0,
+        z: Math.sin(angle) * radius,
+        time: t * 100 // días
+      });
+    }
+    
+    return points;
+  };
+
   // Simular datos del backend
   const simulateBackendData = async () => {
     if (!selectedAsteroid) return;
+    
+    // Generar trayectoria
+    setTrajectory(generateTrajectory());
     
     setSimulationState(prev => ({ ...prev, isRunning: true, phase: 'data_collecting' }));
     
@@ -178,14 +205,16 @@ export default function AsteroidSimulatorSection() {
         {selectedAsteroid && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Panel Izquierdo - Simulador 3D */}
-            <div className="bg-gray-900/50 backdrop-blur-lg rounded-2xl border border-cyan-400/30 p-6">
+            <div className="bg-gray-900/50 backdrop-blur-lg rounded-2xl border border-cyan-400/30 p-6 col-span-2">
               <h2 className="text-2xl font-bold text-white mb-4">🌍 Simulador 3D</h2>
-              <div className="bg-gray-800/50 rounded-lg h-96 flex items-center justify-center border border-gray-600">
-                <div className="text-center">
-                  <div className="text-6xl mb-4">🌍</div>
-                  <div className="text-gray-300">Simulador Three.js</div>
-                  <div className="text-gray-400 text-sm">Integración pendiente</div>
-                </div>
+              <div className="w-full h-[80vh]">
+                <IntegratedAsteroidSimulator 
+                  selectedAsteroid={selectedAsteroid}
+                  onImpact={(impactData) => {
+                    console.log('Impact detected:', impactData);
+                    // Aquí puedes manejar los datos del impacto
+                  }}
+                />
               </div>
             </div>
 
