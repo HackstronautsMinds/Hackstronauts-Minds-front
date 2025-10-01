@@ -21,6 +21,19 @@ export interface Agent {
   sciences: string[];
   responsibilities: string[];
   importance: string;
+  // Nuevos campos épicos
+  tagline: string;
+  oneLiner: string;
+  epicDescription: string;
+  signatureAbility: {
+    name: string;
+    description: string;
+  };
+  quote: string;
+  icon: string;
+  confidence: 'ALTA' | 'MEDIA' | 'BAJA';
+  lastMission?: string;
+  cta: string;
 }
 
 export const agents: Agent[] = [
@@ -56,7 +69,20 @@ export const agents: Agent[] = [
       "Validar y limpiar datos",
       "Manejar APIs externas"
     ],
-    importance: "Es el primer paso en toda la simulación. Sin datos buenos, todo lo demás falla."
+    importance: "Es el primer paso en toda la simulación. Sin datos buenos, todo lo demás falla.",
+    // Campos épicos
+    tagline: "DR. DATA — SENIOR · Recolector de datos espaciales. Base de verdad para la simulación.",
+    oneLiner: "Extrae y valida feeds de la NASA y otras fuentes, limpia ruido y entrega el 'single source of truth' que el resto de agentes necesita.",
+    epicDescription: "Arquitecto de la verdad numérica: convierte señales dispersas en la base inquebrantable de cada predicción. Sin él, toda la torre de decisión tiembla.",
+    signatureAbility: {
+      name: "Fusión de Feeds",
+      description: "Integra APIs en tiempo real, valida y normaliza para producir una única fuente de confianza."
+    },
+    quote: "Los números no mienten; solo necesitan ser escuchados con cuidado.",
+    icon: "🛰️",
+    confidence: "ALTA",
+    lastMission: "Última actualización: 2024-01-15 14:30 UTC",
+    cta: "ANALIZAR DATOS"
   },
   {
     id: 2,
@@ -90,7 +116,20 @@ export const agents: Agent[] = [
       "Calcular probabilidades de impacto",
       "Analizar incertidumbre orbital"
     ],
-    importance: "Proporciona la base científica para determinar si un asteroide impactará la Tierra."
+    importance: "Proporciona la base científica para determinar si un asteroide impactará la Tierra.",
+    // Campos épicos
+    tagline: "DRA. ORBITAL — EXPERT · Mecánica celeste aplicada: determina si la roca besará la Tierra.",
+    oneLiner: "Calcula trayectorias con física real para estimar aproximaciones y probabilidades de impacto. Maneja incertidumbre como herramienta.",
+    epicDescription: "Cartógrafa del cielo: transforma ecuaciones en advertencias temporales. Si hay una trayectoria peligrosa, ella la encontrará.",
+    signatureAbility: {
+      name: "Vectoría Exacta",
+      description: "Modelado orbital con análisis de incertidumbre; predice ventanas de aproximación."
+    },
+    quote: "Las órbitas hablan en ecuaciones; yo solo traduzco.",
+    icon: "🪐",
+    confidence: "ALTA",
+    lastMission: "Análisis orbital: 2024-01-15 16:45 UTC",
+    cta: "SIMULAR TRAYECTORIA"
   },
   {
     id: 3,
@@ -124,7 +163,20 @@ export const agents: Agent[] = [
       "Evaluar efectos sísmicos",
       "Analizar efectos de tsunami"
     ],
-    importance: "Determina qué daños causaría un impacto y cuánta población se vería afectada."
+    importance: "Determina qué daños causaría un impacto y cuánta población se vería afectada.",
+    // Campos épicos
+    tagline: "DR. IMPACT — EXPERT · Calcula energía del impacto y daño potencial.",
+    oneLiner: "Convierte masa y velocidad en consecuencias: energía, tamaño de cráter, sismicidad y riesgo de tsunami.",
+    epicDescription: "Medidor del desastre: toma una roca y calcula su furia. ¿Cuánto temblará la Tierra? ¿Qué ciudades quedarán en la sombra? Él lo sabe.",
+    signatureAbility: {
+      name: "Cálculo de Energía",
+      description: "E = ½mv² + modelado geofísico para estimar daños y población afectada."
+    },
+    quote: "No es catastrofismo, es cálculo — y el cálculo salva vidas.",
+    icon: "💥",
+    confidence: "ALTA",
+    lastMission: "Análisis de impacto: 2024-01-15 18:20 UTC",
+    cta: "CALCULAR DAÑOS"
   },
   {
     id: 4,
@@ -158,7 +210,20 @@ export const agents: Agent[] = [
       "Generar recomendaciones",
       "Optimizar misiones"
     ],
-    importance: "Planifica cómo evitar el impacto y qué estrategias son más efectivas."
+    importance: "Planifica cómo evitar el impacto y qué estrategias son más efectivas.",
+    // Campos épicos
+    tagline: "DRA. MITIGATION — SENIOR · Diseña estrategias para desviar amenazas.",
+    oneLiner: "Evalúa Kinetic, Gravity Tractor, Nuclear y Ablation; calcula efectividad y coste para cada plan de acción.",
+    epicDescription: "Planificadora de futuros: cuando el reloj corre, ella diseña la maniobra que cambie el destino del planeta.",
+    signatureAbility: {
+      name: "Plan Maestro",
+      description: "Simula y compara estrategias de deflexión con métricas de coste/beneficio."
+    },
+    quote: "Hay más de una forma de desviar el problema; mi trabajo es encontrar la que menos duela al planeta.",
+    icon: "🛡️",
+    confidence: "ALTA",
+    lastMission: "Plan de deflexión: 2024-01-15 20:10 UTC",
+    cta: "DESPLEGAR ESTRATEGIA"
   },
   {
     id: 5,
@@ -192,7 +257,20 @@ export const agents: Agent[] = [
       "Visualizar métricas de confianza",
       "Producir diagramas de riesgo"
     ],
-    importance: "Hace que los datos complejos sean comprensibles visualmente para todos."
+    importance: "Hace que los datos complejos sean comprensibles visualmente para todos.",
+    // Campos épicos
+    tagline: "DR. VISUALIZATION — SENIOR · Convierte datos en mapas y escenas 3D.",
+    oneLiner: "Genera gráficos orbitales, mapas de impacto y diagramas de riesgo que hacen comprensible lo incomprensible.",
+    epicDescription: "Cartógrafo de lo invisible: transforma ecuaciones y probabilidades en imágenes que cualquiera puede entender — desde ciudadanos hasta presidentes.",
+    signatureAbility: {
+      name: "Mapa de Daño",
+      description: "Visualizaciones 2D/3D interactivas con capas de daño y confianza."
+    },
+    quote: "Si no puedes visualizarlo, no lo comprendes.",
+    icon: "🎛️",
+    confidence: "ALTA",
+    lastMission: "Render 3D: 2024-01-15 22:30 UTC",
+    cta: "ABRIR VISUALIZACIÓN"
   },
   {
     id: 6,
@@ -226,7 +304,20 @@ export const agents: Agent[] = [
       "Evaluar evolución del riesgo",
       "Analizar patrones históricos"
     ],
-    importance: "Mejora las predicciones usando inteligencia artificial y patrones históricos."
+    importance: "Mejora las predicciones usando inteligencia artificial y patrones históricos.",
+    // Campos épicos
+    tagline: "DRA. ML — EXPERT · Predice trayectorias y evolución del riesgo con ML.",
+    oneLiner: "Entrena modelos sobre histórico, detecta patrones y proyecta trayectorias a futuro para anticipar cambios de riesgo.",
+    epicDescription: "Oráculo entrenado: aprende del pasado para revelar futuros probables y ajustar la alarma con datos.",
+    signatureAbility: {
+      name: "Predicción Temporal",
+      description: "Modelos que pronostican la evolución del riesgo hasta 10 años vista."
+    },
+    quote: "El pasado habla en patrones; mi trabajo es escucharlos y adelantar sus pasos.",
+    icon: "🤖",
+    confidence: "ALTA",
+    lastMission: "Predicción ML: 2024-01-15 23:45 UTC",
+    cta: "EJECUTAR PREDICCIÓN"
   },
   {
     id: 7,
@@ -260,6 +351,19 @@ export const agents: Agent[] = [
       "Generar narrativas",
       "Adaptar contenido por audiencia"
     ],
-    importance: "Hace que la información científica sea accesible para todos, desde niños hasta gobiernos."
+    importance: "Hace que la información científica sea accesible para todos, desde niños hasta gobiernos.",
+    // Campos épicos
+    tagline: "DR. EXPLAINER — SENIOR · Traduce lo técnico a lenguaje humano.",
+    oneLiner: "Toma análisis complejos y los convierte en narrativas simples, adaptadas al público: niños, prensa o gobierno.",
+    epicDescription: "Embajador del entendimiento: comunica la ciencia de forma que la gente pueda decidir con cabeza (y sin pánico).",
+    signatureAbility: {
+      name: "Narrativa Clara",
+      description: "Resumen accionable y adaptado por audiencia, con comparaciones históricas y pasos recomendados."
+    },
+    quote: "No es hablar bonito; es dar a la gente la información que necesita para actuar.",
+    icon: "📣",
+    confidence: "ALTA",
+    lastMission: "Comunicado oficial: 2024-01-16 00:15 UTC",
+    cta: "GENERAR REPORTE"
   }
 ];

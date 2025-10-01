@@ -105,25 +105,22 @@ export default function AgentSelector() {
           
         </div>
 
-        {/* VENTANA DE INFORMACIÓN DEL CIENTÍFICO - Lado derecho */}
-        <AnimatePresence>
-          {hoveredScientist && (
-            <motion.div
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 100 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="absolute top-1/2 transform -translate-y-1/2 z-20"
-              style={{ 
-                left: '60%',
-                width: '500px',
-                marginLeft: '50px'
-              }}
-            >
-              <ScientistInfoWindow scientist={hoveredScientist} />
-            </motion.div>
-          )}
-        </AnimatePresence>
+            {/* CONTENEDOR SEPARADO PARA VENTANA DE GLASSMORPHISM */}
+            <div className="absolute top-0 left-1/2 right-8 h-full z-20 flex items-center justify-start pl-8">
+              <AnimatePresence>
+                {hoveredScientist && (
+                  <motion.div
+                    initial={{ opacity: 0, x: 100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 100 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="w-full max-w-md"
+                  >
+                    <ScientistInfoWindow scientist={hoveredScientist} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
       </div>
     </section>
   );
@@ -282,7 +279,7 @@ interface ScientistInfoWindowProps {
 function ScientistInfoWindow({ scientist }: ScientistInfoWindowProps) {
   return (
     <motion.div
-      className="relative w-[2000px] h-[500px] rounded-3xl overflow-hidden"
+      className="relative w-full h-[350px] rounded-2xl overflow-hidden"
       style={{
         background: 'rgba(5, 10, 30, 0.4)',
         backdropFilter: 'blur(40px)',
@@ -291,7 +288,7 @@ function ScientistInfoWindow({ scientist }: ScientistInfoWindowProps) {
       }}
     >
       {/* Grid de fondo */}
-      <div className="absolute inset-0 opacity-15">
+      <div className="absolute inset-0 opacity-8">
         <div 
           className="absolute inset-0" 
           style={{
@@ -312,88 +309,123 @@ function ScientistInfoWindow({ scientist }: ScientistInfoWindowProps) {
 
 
       {/* Contenido */}
-      <div className="relative z-10 p-8 h-full flex flex-row gap-12">
-        {/* Columna izquierda - Header y info principal */}
-        <div className="flex-1 flex flex-col">
-          {/* Header */}
-          <div className="flex items-center gap-4 mb-6">
-          <div className="relative">
-            <motion.div
-              className="absolute -inset-2 rounded-full"
-              style={{
-                border: `3px solid ${scientist.color}`,
-              }}
-              animate={{
-                scale: [1, 1.15, 1],
-                opacity: [0.4, 0.8, 0.4],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-              }}
-            />
-            <div
-              className="w-16 h-16 rounded-full overflow-hidden border-2 relative"
-              style={{
-                borderColor: scientist.color,
-                boxShadow: `0 0 20px ${scientist.color}60`,
-              }}
-            >
-              <img
-                src={scientist.image}
-                alt={scientist.name}
-                className="w-full h-full object-cover"
-              />
-              <div 
-                className="absolute inset-0"
+      <div className="relative z-10 p-4 h-full flex flex-col gap-3 overflow-y-auto">
+        {/* Header y info principal */}
+        <div className="flex flex-col">
+          {/* Header épico */}
+          <div className="flex items-center gap-3 mb-4">
+            <div className="relative">
+              <motion.div
+                className="absolute -inset-1 rounded-full"
                 style={{
-                  background: `linear-gradient(135deg, transparent 40%, ${scientist.color}20 50%, transparent 60%)`,
+                  border: `2px solid ${scientist.color}`,
+                }}
+                animate={{
+                  scale: [1, 1.1, 1],
+                  opacity: [0.4, 0.7, 0.4],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
                 }}
               />
+              <div
+                className="w-12 h-12 rounded-full overflow-hidden border-2 relative"
+                style={{
+                  borderColor: scientist.color,
+                  boxShadow: `0 0 15px ${scientist.color}60`,
+                }}
+              >
+                <img
+                  src={scientist.image}
+                  alt={scientist.name}
+                  className="w-full h-full object-cover"
+                />
+                <div 
+                  className="absolute inset-0"
+                  style={{
+                    background: `linear-gradient(135deg, transparent 40%, ${scientist.color}20 50%, transparent 60%)`,
+                  }}
+                />
+              </div>
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-lg">{scientist.icon}</span>
+                <h3 
+                  className="text-white text-base font-black uppercase"
+                  style={{
+                    textShadow: `0 0 15px ${scientist.color}60`,
+                  }}
+                >
+                  {scientist.name}
+                </h3>
+                <span 
+                  className="px-2 py-1 text-sm font-bold rounded-full"
+                  style={{
+                    backgroundColor: `${scientist.color}20`,
+                    color: scientist.color,
+                    border: `1px solid ${scientist.color}40`,
+                  }}
+                >
+                  {scientist.rank}
+                </span>
+              </div>
+              <p 
+                className="text-sm font-bold uppercase tracking-wider mb-1"
+                style={{ color: scientist.color }}
+              >
+                {scientist.role}
+              </p>
+              <p className="text-gray-300 text-sm italic">"{scientist.quote}"</p>
             </div>
           </div>
-          <div>
-            <h3 
-              className="text-white text-xl font-black uppercase"
-              style={{
-                textShadow: `0 0 20px ${scientist.color}60`,
-              }}
-            >
-              {scientist.name}
-            </h3>
-            <p 
-              className="text-sm font-bold uppercase tracking-wider"
-              style={{ color: scientist.color }}
-            >
-              {scientist.role}
-            </p>
+
+          {/* Tagline épico */}
+          <div className="mb-3 p-2 rounded-lg" style={{ backgroundColor: `${scientist.color}10` }}>
+            <p className="text-white text-sm font-bold">{scientist.tagline}</p>
+          </div>
+
+          {/* One-liner */}
+          <div className="mb-3">
+            <p className="text-gray-200 text-sm leading-relaxed">{scientist.oneLiner}</p>
           </div>
         </div>
 
-        {/* Especialidad */}
-        <div className="mb-4">
-          <h4 className="text-white text-sm font-bold uppercase mb-2">Especialidad</h4>
-          <p className="text-gray-300 text-sm">{scientist.specialty}</p>
-        </div>
+        {/* Habilidades y ciencias */}
+        <div className="flex flex-col">
 
-        {/* Descripción */}
-        <div className="mb-4">
-          <h4 className="text-white text-sm font-bold uppercase mb-2">Descripción</h4>
-          <p className="text-gray-300 text-sm leading-relaxed">{scientist.description}</p>
-        </div>
-        </div>
+            {/* Habilidad firma */}
+            <div className="mb-3 p-2 rounded-lg border" style={{ 
+              backgroundColor: `${scientist.color}10`,
+              borderColor: `${scientist.color}40`
+            }}>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-base">{scientist.icon}</span>
+                <span className="text-white font-bold text-sm">{scientist.signatureAbility.name}</span>
+              </div>
+              <p className="text-gray-300 text-sm">{scientist.signatureAbility.description}</p>
+            </div>
 
-        {/* Columna derecha - Ciencias, responsabilidades, logros y stats */}
-        <div className="flex-1 flex flex-col">
-
-            {/* Ciencias */}
-            <div className="mb-4">
-              <h4 className="text-white text-sm font-bold uppercase mb-2">Ciencias</h4>
-              <div className="grid grid-cols-2 gap-2">
-                {scientist.sciences.map((science, index) => (
+            {/* Confianza y Ciencias en una fila */}
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-white text-sm font-bold uppercase">Confianza:</span>
+                <span 
+                  className="px-2 py-1 text-sm font-bold rounded-full"
+                  style={{
+                    backgroundColor: scientist.confidence === 'ALTA' ? '#00FF7F' : scientist.confidence === 'MEDIA' ? '#FFD700' : '#FF6B6B',
+                    color: '#000'
+                  }}
+                >
+                  {scientist.confidence}
+                </span>
+              </div>
+              <div className="flex gap-1">
+                {scientist.sciences.slice(0, 2).map((science, index) => (
                   <span
                     key={index}
-                    className="px-3 py-2 text-xs rounded-full text-center"
+                    className="px-2 py-1 text-sm rounded-full"
                     style={{
                       backgroundColor: `${scientist.color}20`,
                       color: scientist.color,
@@ -406,107 +438,67 @@ function ScientistInfoWindow({ scientist }: ScientistInfoWindowProps) {
               </div>
             </div>
 
-            {/* Responsabilidades */}
-            <div className="mb-4">
+
+        </div>
+
+        {/* Responsabilidades y logros */}
+        <div className="flex flex-col">
+
+            {/* Responsabilidades compactas */}
+            <div className="mb-3">
               <h4 className="text-white text-sm font-bold uppercase mb-2">Responsabilidades</h4>
-              <div className="space-y-1 max-h-32 overflow-y-auto">
-                {scientist.responsibilities.map((responsibility, index) => (
+              <div className="space-y-1 max-h-16 overflow-y-auto">
+                {scientist.responsibilities.slice(0, 3).map((responsibility, index) => (
                   <div
                     key={index}
                     className="flex items-start gap-2"
                   >
                     <div
-                      className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0"
+                      className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
                       style={{ backgroundColor: scientist.color }}
                     />
-                    <span className="text-gray-300 text-xs">{responsibility}</span>
+                    <span className="text-gray-300 text-sm">{responsibility}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Importancia */}
-            <div className="mb-4">
-              <h4 className="text-white text-sm font-bold uppercase mb-2">Importancia</h4>
-              <p className="text-gray-300 text-xs leading-relaxed">{scientist.importance}</p>
-            </div>
-
-            {/* Logros */}
-            <div className="flex-1">
-              <h4 className="text-white text-sm font-bold uppercase mb-3">Logros Destacados</h4>
-              <div className="space-y-2 max-h-32 overflow-y-auto">
-                {scientist.achievements.map((achievement, index) => (
+            {/* Logros compactos */}
+            <div className="mb-3">
+              <h4 className="text-white text-sm font-bold uppercase mb-2">Logros</h4>
+              <div className="space-y-1 max-h-16 overflow-y-auto">
+                {scientist.achievements.slice(0, 2).map((achievement, index) => (
                   <div
                     key={index}
-                    className="flex items-start gap-2 p-2 rounded-lg"
+                    className="flex items-start gap-2 p-1 rounded"
                     style={{
                       backgroundColor: `${scientist.color}10`,
                       border: `1px solid ${scientist.color}30`,
                     }}
                   >
                     <div
-                      className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+                      className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
                       style={{ backgroundColor: scientist.color }}
                     />
-                    <span className="text-gray-300 text-xs">{achievement}</span>
+                    <span className="text-gray-300 text-sm">{achievement}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-        {/* Stats si están disponibles */}
-        {scientist.stats && (
-          <div className="mt-4">
-            <h4 className="text-white text-sm font-bold uppercase mb-3">Atributos</h4>
-            <div className="grid grid-cols-2 gap-3">
-              {Object.entries(scientist.stats).map(([key, value]) => (
-                <div key={key} className="flex flex-col gap-1">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-xs capitalize">{key}:</span>
-                    <span className="text-white text-xs">{value}%</span>
-                  </div>
-                  <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-                    <motion.div
-                      className="h-full rounded-full"
-                      style={{
-                        background: `linear-gradient(90deg, ${scientist.color}, ${scientist.color}80)`,
-                      }}
-                      initial={{ width: 0 }}
-                      animate={{ width: `${value}%` }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                    />
-                  </div>
-                </div>
-              ))}
+            {/* CTA épico */}
+            <div className="mt-auto">
+              <button 
+                className="w-full py-2 px-3 rounded-lg font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 text-sm"
+                style={{
+                  backgroundColor: scientist.color,
+                  color: '#000',
+                  boxShadow: `0 0 15px ${scientist.color}60`
+                }}
+              >
+                {scientist.cta}
+              </button>
             </div>
-          </div>
-        )}
-
-        {/* Información adicional si está disponible */}
-        {(scientist.yearsOfService || scientist.missionsCompleted || scientist.rank) && (
-          <div className="mt-4 pt-4 border-t border-gray-600">
-            <div className="grid grid-cols-3 gap-2 text-center">
-              {scientist.yearsOfService && (
-                <div>
-                  <p className="text-gray-400 text-xs">Años</p>
-                  <p className="text-white text-lg font-bold">{scientist.yearsOfService}</p>
-                </div>
-              )}
-              {scientist.missionsCompleted && (
-                <div>
-                  <p className="text-gray-400 text-xs">Misiones</p>
-                  <p className="text-white text-lg font-bold">{scientist.missionsCompleted}</p>
-                </div>
-              )}
-              {scientist.rank && (
-                <div>
-                  <p className="text-gray-400 text-xs">Rango</p>
-                  <p className="text-white text-sm font-bold">{scientist.rank}</p>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
         </div>
       </div>
     </motion.div>
