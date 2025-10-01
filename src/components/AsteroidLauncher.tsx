@@ -6,16 +6,29 @@ interface AsteroidLauncherProps {
   isVisible: boolean;
   mapClickPosition?: { x: number; y: number };
   onPositionUsed?: () => void;
+  asteroidMaterial?: 'iron' | 'stone' | 'ice' | 'gold' | 'diamond';
 }
 
 export function AsteroidLauncher({ 
   onMapClick, 
   isVisible, 
   mapClickPosition, 
-  onPositionUsed 
+  onPositionUsed,
+  asteroidMaterial = 'iron'
 }: AsteroidLauncherProps) {
   const [isLaunching, setIsLaunching] = useState(false);
   const [trail, setTrail] = useState<Array<{ x: number; y: number; opacity: number }>>([]);
+
+  // Configuración de materiales
+  const materialConfig = {
+    iron: { color: '#8B4513', trailColor: '#FF6347', glowColor: '#FF4500', icon: '🦾' },
+    stone: { color: '#696969', trailColor: '#FF8C69', glowColor: '#FF6347', icon: '🪨' },
+    ice: { color: '#B0E0E6', trailColor: '#87CEEB', glowColor: '#00BFFF', icon: '🧊' },
+    gold: { color: '#FFD700', trailColor: '#FFA500', glowColor: '#FFD700', icon: '🏆' },
+    diamond: { color: '#B9F2FF', trailColor: '#FFFFFF', glowColor: '#00FFFF', icon: '💎' }
+  };
+
+  const currentMaterial = materialConfig[asteroidMaterial];
 
   useEffect(() => {
     if (mapClickPosition && isVisible) {
@@ -53,11 +66,12 @@ export function AsteroidLauncher({
         {trail.map((particle, index) => (
           <motion.div
             key={index}
-            className="absolute w-3 h-3 bg-orange-400 rounded-full shadow-lg"
+            className="absolute w-3 h-3 rounded-full shadow-lg"
             style={{
               left: `${particle.x}%`,
               top: `${particle.y}%`,
-              opacity: particle.opacity
+              opacity: particle.opacity,
+              backgroundColor: currentMaterial.trailColor
             }}
             initial={{ scale: 0, opacity: 0 }}
             animate={{ 
@@ -78,20 +92,21 @@ export function AsteroidLauncher({
 
       {/* Explosión central */}
       <motion.div
-        className="absolute w-12 h-12 bg-gradient-to-r from-red-500 to-orange-500 rounded-full shadow-2xl"
+        className="absolute w-12 h-12 rounded-full shadow-2xl"
         style={{
           left: `${mapClickPosition.x}%`,
           top: `${mapClickPosition.y}%`,
-          transform: 'translate(-50%, -50%)'
+          transform: 'translate(-50%, -50%)',
+          background: `linear-gradient(45deg, ${currentMaterial.color}, ${currentMaterial.glowColor})`
         }}
         initial={{ scale: 0 }}
         animate={{ 
           scale: [0, 4, 0],
           opacity: [1, 0.9, 0],
           boxShadow: [
-            '0 0 0px #ff6b35',
-            '0 0 40px #ff6b35',
-            '0 0 80px #ff6b35'
+            `0 0 0px ${currentMaterial.glowColor}`,
+            `0 0 40px ${currentMaterial.glowColor}`,
+            `0 0 80px ${currentMaterial.glowColor}`
           ]
         }}
         transition={{ 
@@ -99,6 +114,27 @@ export function AsteroidLauncher({
           ease: "easeOut"
         }}
       />
+
+      {/* Texto de impacto con material */}
+      {isLaunching && (
+        <motion.div
+          className="absolute text-white font-bold text-lg"
+          style={{
+            left: `${mapClickPosition.x}%`,
+            top: `${mapClickPosition.y - 10}%`,
+            transform: 'translateX(-50%)'
+          }}
+          initial={{ opacity: 0, y: 0 }}
+          animate={{ 
+            opacity: [0, 1, 0],
+            y: [0, -20, -40]
+          }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 2, ease: "easeOut" }}
+        >
+          {currentMaterial.icon} IMPACTO {asteroidMaterial.toUpperCase()}!
+        </motion.div>
+      )}
 
       {/* Onda de choque */}
       <motion.div

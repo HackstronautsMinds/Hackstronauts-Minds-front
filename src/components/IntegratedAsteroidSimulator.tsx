@@ -8,6 +8,7 @@ import { AsteroidData } from '../types/simulation.types';
 
 interface IntegratedAsteroidSimulatorProps {
   selectedAsteroid: AsteroidData | null;
+  selectedAgent?: any; // Agente seleccionado desde la sección principal
   onImpact?: (impactData: any) => void;
 }
 
@@ -20,6 +21,7 @@ function latLngToXY(lat: number, lng: number): { x: number, y: number } {
 
 export default function IntegratedAsteroidSimulator({ 
   selectedAsteroid, 
+  selectedAgent,
   onImpact 
 }: IntegratedAsteroidSimulatorProps) {
   const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -30,13 +32,62 @@ export default function IntegratedAsteroidSimulator({
   const [asteroidConfig, setAsteroidConfig] = useState({
     diameter: 50,
     speed: 100,
-    material: 'iron' as 'iron' | 'stone' | 'ice'
+    material: 'iron' as 'iron' | 'stone' | 'ice' | 'gold' | 'diamond'
   });
+
+  // Configuraciones de materiales de asteroides
+  const asteroidMaterials = {
+    iron: { 
+      name: 'Hierro', 
+      color: '#8B4513', 
+      density: 1.0, 
+      icon: '🦾',
+      effects: { energy: 1.2, crater: 1.1, area: 1.0 }
+    },
+    stone: { 
+      name: 'Piedra', 
+      color: '#696969', 
+      density: 0.8, 
+      icon: '🪨',
+      effects: { energy: 0.8, crater: 0.9, area: 0.8 }
+    },
+    ice: { 
+      name: 'Hielo', 
+      color: '#B0E0E6', 
+      density: 0.5, 
+      icon: '🧊',
+      effects: { energy: 0.6, crater: 0.7, area: 1.2 }
+    },
+    gold: { 
+      name: 'Oro', 
+      color: '#FFD700', 
+      density: 1.5, 
+      icon: '🏆',
+      effects: { energy: 1.5, crater: 1.3, area: 1.1 }
+    },
+    diamond: { 
+      name: 'Diamante', 
+      color: '#B9F2FF', 
+      density: 2.0, 
+      icon: '💎',
+      effects: { energy: 2.0, crater: 1.5, area: 1.3 }
+    }
+  };
 
   // Estados para la simulación de agentes
   const [simulationPhase, setSimulationPhase] = useState<'idle' | 'data_collecting' | 'orbital_calculating' | 'impact_analyzing' | 'mitigation_planning' | 'completed'>('idle');
   const [simulationProgress, setSimulationProgress] = useState(0);
   const [isSimulationRunning, setIsSimulationRunning] = useState(false);
+  
+  // Métricas en tiempo real
+  const [liveMetrics, setLiveMetrics] = useState({
+    energy: 0,
+    craterSize: 0,
+    affectedArea: 0,
+    populationAtRisk: 0,
+    infrastructureDamage: 0,
+    mitigationTime: 0
+  });
 
   const handleLocationSelect = useCallback((lat: number, lng: number) => {
     setSelectedLocation({ lat, lng });
@@ -60,13 +111,39 @@ export default function IntegratedAsteroidSimulator({
     setSimulationPhase('data_collecting');
     setSimulationProgress(0);
 
-    // Simular progreso de los agentes
+    // Calcular métricas basadas en la configuración del asteroide y material
+    const material = asteroidMaterials[asteroidConfig.material];
+    const baseEnergy = (asteroidConfig.diameter * asteroidConfig.speed) / 10 * material.effects.energy;
+    const baseCrater = asteroidConfig.diameter * 2 * material.effects.crater;
+    const baseArea = Math.PI * Math.pow(baseCrater / 2, 2) * material.effects.area;
+    
+    // Simular progreso de los agentes con métricas dinámicas
     const phases = [
-      { phase: 'data_collecting' as const, duration: 2000 },
-      { phase: 'orbital_calculating' as const, duration: 3000 },
-      { phase: 'impact_analyzing' as const, duration: 2500 },
-      { phase: 'mitigation_planning' as const, duration: 2000 },
-      { phase: 'completed' as const, duration: 1000 }
+      { 
+        phase: 'data_collecting' as const, 
+        duration: 2000,
+        metrics: { energy: baseEnergy, craterSize: baseCrater, affectedArea: baseArea }
+      },
+      { 
+        phase: 'orbital_calculating' as const, 
+        duration: 3000,
+        metrics: { populationAtRisk: Math.floor(baseArea * 0.1) }
+      },
+      { 
+        phase: 'impact_analyzing' as const, 
+        duration: 2500,
+        metrics: { infrastructureDamage: Math.floor(baseEnergy * 0.3) }
+      },
+      { 
+        phase: 'mitigation_planning' as const, 
+        duration: 2000,
+        metrics: { mitigationTime: Math.floor(baseEnergy / 100) }
+      },
+      { 
+        phase: 'completed' as const, 
+        duration: 1000,
+        metrics: {}
+      }
     ];
 
     let currentPhaseIndex = 0;
@@ -80,6 +157,11 @@ export default function IntegratedAsteroidSimulator({
 
       const currentPhaseData = phases[currentPhaseIndex];
       setSimulationPhase(currentPhaseData.phase);
+      
+      // Actualizar métricas para esta fase
+      if (currentPhaseData.metrics) {
+        setLiveMetrics(prev => ({ ...prev, ...currentPhaseData.metrics }));
+      }
       
       const progressInterval = setInterval(() => {
         progress += 2;
@@ -95,7 +177,7 @@ export default function IntegratedAsteroidSimulator({
     };
 
     updateProgress();
-  }, [isSimulationRunning]);
+  }, [isSimulationRunning, asteroidConfig]);
 
   const handleMapClick = useCallback((lat: number, lng: number, coords?: {x: number, y: number}) => {
     // Usar las coordenadas calculadas del clic o convertir lat/lng
@@ -272,16 +354,33 @@ export default function IntegratedAsteroidSimulator({
 
                     {/* Material */}
                     <div className="mb-4">
-                      <label className="block text-sm mb-2">Material</label>
+                      <label className="block text-sm mb-2 text-white font-medium">Material</label>
                       <select
                         value={asteroidConfig.material}
                         onChange={(e) => setAsteroidConfig(prev => ({ ...prev, material: e.target.value as any }))}
                         className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white"
                       >
-                        <option value="iron">🦾 Hierro</option>
-                        <option value="stone">🪨 Piedra</option>
-                        <option value="ice">🧊 Hielo</option>
+                        {Object.entries(asteroidMaterials).map(([key, material]) => (
+                          <option key={key} value={key}>
+                            {material.icon} {material.name}
+                          </option>
+                        ))}
                       </select>
+                      
+                      {/* Información del material seleccionado */}
+                      <div className="mt-2 p-2 bg-gray-800 rounded text-xs">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span style={{ color: asteroidMaterials[asteroidConfig.material].color }}>
+                            {asteroidMaterials[asteroidConfig.material].icon}
+                          </span>
+                          <span className="text-gray-300">{asteroidMaterials[asteroidConfig.material].name}</span>
+                        </div>
+                        <div className="text-gray-400">
+                          Densidad: {asteroidMaterials[asteroidConfig.material].density}x | 
+                          Energía: {asteroidMaterials[asteroidConfig.material].effects.energy}x | 
+                          Cráter: {asteroidMaterials[asteroidConfig.material].effects.crater}x
+                        </div>
+                      </div>
                     </div>
 
                     {/* Botón de lanzamiento manual */}
@@ -337,6 +436,7 @@ export default function IntegratedAsteroidSimulator({
                 isVisible={showAsteroidLauncher}
                 mapClickPosition={mapClickPosition}
                 onPositionUsed={() => setMapClickPosition(null)}
+                asteroidMaterial={asteroidConfig.material}
               />
 
               {/* Panel de Estado de Agentes */}
@@ -345,6 +445,56 @@ export default function IntegratedAsteroidSimulator({
                   currentPhase={simulationPhase}
                   progress={simulationProgress}
                 />
+              </div>
+
+              {/* Panel de Métricas en Tiempo Real */}
+              <div className="absolute top-20 left-4 z-50 bg-black/90 backdrop-blur-md text-white p-4 rounded-lg border-2 border-cyan-400/50 pointer-events-auto shadow-2xl w-80">
+                <h3 className="font-bold text-cyan-400 mb-3 flex items-center gap-2">
+                  📊 Métricas en Tiempo Real
+                </h3>
+                
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-300">Energía:</span>
+                    <span className="text-cyan-400 font-bold">{liveMetrics.energy.toFixed(0)} MJ</span>
+                  </div>
+                  
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-300">Tamaño del Cráter:</span>
+                    <span className="text-red-400 font-bold">{liveMetrics.craterSize.toFixed(0)}m</span>
+                  </div>
+                  
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-300">Área Afectada:</span>
+                    <span className="text-orange-400 font-bold">{liveMetrics.affectedArea.toFixed(0)} km²</span>
+                  </div>
+                  
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-300">Población en Riesgo:</span>
+                    <span className="text-yellow-400 font-bold">{liveMetrics.populationAtRisk.toLocaleString()}</span>
+                  </div>
+                  
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-300">Daño a Infraestructura:</span>
+                    <span className="text-pink-400 font-bold">{liveMetrics.infrastructureDamage.toFixed(0)}%</span>
+                  </div>
+                  
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-300">Tiempo de Mitigación:</span>
+                    <span className="text-green-400 font-bold">{liveMetrics.mitigationTime} días</span>
+                  </div>
+                </div>
+
+                {/* Indicador de agente seleccionado */}
+                {selectedAgent && (
+                  <div className="mt-4 pt-3 border-t border-cyan-400/30">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: selectedAgent.color }}></div>
+                      <span className="text-sm text-cyan-300">Agente: {selectedAgent.name}</span>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">{selectedAgent.specialty}</p>
+                  </div>
+                )}
               </div>
               
               {/* Información del mapa */}
