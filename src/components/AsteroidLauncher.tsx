@@ -18,8 +18,6 @@ export function AsteroidLauncher({
   const [trail, setTrail] = useState<Array<{ x: number; y: number; opacity: number }>>([]);
 
   useEffect(() => {
-    console.log('🎯 AsteroidLauncher useEffect:', { mapClickPosition, isVisible });
-    
     if (mapClickPosition && isVisible) {
       console.log('🚀 Launching asteroid at position:', mapClickPosition);
       
@@ -28,10 +26,10 @@ export function AsteroidLauncher({
       
       // Crear trail de partículas
       const newTrail = [];
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 15; i++) {
         newTrail.push({
-          x: mapClickPosition.x + (Math.random() - 0.5) * 10,
-          y: mapClickPosition.y + (Math.random() - 0.5) * 10,
+          x: mapClickPosition.x + (Math.random() - 0.5) * 8,
+          y: mapClickPosition.y + (Math.random() - 0.5) * 8,
           opacity: Math.random() * 0.8 + 0.2
         });
       }
@@ -39,11 +37,10 @@ export function AsteroidLauncher({
 
       // Limpiar después de la animación
       setTimeout(() => {
-        console.log('💥 Asteroid animation completed');
         setIsLaunching(false);
         setTrail([]);
         onPositionUsed?.();
-      }, 2000);
+      }, 3000);
     }
   }, [mapClickPosition, isVisible, onPositionUsed]);
 
@@ -56,7 +53,7 @@ export function AsteroidLauncher({
         {trail.map((particle, index) => (
           <motion.div
             key={index}
-            className="absolute w-2 h-2 bg-orange-500 rounded-full"
+            className="absolute w-3 h-3 bg-orange-400 rounded-full shadow-lg"
             style={{
               left: `${particle.x}%`,
               top: `${particle.y}%`,
@@ -64,15 +61,15 @@ export function AsteroidLauncher({
             }}
             initial={{ scale: 0, opacity: 0 }}
             animate={{ 
-              scale: [0, 1, 0],
+              scale: [0, 1.2, 0],
               opacity: [0, particle.opacity, 0],
-              x: [0, (Math.random() - 0.5) * 50],
-              y: [0, (Math.random() - 0.5) * 50]
+              x: [0, (Math.random() - 0.5) * 60],
+              y: [0, (Math.random() - 0.5) * 60]
             }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ 
-              duration: 2,
-              delay: index * 0.1,
+              duration: 2.5,
+              delay: index * 0.05,
               ease: "easeOut"
             }}
           />
@@ -81,7 +78,7 @@ export function AsteroidLauncher({
 
       {/* Explosión central */}
       <motion.div
-        className="absolute w-8 h-8 bg-red-500 rounded-full"
+        className="absolute w-12 h-12 bg-gradient-to-r from-red-500 to-orange-500 rounded-full shadow-2xl"
         style={{
           left: `${mapClickPosition.x}%`,
           top: `${mapClickPosition.y}%`,
@@ -89,18 +86,23 @@ export function AsteroidLauncher({
         }}
         initial={{ scale: 0 }}
         animate={{ 
-          scale: [0, 3, 0],
-          opacity: [1, 0.8, 0]
+          scale: [0, 4, 0],
+          opacity: [1, 0.9, 0],
+          boxShadow: [
+            '0 0 0px #ff6b35',
+            '0 0 40px #ff6b35',
+            '0 0 80px #ff6b35'
+          ]
         }}
         transition={{ 
-          duration: 1.5,
+          duration: 2,
           ease: "easeOut"
         }}
       />
 
       {/* Onda de choque */}
       <motion.div
-        className="absolute border-2 border-yellow-400 rounded-full"
+        className="absolute border-4 border-yellow-300 rounded-full"
         style={{
           left: `${mapClickPosition.x}%`,
           top: `${mapClickPosition.y}%`,
@@ -108,13 +110,35 @@ export function AsteroidLauncher({
         }}
         initial={{ width: 0, height: 0, opacity: 1 }}
         animate={{ 
-          width: 200,
-          height: 200,
+          width: 300,
+          height: 300,
           opacity: 0
         }}
         transition={{ 
-          duration: 1,
-          ease: "easeOut"
+          duration: 1.5,
+          ease: "easeOut",
+          delay: 0.2
+        }}
+      />
+
+      {/* Segunda onda de choque */}
+      <motion.div
+        className="absolute border-2 border-red-400 rounded-full"
+        style={{
+          left: `${mapClickPosition.x}%`,
+          top: `${mapClickPosition.y}%`,
+          transform: 'translate(-50%, -50%)'
+        }}
+        initial={{ width: 0, height: 0, opacity: 0.8 }}
+        animate={{ 
+          width: 500,
+          height: 500,
+          opacity: 0
+        }}
+        transition={{ 
+          duration: 2,
+          ease: "easeOut",
+          delay: 0.5
         }}
       />
     </div>

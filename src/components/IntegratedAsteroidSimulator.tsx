@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Earth3DGlobe from './Earth3DGlobe';
 import LeafletMapComponent from './LeafletMapComponent';
 import { AsteroidLauncher } from './AsteroidLauncher';
+import AgentStatusPanel from './AgentStatusPanel';
 import { AsteroidData } from '../types/simulation.types';
 
 interface IntegratedAsteroidSimulatorProps {
@@ -32,6 +33,11 @@ export default function IntegratedAsteroidSimulator({
     material: 'iron' as 'iron' | 'stone' | 'ice'
   });
 
+  // Estados para la simulación de agentes
+  const [simulationPhase, setSimulationPhase] = useState<'idle' | 'data_collecting' | 'orbital_calculating' | 'impact_analyzing' | 'mitigation_planning' | 'completed'>('idle');
+  const [simulationProgress, setSimulationProgress] = useState(0);
+  const [isSimulationRunning, setIsSimulationRunning] = useState(false);
+
   const handleLocationSelect = useCallback((lat: number, lng: number) => {
     setSelectedLocation({ lat, lng });
     
@@ -46,18 +52,61 @@ export default function IntegratedAsteroidSimulator({
     }, 1500);
   }, []);
 
-  const handleMapClick = useCallback((lat: number, lng: number, coords?: {x: number, y: number}) => {
-    console.log('🚀 Map clicked:', { lat, lng, coords });
+  // Función para simular el trabajo de los agentes
+  const startAgentSimulation = useCallback(() => {
+    if (isSimulationRunning) return;
     
+    setIsSimulationRunning(true);
+    setSimulationPhase('data_collecting');
+    setSimulationProgress(0);
+
+    // Simular progreso de los agentes
+    const phases = [
+      { phase: 'data_collecting' as const, duration: 2000 },
+      { phase: 'orbital_calculating' as const, duration: 3000 },
+      { phase: 'impact_analyzing' as const, duration: 2500 },
+      { phase: 'mitigation_planning' as const, duration: 2000 },
+      { phase: 'completed' as const, duration: 1000 }
+    ];
+
+    let currentPhaseIndex = 0;
+    let progress = 0;
+
+    const updateProgress = () => {
+      if (currentPhaseIndex >= phases.length) {
+        setIsSimulationRunning(false);
+        return;
+      }
+
+      const currentPhaseData = phases[currentPhaseIndex];
+      setSimulationPhase(currentPhaseData.phase);
+      
+      const progressInterval = setInterval(() => {
+        progress += 2;
+        setSimulationProgress(progress);
+        
+        if (progress >= 100) {
+          clearInterval(progressInterval);
+          progress = 0;
+          currentPhaseIndex++;
+          setTimeout(updateProgress, 500);
+        }
+      }, currentPhaseData.duration / 50);
+    };
+
+    updateProgress();
+  }, [isSimulationRunning]);
+
+  const handleMapClick = useCallback((lat: number, lng: number, coords?: {x: number, y: number}) => {
     // Usar las coordenadas calculadas del clic o convertir lat/lng
     const mapCoords = coords || latLngToXY(lat, lng);
-    console.log('📍 Map coords set:', mapCoords);
-    
     setMapClickPosition(mapCoords);
     
     // Activar el lanzador de asteroides
-    console.log('🎯 Activating asteroid launcher');
     setShowAsteroidLauncher(true);
+    
+    // Iniciar simulación de agentes
+    startAgentSimulation();
     
     // Simular impacto
     const mockImpact = {
@@ -68,10 +117,9 @@ export default function IntegratedAsteroidSimulator({
       y: mapCoords.y
     };
     
-    console.log('💥 Impact data:', mockImpact);
     setImpactData(mockImpact);
     onImpact?.(mockImpact);
-  }, [onImpact]);
+  }, [onImpact, startAgentSimulation]);
 
   const handleAsteroidImpact = useCallback((impact: any) => {
     setImpactData(impact);
@@ -245,6 +293,9 @@ export default function IntegratedAsteroidSimulator({
                           setMapClickPosition(mapCoords);
                           setShowAsteroidLauncher(true);
                           
+                          // Iniciar simulación de agentes
+                          startAgentSimulation();
+                          
                           // Simular impacto con configuración personalizada
                           const mockImpact = {
                             energy: (asteroidConfig.diameter * asteroidConfig.speed) / 10,
@@ -259,9 +310,22 @@ export default function IntegratedAsteroidSimulator({
                           onImpact?.(mockImpact);
                         }
                       }}
-                      className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2 px-4 rounded transition-colors"
+                      className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2 px-4 rounded transition-colors mb-2"
                     >
                       🚀 Lanzar Asteroide Aquí
+                    </button>
+
+                    {/* Botón para simular solo agentes */}
+                    <button
+                      onClick={startAgentSimulation}
+                      disabled={isSimulationRunning}
+                      className={`w-full font-bold py-2 px-4 rounded transition-colors ${
+                        isSimulationRunning 
+                          ? 'bg-gray-600 text-gray-400 cursor-not-allowed' 
+                          : 'bg-purple-600 hover:bg-purple-500 text-white'
+                      }`}
+                    >
+                      {isSimulationRunning ? '🤖 Agentes Trabajando...' : '🤖 Simular Solo Agentes'}
                     </button>
                   </div>
                 </div>
@@ -274,6 +338,14 @@ export default function IntegratedAsteroidSimulator({
                 mapClickPosition={mapClickPosition}
                 onPositionUsed={() => setMapClickPosition(null)}
               />
+
+              {/* Panel de Estado de Agentes */}
+              <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50">
+                <AgentStatusPanel 
+                  currentPhase={simulationPhase}
+                  progress={simulationProgress}
+                />
+              </div>
               
               {/* Información del mapa */}
               <div className="absolute top-4 left-4 z-30">
