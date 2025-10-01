@@ -8,13 +8,75 @@ export default function AgentSelector() {
 
   return (
     <section className="relative w-full min-h-screen overflow-hidden bg-black py-20">
-      {/* Fondo con gradiente radial */}
+      {/* Fondo negro sólido */}
+      <div className="absolute inset-0 bg-black" />
+      
+      {/* Fondo espacial con gradiente radial */}
       <div 
-        className="absolute inset-0"
+        className="absolute inset-0 opacity-30"
         style={{
-          background: 'radial-gradient(ellipse at center, #FF1B8D 0%, #8B2C7E 25%, #4A1B5C 50%, #2D4A5E 75%, #1B5C68 100%)'
+          background: 'radial-gradient(ellipse at center, #FF1B8D 0%, #8B2C7E 20%, #4A1B5C 40%, #2D4A5E 60%, transparent 80%, transparent 100%)'
         }}
       />
+      
+      {/* Estrellas de fondo */}
+      <div className="absolute inset-0">
+        {/* Estrellas pequeñas */}
+        {Array.from({ length: 150 }).map((_, i) => (
+          <div
+            key={`small-${i}`}
+            className="absolute rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${Math.random() * 2 + 1}px`,
+              height: `${Math.random() * 2 + 1}px`,
+              backgroundColor: Math.random() > 0.5 ? '#FF1B8D' : '#00D4FF',
+              opacity: Math.random() * 0.7 + 0.3,
+              animationDelay: `${Math.random() * 4}s`,
+              animationDuration: `${Math.random() * 3 + 2}s`,
+            }}
+          />
+        ))}
+        
+        {/* Estrellas medianas */}
+        {Array.from({ length: 50 }).map((_, i) => (
+          <div
+            key={`medium-${i}`}
+            className="absolute rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${Math.random() * 3 + 2}px`,
+              height: `${Math.random() * 3 + 2}px`,
+              backgroundColor: Math.random() > 0.5 ? '#FF1B8D' : '#00D4FF',
+              opacity: Math.random() * 0.8 + 0.2,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${Math.random() * 4 + 3}s`,
+              boxShadow: `0 0 ${Math.random() * 8 + 4}px ${Math.random() > 0.5 ? '#FF1B8D' : '#00D4FF'}`,
+            }}
+          />
+        ))}
+        
+        {/* Estrellas grandes y brillantes */}
+        {Array.from({ length: 20 }).map((_, i) => (
+          <div
+            key={`large-${i}`}
+            className="absolute rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${Math.random() * 4 + 3}px`,
+              height: `${Math.random() * 4 + 3}px`,
+              backgroundColor: Math.random() > 0.5 ? '#FF1B8D' : '#00D4FF',
+              opacity: Math.random() * 0.9 + 0.1,
+              animationDelay: `${Math.random() * 6}s`,
+              animationDuration: `${Math.random() * 5 + 4}s`,
+              boxShadow: `0 0 ${Math.random() * 12 + 8}px ${Math.random() > 0.5 ? '#FF1B8D' : '#00D4FF'}`,
+            }}
+          />
+        ))}
+      </div>
 
       {/* Contenedor principal - para mover todo el bloque */}
       <div className="relative z-10 w-full min-h-screen flex items-end justify-center px-8 pb-32">
@@ -136,10 +198,10 @@ interface ScientistCardProps {
 
 function ScientistCard({ scientist, isSelected, isDimmed, onMouseEnter, onMouseLeave }: ScientistCardProps) {
   return (
-    <motion.div
+    <div
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className={`relative cursor-pointer transition-all duration-300 ${
+      className={`relative cursor-pointer group ${
         isDimmed
           ? 'opacity-25 blur-[2px] grayscale'
           : 'opacity-100'
@@ -148,10 +210,7 @@ function ScientistCard({ scientist, isSelected, isDimmed, onMouseEnter, onMouseL
         width: '140px',
         height: '175px',
         borderRadius: '16px',
-        overflow: 'hidden',
-        backgroundColor: 'rgba(0, 0, 0, 0.3)',
-        backdropFilter: 'blur(10px)',
-        border: '2px solid rgba(0, 212, 255, 0.3)'
+        overflow: 'hidden'
       }}
     >
       <img
@@ -160,114 +219,47 @@ function ScientistCard({ scientist, isSelected, isDimmed, onMouseEnter, onMouseL
         className="w-full h-full object-cover"
       />
       
-      {/* Overlay gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+      {/* Solo esquinas con borde grueso en hover */}
+      {/* Esquina superior izquierda */}
+      <div 
+        className="absolute -top-1 -left-1 w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{
+          borderTop: '6px solid #00D4FF',
+          borderLeft: '6px solid #00D4FF',
+          boxShadow: '0 0 10px #00D4FF'
+        }}
+      />
       
-      {/* Marco con esquinas angulares animado - solo cuando está seleccionado */}
-      <AnimatePresence>
-        {isSelected && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.3 }}
-            className="absolute inset-0 pointer-events-none"
-          >
-            {/* Marco principal */}
-            <div 
-              className="absolute inset-0 border-4"
-              style={{
-                borderColor: '#00D4FF',
-                boxShadow: '0 0 30px #00D4FF, inset 0 0 30px rgba(0, 212, 255, 0.5)'
-              }}
-            />
-            
-            {/* Esquina superior izquierda */}
-            <motion.div
-              animate={{ 
-                x: [0, 5, 0],
-                y: [0, -5, 0],
-                rotate: [0, 5, 0]
-              }}
-              transition={{ 
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className="absolute -top-3 -left-3 w-8 h-8"
-              style={{
-                borderTop: '6px solid #00D4FF',
-                borderLeft: '6px solid #00D4FF',
-                boxShadow: '0 0 25px #00D4FF'
-              }}
-            />
-            
-            {/* Esquina superior derecha */}
-            <motion.div
-              animate={{ 
-                x: [0, -5, 0],
-                y: [0, -5, 0],
-                rotate: [0, -5, 0]
-              }}
-              transition={{ 
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.5
-              }}
-              className="absolute -top-3 -right-3 w-8 h-8"
-              style={{
-                borderTop: '6px solid #00D4FF',
-                borderRight: '6px solid #00D4FF',
-                boxShadow: '0 0 25px #00D4FF'
-              }}
-            />
-            
-            {/* Esquina inferior izquierda */}
-            <motion.div
-              animate={{ 
-                x: [0, 5, 0],
-                y: [0, 5, 0],
-                rotate: [0, -5, 0]
-              }}
-              transition={{ 
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1
-              }}
-              className="absolute -bottom-3 -left-3 w-8 h-8"
-              style={{
-                borderBottom: '6px solid #00D4FF',
-                borderLeft: '6px solid #00D4FF',
-                boxShadow: '0 0 25px #00D4FF'
-              }}
-            />
-            
-            {/* Esquina inferior derecha */}
-            <motion.div
-              animate={{ 
-                x: [0, -5, 0],
-                y: [0, 5, 0],
-                rotate: [0, 5, 0]
-              }}
-              transition={{ 
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1.5
-              }}
-              className="absolute -bottom-3 -right-3 w-8 h-8"
-              style={{
-                borderBottom: '6px solid #00D4FF',
-                borderRight: '6px solid #00D4FF',
-                boxShadow: '0 0 25px #00D4FF'
-              }}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+      {/* Esquina superior derecha */}
+      <div 
+        className="absolute -top-1 -right-1 w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{
+          borderTop: '6px solid #00D4FF',
+          borderRight: '6px solid #00D4FF',
+          boxShadow: '0 0 10px #00D4FF'
+        }}
+      />
+      
+      {/* Esquina inferior izquierda */}
+      <div 
+        className="absolute -bottom-1 -left-1 w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{
+          borderBottom: '6px solid #00D4FF',
+          borderLeft: '6px solid #00D4FF',
+          boxShadow: '0 0 10px #00D4FF'
+        }}
+      />
+      
+      {/* Esquina inferior derecha */}
+      <div 
+        className="absolute -bottom-1 -right-1 w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{
+          borderBottom: '6px solid #00D4FF',
+          borderRight: '6px solid #00D4FF',
+          boxShadow: '0 0 10px #00D4FF'
+        }}
+      />
+    </div>
   );
 }
 
