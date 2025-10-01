@@ -6,6 +6,7 @@ import NASAScientistSelector from './components/NASAScientistSelector';
 import { CTASection } from './components/CTASection';
 import { BackendTest } from './components/BackendTest';
 import { NEOList } from './components/NEOList';
+import AsteroidSimulatorSection from './components/AsteroidSimulatorSection';
 
 export default function App() {
   const [showMainContent, setShowMainContent] = useState(false);
@@ -38,6 +39,9 @@ export default function App() {
             
             {/* Lista de NEOs */}
             <NEOList />
+            
+            {/* Simulador de Impacto de Asteroides */}
+            <AsteroidSimulatorSection />
             
             {/* Prueba de conexión backend - TEMPORAL */}
             <div className="py-16 px-6">

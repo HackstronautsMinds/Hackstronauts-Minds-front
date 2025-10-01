@@ -1,10 +1,36 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { agents, Agent } from '../data/agents';
+import NEOSection from './NEOSection';
 
 
 export default function AgentSelector() {
   const [hoveredScientist, setHoveredScientist] = useState<Agent | null>(null);
+  const [selectedScientist, setSelectedScientist] = useState<Agent | null>(null);
+  const [showNEOSection, setShowNEOSection] = useState(false);
+
+  const handleMouseEnter = (scientist: Agent) => {
+    setHoveredScientist(scientist);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredScientist(null);
+  };
+
+  const handleClick = (scientist: Agent) => {
+    if (selectedScientist?.id === scientist.id) {
+      setSelectedScientist(null);
+    } else {
+      setSelectedScientist(scientist);
+    }
+  };
+
+  const handleAnalyzeData = () => {
+    setShowNEOSection(true);
+  };
+
+  // El agente a mostrar es el seleccionado (si existe) o el hovered
+  const displayScientist = selectedScientist || hoveredScientist;
 
   return (
     <section className="relative w-full min-h-screen overflow-hidden bg-black py-20">
@@ -184,6 +210,14 @@ export default function AgentSelector() {
               </AnimatePresence>
             </div>
       </div>
+
+
+      {/* Sección NEOs */}
+      <NEOSection 
+        isOpen={showNEOSection} 
+        onClose={() => setShowNEOSection(false)} 
+      />
+
     </section>
   );
 }
