@@ -5,7 +5,7 @@ interface LeafletMapProps {
   latitude: number;
   longitude: number;
   zoom?: number;
-  onMapClick?: (lat: number, lng: number) => void;
+  onMapClick?: (lat: number, lng: number, coords?: {x: number, y: number}) => void;
   showAsteroidLauncher?: boolean;
 }
 
@@ -71,8 +71,16 @@ export default function LeafletMapComponent({
             const lat = e.latlng.lat;
             const lng = e.latlng.lng;
             
-            console.log('📍 Map click position:', { lat, lng });
-            onMapClick?.(lat, lng);
+            // Calcular coordenadas relativas dentro del contenedor
+            const containerPoint = leafletMap.latLngToContainerPoint(e.latlng);
+            const rect = mapRef.current!.getBoundingClientRect();
+            const x = (containerPoint.x / rect.width) * 100;
+            const y = (containerPoint.y / rect.height) * 100;
+            
+            console.log('📍 Map click position:', { lat, lng, x, y });
+            
+            // Llamar a la función de clic del mapa con coordenadas relativas
+            onMapClick?.(lat, lng, { x, y });
           });
 
           setMap(leafletMap);
@@ -110,7 +118,7 @@ export default function LeafletMapComponent({
 
   return (
     <div className="w-full h-full relative">
-      <div ref={mapRef} className="w-full h-full" />
+      <div ref={mapRef} className="w-full h-full z-10" />
     </div>
   );
 }

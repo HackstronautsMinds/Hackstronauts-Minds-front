@@ -18,7 +18,11 @@ export function AsteroidLauncher({
   const [trail, setTrail] = useState<Array<{ x: number; y: number; opacity: number }>>([]);
 
   useEffect(() => {
+    console.log('🎯 AsteroidLauncher useEffect:', { mapClickPosition, isVisible });
+    
     if (mapClickPosition && isVisible) {
+      console.log('🚀 Launching asteroid at position:', mapClickPosition);
+      
       // Simular lanzamiento de asteroide
       setIsLaunching(true);
       
@@ -35,6 +39,7 @@ export function AsteroidLauncher({
 
       // Limpiar después de la animación
       setTimeout(() => {
+        console.log('💥 Asteroid animation completed');
         setIsLaunching(false);
         setTrail([]);
         onPositionUsed?.();

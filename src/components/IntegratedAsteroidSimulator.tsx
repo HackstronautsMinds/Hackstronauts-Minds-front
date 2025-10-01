@@ -46,12 +46,18 @@ export default function IntegratedAsteroidSimulator({
     }, 1500);
   }, []);
 
-  const handleMapClick = useCallback((lat: number, lng: number) => {
-    console.log('Map clicked:', { lat, lng });
+  const handleMapClick = useCallback((lat: number, lng: number, coords?: {x: number, y: number}) => {
+    console.log('🚀 Map clicked:', { lat, lng, coords });
     
-    // Convertir a coordenadas del mapa
-    const mapCoords = latLngToXY(lat, lng);
+    // Usar las coordenadas calculadas del clic o convertir lat/lng
+    const mapCoords = coords || latLngToXY(lat, lng);
+    console.log('📍 Map coords set:', mapCoords);
+    
     setMapClickPosition(mapCoords);
+    
+    // Activar el lanzador de asteroides
+    console.log('🎯 Activating asteroid launcher');
+    setShowAsteroidLauncher(true);
     
     // Simular impacto
     const mockImpact = {
@@ -62,6 +68,7 @@ export default function IntegratedAsteroidSimulator({
       y: mapCoords.y
     };
     
+    console.log('💥 Impact data:', mockImpact);
     setImpactData(mockImpact);
     onImpact?.(mockImpact);
   }, [onImpact]);
@@ -135,7 +142,7 @@ export default function IntegratedAsteroidSimulator({
             >
               {/* Mapa de Leaflet */}
               {selectedLocation && (
-                <div className="w-full h-full">
+                <div className="w-full h-full relative">
                   <LeafletMapComponent
                     latitude={selectedLocation.lat}
                     longitude={selectedLocation.lng}
@@ -143,6 +150,120 @@ export default function IntegratedAsteroidSimulator({
                     onMapClick={handleMapClick}
                     showAsteroidLauncher={true}
                   />
+                  
+                  {/* Instrucciones flotantes */}
+                  <div className="absolute top-4 left-4 z-50 bg-black/90 backdrop-blur-md text-white p-4 rounded-lg border-2 border-cyan-400/50 pointer-events-auto shadow-2xl">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                      <span className="font-bold text-cyan-400 text-lg">INSTRUCCIONES</span>
+                    </div>
+                    <p className="text-sm mb-2 text-white font-medium">🖱️ Haz clic en cualquier parte del mapa para lanzar un asteroide</p>
+                    <p className="text-sm mb-2 text-white font-medium">⚙️ Usa el panel de configuración para personalizar el asteroide</p>
+                    <p className="text-sm text-cyan-300 font-bold">
+                      📍 Ubicación: {selectedLocation.lat.toFixed(2)}°, {selectedLocation.lng.toFixed(2)}°
+                    </p>
+                  </div>
+
+                  {/* Botón para volver al globo */}
+                  <button
+                    onClick={() => {
+                      setShowMap(false);
+                      setSelectedLocation(null);
+                      setMapClickPosition(null);
+                    }}
+                    className="absolute top-4 right-4 z-50 bg-red-600/80 hover:bg-red-600 text-white p-3 rounded-lg backdrop-blur-sm transition-colors pointer-events-auto"
+                  >
+                    🌍 Volver al Globo
+                  </button>
+
+                  {/* Panel de configuración flotante */}
+                  <div className="absolute bottom-4 right-4 z-50 bg-black/90 backdrop-blur-md text-white p-4 rounded-lg border-2 border-cyan-400/50 w-80 pointer-events-auto shadow-2xl">
+                    <h3 className="font-bold text-cyan-400 mb-3 flex items-center gap-2">
+                      ⚙️ Configuración del Asteroide
+                    </h3>
+                    
+                    {/* Diámetro */}
+                    <div className="mb-4">
+                      <label className="block text-sm mb-2 text-white font-medium">Diámetro: <span className="text-cyan-400 font-bold">{asteroidConfig.diameter}m</span></label>
+                      <input
+                        type="range"
+                        min="10"
+                        max="200"
+                        value={asteroidConfig.diameter}
+                        onChange={(e) => setAsteroidConfig(prev => ({ ...prev, diameter: parseInt(e.target.value) }))}
+                        className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+                        style={{
+                          background: `linear-gradient(to right, #06b6d4 0%, #06b6d4 ${(asteroidConfig.diameter - 10) / 1.9}%, #374151 ${(asteroidConfig.diameter - 10) / 1.9}%, #374151 100%)`
+                        }}
+                      />
+                      <div className="flex justify-between text-xs text-gray-300 mt-1">
+                        <span>10m</span>
+                        <span>200m</span>
+                      </div>
+                    </div>
+
+                    {/* Velocidad */}
+                    <div className="mb-4">
+                      <label className="block text-sm mb-2 text-white font-medium">Velocidad: <span className="text-cyan-400 font-bold">{asteroidConfig.speed}%</span></label>
+                      <input
+                        type="range"
+                        min="25"
+                        max="200"
+                        value={asteroidConfig.speed}
+                        onChange={(e) => setAsteroidConfig(prev => ({ ...prev, speed: parseInt(e.target.value) }))}
+                        className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+                        style={{
+                          background: `linear-gradient(to right, #06b6d4 0%, #06b6d4 ${(asteroidConfig.speed - 25) / 1.75}%, #374151 ${(asteroidConfig.speed - 25) / 1.75}%, #374151 100%)`
+                        }}
+                      />
+                      <div className="flex justify-between text-xs text-gray-300 mt-1">
+                        <span>25%</span>
+                        <span>200%</span>
+                      </div>
+                    </div>
+
+                    {/* Material */}
+                    <div className="mb-4">
+                      <label className="block text-sm mb-2">Material</label>
+                      <select
+                        value={asteroidConfig.material}
+                        onChange={(e) => setAsteroidConfig(prev => ({ ...prev, material: e.target.value as any }))}
+                        className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white"
+                      >
+                        <option value="iron">🦾 Hierro</option>
+                        <option value="stone">🪨 Piedra</option>
+                        <option value="ice">🧊 Hielo</option>
+                      </select>
+                    </div>
+
+                    {/* Botón de lanzamiento manual */}
+                    <button
+                      onClick={() => {
+                        if (selectedLocation) {
+                          // Usar la configuración actual del asteroide
+                          const mapCoords = latLngToXY(selectedLocation.lat, selectedLocation.lng);
+                          setMapClickPosition(mapCoords);
+                          setShowAsteroidLauncher(true);
+                          
+                          // Simular impacto con configuración personalizada
+                          const mockImpact = {
+                            energy: (asteroidConfig.diameter * asteroidConfig.speed) / 10,
+                            craterSize: asteroidConfig.diameter * 2,
+                            location: { lat: selectedLocation.lat, lng: selectedLocation.lng },
+                            x: mapCoords.x,
+                            y: mapCoords.y,
+                            material: asteroidConfig.material
+                          };
+                          
+                          setImpactData(mockImpact);
+                          onImpact?.(mockImpact);
+                        }
+                      }}
+                      className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2 px-4 rounded transition-colors"
+                    >
+                      🚀 Lanzar Asteroide Aquí
+                    </button>
+                  </div>
                 </div>
               )}
               
