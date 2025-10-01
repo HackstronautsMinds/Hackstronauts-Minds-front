@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { agents, Agent } from '../data/agents';
@@ -20,7 +21,7 @@ export default function AgentSelector() {
       <div className="relative z-10 w-full min-h-screen flex items-end justify-center px-8 pb-32">
         
         {/* CONTENEDOR PRINCIPAL - envuelve animación central y científicos */}
-        <div className="relative w-full max-w-5xl flex flex-col items-center" style={{ marginRight: '800px', marginLeft: '-500px' }}>
+        <div className="relative w-full max-w-5xl flex flex-col items-center" style={{ marginRight: '420px', marginLeft: '-220px' }}>
           
           {/* CONTENEDOR DE ANIMACIÓN CENTRAL */}
           <div className="absolute z-0 flex items-center justify-center pointer-events-none" style={{ top: '50%', transform: 'translateY(-170%)' }}>
@@ -116,8 +117,8 @@ export default function AgentSelector() {
               className="absolute top-1/2 transform -translate-y-1/2 z-20"
               style={{ 
                 left: '60%',
-                width: '500px',
-                marginLeft: '50px'
+                width: '380px',
+                marginLeft: '10px'
               }}
             >
               <ScientistInfoWindow scientist={hoveredScientist} />
@@ -282,7 +283,7 @@ interface ScientistInfoWindowProps {
 function ScientistInfoWindow({ scientist }: ScientistInfoWindowProps) {
   return (
     <motion.div
-      className="relative w-[2000px] h-[500px] rounded-3xl overflow-hidden"
+      className="relative w-[1300px] h-[750px] rounded-3xl overflow-hidden"
       style={{
         background: 'rgba(5, 10, 30, 0.4)',
         backdropFilter: 'blur(40px)',
@@ -312,11 +313,9 @@ function ScientistInfoWindow({ scientist }: ScientistInfoWindowProps) {
 
 
       {/* Contenido */}
-      <div className="relative z-10 p-8 h-full flex flex-row gap-12">
-        {/* Columna izquierda - Header y info principal */}
-        <div className="flex-1 flex flex-col">
-          {/* Header */}
-          <div className="flex items-center gap-4 mb-6">
+      <div className="relative z-10 p-12 h-full flex flex-col">
+        {/* Header */}
+        <div className="flex items-center gap-4 mb-6">
           <div className="relative">
             <motion.div
               className="absolute -inset-2 rounded-full"
@@ -381,19 +380,15 @@ function ScientistInfoWindow({ scientist }: ScientistInfoWindowProps) {
           <h4 className="text-white text-sm font-bold uppercase mb-2">Descripción</h4>
           <p className="text-gray-300 text-sm leading-relaxed">{scientist.description}</p>
         </div>
-        </div>
-
-        {/* Columna derecha - Ciencias, responsabilidades, logros y stats */}
-        <div className="flex-1 flex flex-col">
 
             {/* Ciencias */}
             <div className="mb-4">
               <h4 className="text-white text-sm font-bold uppercase mb-2">Ciencias</h4>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="flex flex-wrap gap-1">
                 {scientist.sciences.map((science, index) => (
                   <span
                     key={index}
-                    className="px-3 py-2 text-xs rounded-full text-center"
+                    className="px-2 py-1 text-xs rounded-full"
                     style={{
                       backgroundColor: `${scientist.color}20`,
                       color: scientist.color,
@@ -458,14 +453,11 @@ function ScientistInfoWindow({ scientist }: ScientistInfoWindowProps) {
         {scientist.stats && (
           <div className="mt-4">
             <h4 className="text-white text-sm font-bold uppercase mb-3">Atributos</h4>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-2">
               {Object.entries(scientist.stats).map(([key, value]) => (
-                <div key={key} className="flex flex-col gap-1">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-xs capitalize">{key}:</span>
-                    <span className="text-white text-xs">{value}%</span>
-                  </div>
-                  <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+                <div key={key} className="flex items-center gap-2">
+                  <span className="text-gray-400 text-xs w-20 capitalize">{key}:</span>
+                  <div className="flex-1 h-2 bg-gray-700 rounded-full overflow-hidden">
                     <motion.div
                       className="h-full rounded-full"
                       style={{
@@ -476,6 +468,7 @@ function ScientistInfoWindow({ scientist }: ScientistInfoWindowProps) {
                       transition={{ duration: 1, delay: 0.5 }}
                     />
                   </div>
+                  <span className="text-white text-xs w-8">{value}%</span>
                 </div>
               ))}
             </div>
@@ -507,7 +500,6 @@ function ScientistInfoWindow({ scientist }: ScientistInfoWindowProps) {
             </div>
           </div>
         )}
-        </div>
       </div>
     </motion.div>
   );
