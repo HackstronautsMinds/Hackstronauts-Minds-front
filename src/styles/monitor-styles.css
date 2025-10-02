@@ -1,0 +1,556 @@
+/* Mission Control Styles */
+.mission-control-room {
+  font-family: 'Courier New', 'IBM Plex Mono', monospace;
+  background: linear-gradient(135deg, #0a0e1a 0%, #000000 100%);
+  color: #00ffff;
+  overflow: hidden;
+}
+
+.mission-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  perspective: 1000px;
+}
+
+.display-wall {
+  flex: 0 0 45%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  perspective: 1200px;
+}
+
+/* Curved Monitor Wall Styles */
+.curved-monitor-wall {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  perspective: 1400px;
+  perspective-origin: center bottom;
+}
+
+.monitor-wall-surface {
+  position: absolute;
+  width: 200%;
+  height: 120%;
+  top: -10%;
+  left: -50%;
+  background: radial-gradient(ellipse at center bottom, 
+    rgba(10, 14, 26, 0.9) 0%, 
+    rgba(0, 0, 0, 0.95) 70%);
+  border-radius: 50% / 60%;
+  transform: rotateX(75deg) translateZ(-100px);
+  z-index: -2;
+}
+
+.wall-grid {
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.3;
+}
+
+.monitor-arrangement {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  gap: 0;
+}
+
+.monitor-position {
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.monitor-mount {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+
+.monitor-mount:hover {
+  transform: translateZ(15px);
+}
+
+.left-position {
+  transform: 
+    translateX(-225px) 
+    translateZ(-60px) 
+    rotateY(25deg);
+  transform-origin: right center;
+}
+
+.center-position {
+  transform: 
+    translateX(0px) 
+    translateZ(0px) 
+    rotateY(0deg) 
+    scale(1.05);
+  z-index: 10;
+}
+
+.right-position {
+  transform: 
+    translateX(225px) 
+    translateZ(-60px) 
+    rotateY(-25deg);
+  transform-origin: left center;
+}
+
+.curved-monitor {
+  width: 450px;
+  height: 340px;
+  filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.3));
+  transform-style: preserve-3d;
+}
+
+.center-main {
+  filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.5));
+}
+
+/* Seamless Monitor Connection */
+.left-position::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 80%;
+  background: linear-gradient(180deg, 
+    transparent 0%,
+    rgba(0, 255, 255, 0.2) 20%,
+    rgba(0, 255, 255, 0.3) 50%,
+    rgba(0, 255, 255, 0.2) 80%,
+    transparent 100%
+  );
+  z-index: 5;
+  border-radius: 0 2px 2px 0;
+}
+
+.right-position::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 80%;
+  background: linear-gradient(180deg, 
+    transparent 0%,
+    rgba(0, 255, 255, 0.2) 20%,
+    rgba(0, 255, 255, 0.3) 50%,
+    rgba(0, 255, 255, 0.2) 80%,
+    transparent 100%
+  );
+  z-index: 5;
+  border-radius: 2px 0 0 2px;
+}
+
+/* Wall Lighting Effects */
+.wall-lighting {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.light-beam {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, 
+    rgba(0, 255, 255, 0.2) 0%, 
+    rgba(0, 255, 255, 0.1) 30%, 
+    transparent 70%);
+  top: 50%;
+  transform: translateY(-50%);
+  animation: lightPulse 3s ease-in-out infinite;
+}
+
+.left-beam {
+  left: 15%;
+  animation-delay: 0s;
+}
+
+.center-beam {
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%) scale(1.2);
+  background: radial-gradient(circle, 
+    rgba(0, 255, 136, 0.25) 0%, 
+    rgba(0, 255, 136, 0.1) 30%, 
+    transparent 70%);
+  animation-delay: 1s;
+}
+
+.right-beam {
+  right: 15%;
+  animation-delay: 2s;
+}
+
+@keyframes lightPulse {
+  0%, 100% { 
+    opacity: 0.8; 
+    transform: translateY(-50%) scale(1);
+  }
+  50% { 
+    opacity: 1; 
+    transform: translateY(-50%) scale(1.1);
+  }
+}
+
+/* Enhanced monitor frame for curved wall */
+.curved-monitor .main-monitor-frame {
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  border: 2px solid rgba(0, 255, 255, 0.3);
+  box-shadow: 
+    0 0 40px rgba(0, 255, 255, 0.4),
+    0 15px 35px rgba(0, 0, 0, 0.8),
+    inset 0 0 20px rgba(0, 0, 0, 0.6),
+    inset 0 2px 10px rgba(0, 255, 255, 0.1);
+  position: relative;
+  overflow: visible;
+}
+
+.curved-monitor .main-monitor-bezel {
+  background: linear-gradient(145deg, #333, #222);
+  border: 2px solid #444;
+  box-shadow: 
+    inset 0 2px 8px rgba(0, 0, 0, 0.5),
+    inset 0 0 15px rgba(0, 255, 255, 0.05);
+}
+
+/* Left monitor - remove right border for seamless connection */
+.left-position .main-monitor-frame {
+  border-right: 1px solid rgba(0, 255, 255, 0.1);
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+/* Right monitor - remove left border for seamless connection */
+.right-position .main-monitor-frame {
+  border-left: 1px solid rgba(0, 255, 255, 0.1);
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+/* Center monitor - enhanced glow at connection points */
+.center-position .main-monitor-frame {
+  box-shadow: 
+    0 0 50px rgba(0, 255, 255, 0.5),
+    0 15px 35px rgba(0, 0, 0, 0.8),
+    inset 0 0 20px rgba(0, 0, 0, 0.6),
+    inset 0 2px 10px rgba(0, 255, 255, 0.15),
+    -20px 0 30px rgba(0, 255, 255, 0.2),
+    20px 0 30px rgba(0, 255, 255, 0.2);
+}
+
+/* Main Monitor Styles */
+.main-monitor {
+  width: 480px;
+  height: 360px;
+  transition: transform 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.left-monitor {
+  transform: rotateY(25deg) translateX(-20px) translateZ(-40px);
+}
+
+.right-monitor {
+  transform: rotateY(-25deg) translateX(20px) translateZ(-40px);
+}
+
+.center-monitor {
+  transform: scale(1.05) translateZ(20px);
+  z-index: 2;
+  position: relative;
+}
+
+.main-monitor-frame {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 
+    0 0 40px rgba(0, 255, 255, 0.4),
+    0 10px 25px rgba(0, 0, 0, 0.6),
+    inset 0 0 20px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.main-monitor-bezel {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, #333, #222);
+  border-radius: 8px;
+  padding: 12px;
+  border: 2px solid #444;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.main-monitor-screen {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+
+.main-monitor-content {
+  position: relative;
+  z-index: 2;
+  padding: 16px;
+  height: 100%;
+  color: #00ffff;
+}
+
+.main-monitor-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  text-align: center;
+  color: #00ff88;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.main-scan-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 255, 0.1) 2px,
+    rgba(0, 255, 255, 0.1) 4px
+  );
+  pointer-events: none;
+  animation: scanlines 2s linear infinite;
+}
+
+@keyframes scanlines {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(4px); }
+}
+
+/* Gauge Styles */
+.gauge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 8px;
+}
+
+.gauge-circle {
+  width: 80px;
+  height: 80px;
+  border: 2px solid #00ffff;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.1), transparent);
+  position: relative;
+}
+
+.gauge-circle::before {
+  content: '';
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 50%;
+}
+
+.gauge-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #00ff88;
+  line-height: 1;
+}
+
+.gauge-unit {
+  font-size: 10px;
+  color: #00ffff;
+  margin-top: 2px;
+}
+
+.gauge-label {
+  font-size: 10px;
+  color: #00ffff;
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Chart Styles */
+.chart-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.trajectory-line {
+  filter: drop-shadow(0 0 3px #00ff88);
+}
+
+.impact-point {
+  filter: drop-shadow(0 0 5px #ff0044);
+}
+
+.chart-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.chart-label {
+  color: #00ffff;
+}
+
+/* Level Indicators */
+.level-indicators {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  justify-content: center;
+}
+
+.level-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.level-label {
+  font-size: 12px;
+  color: #00ffff;
+  width: 100px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.level-track {
+  flex: 1;
+  height: 16px;
+  background: rgba(0, 255, 255, 0.1);
+  border: 1px solid #00ffff;
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.level-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00ff88, #ffff00, #ff4400);
+  border-radius: 1px;
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+  transition: width 0.3s ease;
+}
+
+.level-value {
+  font-size: 12px;
+  color: #00ff88;
+  width: 40px;
+  text-align: right;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .curved-monitor {
+    width: 350px;
+    height: 260px;
+  }
+  
+  .left-position {
+    transform: 
+      translateX(-180px) 
+      translateZ(-50px) 
+      rotateY(20deg);
+  }
+  
+  .right-position {
+    transform: 
+      translateX(180px) 
+      translateZ(-50px) 
+      rotateY(-20deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .curved-monitor {
+    width: 280px;
+    height: 210px;
+  }
+  
+  .left-position {
+    transform: 
+      translateX(-140px) 
+      translateZ(-40px) 
+      rotateY(15deg);
+  }
+  
+  .right-position {
+    transform: 
+      translateX(140px) 
+      translateZ(-40px) 
+      rotateY(-15deg);
+  }
+  
+  .gauge-circle {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .gauge-value {
+    font-size: 14px;
+  }
+  
+  .level-label {
+    font-size: 10px;
+    width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .monitor-arrangement {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .left-position,
+  .center-position,
+  .right-position {
+    transform: none;
+    position: static;
+  }
+  
+  .curved-monitor {
+    width: 100%;
+    max-width: 300px;
+    height: 200px;
+  }
+}

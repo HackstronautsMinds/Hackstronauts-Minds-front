@@ -4,6 +4,7 @@ import { AsteroidData, ImpactData, SimulationState, LiveMetrics, TrajectoryPoint
 import { mockAsteroids, fetchAsteroidData, calculateImpactData } from '../data/mockAsteroidData';
 import AgentStatusPanel from './AgentStatusPanel';
 import IntegratedAsteroidSimulator from './IntegratedAsteroidSimulator';
+import { CurvedMonitorWall } from './CurvedMonitorWall';
 
 export default function AsteroidSimulatorSection() {
   const [selectedAsteroid, setSelectedAsteroid] = useState<AsteroidData | null>(null);
@@ -218,9 +219,9 @@ export default function AsteroidSimulatorSection() {
               </div>
             </div>
 
-            {/* Panel Derecho - Métricas en Vivo */}
-            <div className="bg-gray-900/50 backdrop-blur-lg rounded-2xl border border-cyan-400/30 p-6">
-              <h2 className="text-2xl font-bold text-white mb-4">📊 Métricas en Tiempo Real</h2>
+            {/* Panel Derecho - Sistema de Monitores de Control */}
+            <div className="bg-gray-900/50 backdrop-blur-lg rounded-2xl border border-cyan-400/30 p-6 col-span-2">
+              <h2 className="text-2xl font-bold text-white mb-4">🎛️ Mission Control - Meteorite Defense System</h2>
               
               {/* Estado de la simulación */}
               <div className="mb-6">
@@ -229,12 +230,7 @@ export default function AsteroidSimulatorSection() {
                     simulationState.isRunning ? 'bg-green-500 animate-pulse' : 'bg-gray-500'
                   }`} />
                   <span className="text-white font-bold">
-                    {simulationState.phase === 'idle' && 'Inactivo'}
-                    {simulationState.phase === 'data_collecting' && 'Recolectando datos...'}
-                    {simulationState.phase === 'orbital_calculating' && 'Calculando órbita...'}
-                    {simulationState.phase === 'impact_analyzing' && 'Analizando impacto...'}
-                    {simulationState.phase === 'mitigation_planning' && 'Planificando mitigación...'}
-                    {simulationState.phase === 'completed' && 'Simulación completada'}
+                    STATUS: {simulationState.isRunning ? 'OPERATIONAL' : 'STANDBY'}
                   </span>
                 </div>
                 <div className="w-full bg-gray-700 rounded-full h-3">
@@ -245,48 +241,50 @@ export default function AsteroidSimulatorSection() {
                 </div>
               </div>
 
-              {/* Métricas principales */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gray-800/50 rounded-lg p-4">
-                  <div className="text-2xl font-bold text-cyan-400">
-                    {liveMetrics.impactProbability * 100}%
-                  </div>
-                  <div className="text-gray-300 text-sm">Probabilidad de Impacto</div>
-                </div>
-                
-                <div className="bg-gray-800/50 rounded-lg p-4">
-                  <div className="text-2xl font-bold text-red-400">
-                    {liveMetrics.energyMT} MT
-                  </div>
-                  <div className="text-gray-300 text-sm">Energía del Impacto</div>
-                </div>
-                
-                <div className="bg-gray-800/50 rounded-lg p-4">
-                  <div className="text-2xl font-bold text-yellow-400">
-                    {liveMetrics.distanceKm.toLocaleString()} km
-                  </div>
-                  <div className="text-gray-300 text-sm">Distancia Actual</div>
-                </div>
-                
-                <div className="bg-gray-800/50 rounded-lg p-4">
-                  <div className="text-2xl font-bold text-green-400">
-                    {liveMetrics.velocityKmh.toLocaleString()} km/h
-                  </div>
-                  <div className="text-gray-300 text-sm">Velocidad</div>
-                </div>
-              </div>
-
-              {/* Nivel de riesgo */}
-              <div className="mt-6">
-                <div className="text-white font-bold mb-2">Nivel de Riesgo</div>
-                <div className={`px-4 py-2 rounded-lg text-center font-bold ${
-                  liveMetrics.riskLevel === 'low' ? 'bg-green-900 text-green-300' :
-                  liveMetrics.riskLevel === 'medium' ? 'bg-yellow-900 text-yellow-300' :
-                  liveMetrics.riskLevel === 'high' ? 'bg-orange-900 text-orange-300' :
-                  'bg-red-900 text-red-300'
-                }`}>
-                  {liveMetrics.riskLevel.toUpperCase()}
-                </div>
+              {/* Sistema de Monitores */}
+              <div className="w-full h-[60vh]">
+                <CurvedMonitorWall
+                  gaugeData={[
+                    { 
+                      value: Math.round(liveMetrics.energyMT), 
+                      unit: "MT", 
+                      label: "ENERGY", 
+                      color: "#00ff88" 
+                    },
+                    { 
+                      value: Math.round(liveMetrics.distanceKm / 1000), 
+                      unit: "K KM", 
+                      label: "DISTANCE", 
+                      color: "#ff4444" 
+                    },
+                    { 
+                      value: Math.round(liveMetrics.velocityKmh / 1000), 
+                      unit: "K KM/H", 
+                      label: "VELOCITY", 
+                      color: "#ffaa00" 
+                    }
+                  ]}
+                  trajectoryData={[
+                    { x: 0, y: 180 },
+                    { x: 50, y: 160 },
+                    { x: 100, y: 120 },
+                    { x: 150, y: 80 },
+                    { x: 200, y: 60 },
+                    { x: 250, y: 40 },
+                    { x: 300, y: 30 },
+                    { x: 350, y: 25 },
+                    { x: 400, y: 20 }
+                  ]}
+                  levelData={[
+                    { label: "LASER ARRAY", value: Math.min(100, liveMetrics.energyMT * 10), maxValue: 100 },
+                    { label: "MISSILE PODS", value: Math.min(100, liveMetrics.impactProbability * 100), maxValue: 100 },
+                    { label: "SHIELD GEN", value: Math.min(100, 100 - (liveMetrics.impactProbability * 100)), maxValue: 100 },
+                    { label: "REACTOR CORE", value: Math.min(100, liveMetrics.velocityKmh / 100), maxValue: 100 },
+                    { label: "COMMUNICATIONS", value: 100, maxValue: 100 }
+                  ]}
+                  impactTime={`T-${Math.max(0, Math.floor(liveMetrics.distanceKm / 1000))}:00:00`}
+                  impactZone="IMPACT ZONE"
+                />
               </div>
             </div>
           </div>

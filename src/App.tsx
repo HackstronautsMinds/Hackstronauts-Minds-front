@@ -7,6 +7,7 @@ import { CTASection } from './components/CTASection';
 import { BackendTest } from './components/BackendTest';
 import { NEOList } from './components/NEOList';
 import AsteroidSimulatorSection from './components/AsteroidSimulatorSection';
+import './styles/monitor-styles.css';
 
 export default function App() {
   const [showMainContent, setShowMainContent] = useState(false);

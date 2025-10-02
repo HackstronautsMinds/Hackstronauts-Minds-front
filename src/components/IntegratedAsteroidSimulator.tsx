@@ -4,6 +4,7 @@ import Earth3DGlobe from './Earth3DGlobe';
 import LeafletMapComponent from './LeafletMapComponent';
 import { AsteroidLauncher } from './AsteroidLauncher';
 import AgentStatusPanel from './AgentStatusPanel';
+import { CurvedMonitorWall } from './CurvedMonitorWall';
 import { AsteroidData } from '../types/simulation.types';
 
 interface IntegratedAsteroidSimulatorProps {
@@ -89,6 +90,25 @@ export default function IntegratedAsteroidSimulator({
     infrastructureDamage: 0,
     mitigationTime: 0
   });
+
+  // Generar trayectoria simulada basada en las métricas
+  const generateTrajectory = (): Array<{ altitude: number; time: number }> => {
+    const points: Array<{ altitude: number; time: number }> = [];
+    const maxAltitude = 1000; // km
+    const steps = 20;
+    
+    for (let i = 0; i <= steps; i++) {
+      const progress = i / steps;
+      const altitude = maxAltitude * (1 - progress) + (Math.random() - 0.5) * 50;
+      points.push({
+        altitude: Math.max(0, altitude),
+        time: progress * 100 // segundos
+      });
+    }
+    return points;
+  };
+
+  const trajectory = generateTrajectory();
 
   const handleLocationSelect = useCallback((lat: number, lng: number) => {
     setSelectedLocation({ lat, lng });
@@ -462,54 +482,6 @@ export default function IntegratedAsteroidSimulator({
 
             
 
-              {/* Panel de Métricas en Tiempo Real - Lado Izquierdo */}
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-50 bg-black/90 backdrop-blur-md text-white p-3 rounded-lg border-2 border-cyan-400/50 pointer-events-auto shadow-2xl w-64">
-                <h3 className="font-bold text-cyan-400 mb-2 text-sm flex items-center gap-2">
-                  📊 Métricas
-                </h3>
-                
-                <div className="space-y-2 text-xs">
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Energía:</span>
-                    <span className="text-cyan-400 font-bold">{liveMetrics.energy.toFixed(0)} MJ</span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Cráter:</span>
-                    <span className="text-red-400 font-bold">{liveMetrics.craterSize.toFixed(0)}m</span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Área:</span>
-                    <span className="text-orange-400 font-bold">{liveMetrics.affectedArea.toFixed(0)} km²</span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Población:</span>
-                    <span className="text-yellow-400 font-bold">{liveMetrics.populationAtRisk.toLocaleString()}</span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Daño:</span>
-                    <span className="text-pink-400 font-bold">{liveMetrics.infrastructureDamage.toFixed(0)}%</span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Mitigación:</span>
-                    <span className="text-green-400 font-bold">{liveMetrics.mitigationTime} días</span>
-                  </div>
-                </div>
-
-                {/* Indicador de agente seleccionado */}
-                {selectedAgent && (
-                  <div className="mt-3 pt-2 border-t border-cyan-400/30">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: selectedAgent.color }}></div>
-                      <span className="text-xs text-cyan-300">{selectedAgent.name}</span>
-                    </div>
-                  </div>
-                )}
-              </div>
               
               {/* Información del mapa */}
               <div className="absolute top-4 left-4 z-30">
