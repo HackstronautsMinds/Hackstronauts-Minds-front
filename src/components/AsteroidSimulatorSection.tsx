@@ -293,7 +293,7 @@ export default function AsteroidSimulatorSection() {
 
         {/* Sistema de Monitores de Agentes AI */}
         {selectedAsteroid && (
-          <div className="mt-8">
+          <div className="mt-8 -mx-6">
             <MonitorAgentes />
           </div>
         )}

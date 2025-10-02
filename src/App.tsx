@@ -44,12 +44,7 @@ export default function App() {
             {/* Simulador de Impacto de Asteroides */}
             <AsteroidSimulatorSection />
             
-            {/* Prueba de conexión backend - TEMPORAL */}
-            <div className="py-16 px-6">
-              <div className="max-w-6xl mx-auto">
-                <BackendTest />
-              </div>
-            </div>
+           
             
             {/* Footer minimalista estilo Cult Holdings */}
             <footer className="relative py-16 px-6 border-t border-white/10">
