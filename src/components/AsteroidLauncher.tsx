@@ -32,13 +32,12 @@ export function AsteroidLauncher({
 
   useEffect(() => {
     if (mapClickPosition && isVisible) {
-      console.log('🚀 Launching asteroid at position:', mapClickPosition);
       
       // Simular lanzamiento de asteroide
       setIsLaunching(true);
       
       // Crear trail de partículas
-      const newTrail = [];
+      const newTrail: Array<{ x: number; y: number; opacity: number }> = [];
       for (let i = 0; i < 15; i++) {
         newTrail.push({
           x: mapClickPosition.x + (Math.random() - 0.5) * 8,
@@ -52,12 +51,15 @@ export function AsteroidLauncher({
       setTimeout(() => {
         setIsLaunching(false);
         setTrail([]);
-        onPositionUsed?.();
+        // No resetear automáticamente, dejar que el usuario controle
+        // onPositionUsed?.();
       }, 3000);
     }
   }, [mapClickPosition, isVisible, onPositionUsed]);
 
-  if (!isVisible || !mapClickPosition) return null;
+  if (!isVisible || !mapClickPosition) {
+    return null;
+  }
 
   return (
     <div className="absolute inset-0 pointer-events-none z-20">

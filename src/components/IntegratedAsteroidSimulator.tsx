@@ -29,6 +29,7 @@ export default function IntegratedAsteroidSimulator({
   const [showAsteroidLauncher, setShowAsteroidLauncher] = useState(false);
   const [impactData, setImpactData] = useState<any>(null);
   const [mapClickPosition, setMapClickPosition] = useState<{ x: number; y: number } | null>(null);
+  
   const [asteroidConfig, setAsteroidConfig] = useState({
     diameter: 50,
     speed: 100,
@@ -180,7 +181,8 @@ export default function IntegratedAsteroidSimulator({
       
       const progressInterval = setInterval(() => {
         progress += 2;
-        setSimulationProgress(progress);
+        const totalProgress = Math.min(progress + (currentPhaseIndex * 100), 100);
+        setSimulationProgress(totalProgress);
         
         if (progress >= 100) {
           clearInterval(progressInterval);
@@ -197,6 +199,7 @@ export default function IntegratedAsteroidSimulator({
   const handleMapClick = useCallback((lat: number, lng: number, coords?: {x: number, y: number}) => {
     // Usar las coordenadas calculadas del clic o convertir lat/lng
     const mapCoords = coords || latLngToXY(lat, lng);
+    
     setMapClickPosition(mapCoords);
     
     // Activar el lanzador de asteroides
@@ -253,12 +256,14 @@ export default function IntegratedAsteroidSimulator({
       </div>
 
       {/* Estilos para animaciones */}
-      <style jsx>{`
-        @keyframes twinkle {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 1; }
-        }
-      `}</style>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+          }
+        `
+      }} />
 
       {/* Contenido principal */}
       <div className="flex-1 flex" style={{ minHeight: '70vh' }}>
@@ -267,7 +272,7 @@ export default function IntegratedAsteroidSimulator({
             // Vista del planeta 3D
             <motion.div
               key="globe"
-              className="flex-1 relative w-full h-full"
+              className="flex-1 relative w-full h-full flex items-center justify-center"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
@@ -444,22 +449,18 @@ export default function IntegratedAsteroidSimulator({
                 </div>
               )}
               
-              {/* Lanzador de Asteroides */}
-              <AsteroidLauncher
-                onMapClick={handleMapClick}
-                isVisible={showAsteroidLauncher}
-                mapClickPosition={mapClickPosition}
-                onPositionUsed={() => setMapClickPosition(null)}
-                asteroidMaterial={asteroidConfig.material}
-              />
-
-              {/* Panel de Estado de Agentes */}
-              <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50">
-                <AgentStatusPanel 
-                  currentPhase={simulationPhase}
-                  progress={simulationProgress}
+              {/* Lanzador de Asteroides - Solo cuando el mapa esté visible */}
+              {showMap && (
+                <AsteroidLauncher
+                  onMapClick={handleMapClick}
+                  isVisible={showAsteroidLauncher}
+                  mapClickPosition={mapClickPosition}
+                  onPositionUsed={() => setMapClickPosition(null)}
+                  asteroidMaterial={asteroidConfig.material}
                 />
-              </div>
+              )}
+
+            
 
               {/* Panel de Métricas en Tiempo Real - Lado Izquierdo */}
               <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-50 bg-black/90 backdrop-blur-md text-white p-3 rounded-lg border-2 border-cyan-400/50 pointer-events-auto shadow-2xl w-64">
