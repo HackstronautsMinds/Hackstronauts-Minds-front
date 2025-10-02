@@ -6318,3 +6318,13 @@ html {
     opacity: 0;
   }
 }
+
+/* Animación para efecto scanline CRT */
+@keyframes scanline {
+  0%, 100% { 
+    opacity: 0.1; 
+  }
+  50% { 
+    opacity: 0.3; 
+  }
+}
