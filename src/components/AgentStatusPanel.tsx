@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { agents, Agent } from '../data/agents';
 
 interface AgentStatusPanelProps {
-  currentPhase: 'idle' | 'data_collecting' | 'orbital_calculating' | 'impact_analyzing' | 'mitigation_planning' | 'completed';
+  currentPhase: 'idle' | 'data_collecting' | 'orbital_calculating' | 'impact_analyzing' | 'mitigation_planning' | 'visualization_creating' | 'ml_predicting' | 'explaining' | 'completed';
   progress: number;
 }
 
@@ -43,6 +43,30 @@ export default function AgentStatusPanel({ currentPhase, progress }: AgentStatus
           progress: currentPhase === 'mitigation_planning' ? Math.max(0, progress - 60) : 
                    ['idle', 'data_collecting', 'orbital_calculating', 'impact_analyzing'].includes(currentPhase) ? 0 : 100
         };
+      case 'visualization':
+        return {
+          isActive: currentPhase === 'visualization_creating',
+          status: ['idle', 'data_collecting', 'orbital_calculating', 'impact_analyzing', 'mitigation_planning'].includes(currentPhase) ? 'waiting' : 
+                 currentPhase === 'visualization_creating' ? 'working' : 'completed',
+          progress: currentPhase === 'visualization_creating' ? Math.max(0, progress - 70) : 
+                   ['idle', 'data_collecting', 'orbital_calculating', 'impact_analyzing', 'mitigation_planning'].includes(currentPhase) ? 0 : 100
+        };
+      case 'ml':
+        return {
+          isActive: currentPhase === 'ml_predicting',
+          status: ['idle', 'data_collecting', 'orbital_calculating', 'impact_analyzing', 'mitigation_planning', 'visualization_creating'].includes(currentPhase) ? 'waiting' : 
+                 currentPhase === 'ml_predicting' ? 'working' : 'completed',
+          progress: currentPhase === 'ml_predicting' ? Math.max(0, progress - 80) : 
+                   ['idle', 'data_collecting', 'orbital_calculating', 'impact_analyzing', 'mitigation_planning', 'visualization_creating'].includes(currentPhase) ? 0 : 100
+        };
+      case 'explainer':
+        return {
+          isActive: currentPhase === 'explaining',
+          status: ['idle', 'data_collecting', 'orbital_calculating', 'impact_analyzing', 'mitigation_planning', 'visualization_creating', 'ml_predicting'].includes(currentPhase) ? 'waiting' : 
+                 currentPhase === 'explaining' ? 'working' : 'completed',
+          progress: currentPhase === 'explaining' ? Math.max(0, progress - 90) : 
+                   ['idle', 'data_collecting', 'orbital_calculating', 'impact_analyzing', 'mitigation_planning', 'visualization_creating', 'ml_predicting'].includes(currentPhase) ? 0 : 100
+        };
       default:
         return {
           isActive: false,
@@ -71,10 +95,10 @@ export default function AgentStatusPanel({ currentPhase, progress }: AgentStatus
   };
 
   return (
-    <div className="bg-gray-900/50 backdrop-blur-lg rounded-2xl border border-cyan-400/30 p-6">
-      <h2 className="text-2xl font-bold text-white mb-6">🤖 Agentes de IA (Automáticos)</h2>
+    <div className="bg-gray-900/50 backdrop-blur-lg rounded-2xl border border-cyan-400/30 p-4">
+      <h2 className="text-lg font-bold text-white mb-4">🤖 Agentes de IA (Automáticos)</h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
         {agents.map((agent, index) => {
           const agentStatus = getAgentStatus(agent);
           
@@ -84,7 +108,7 @@ export default function AgentStatusPanel({ currentPhase, progress }: AgentStatus
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className={`p-4 rounded-lg border-2 transition-all duration-300 ${
+              className={`p-3 rounded-lg border-2 transition-all duration-300 ${
                 agentStatus.isActive
                   ? 'border-cyan-400 bg-cyan-400/10 shadow-lg shadow-cyan-400/20'
                   : agentStatus.status === 'completed'
@@ -93,18 +117,18 @@ export default function AgentStatusPanel({ currentPhase, progress }: AgentStatus
               }`}
             >
               {/* Header del agente */}
-              <div className="flex items-center gap-3 mb-3">
-                <div className="text-2xl">{agent.icon}</div>
+              <div className="flex items-center gap-2 mb-2">
+                <div className="text-xl">{agent.icon}</div>
                 <div>
-                  <h3 className="font-bold text-white text-sm">{agent.name}</h3>
+                  <h3 className="font-bold text-white text-xs">{agent.name}</h3>
                   <p className="text-xs text-gray-400">{agent.role}</p>
                 </div>
               </div>
 
               {/* Estado y progreso */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className={`text-sm font-bold ${getStatusColor(agentStatus.status)}`}>
+                  <span className={`text-xs font-bold ${getStatusColor(agentStatus.status)}`}>
                     {getStatusIcon(agentStatus.status)} {agentStatus.status.toUpperCase()}
                   </span>
                   <span className="text-xs text-gray-400">
@@ -113,9 +137,9 @@ export default function AgentStatusPanel({ currentPhase, progress }: AgentStatus
                 </div>
                 
                 {/* Barra de progreso */}
-                <div className="w-full bg-gray-700 rounded-full h-2">
+                <div className="w-full bg-gray-700 rounded-full h-1">
                   <motion.div
-                    className={`h-2 rounded-full ${
+                    className={`h-1 rounded-full ${
                       agentStatus.status === 'completed' ? 'bg-green-400' : 'bg-cyan-400'
                     }`}
                     initial={{ width: 0 }}
@@ -126,16 +150,19 @@ export default function AgentStatusPanel({ currentPhase, progress }: AgentStatus
 
                 {/* Descripción de la tarea */}
                 <div className="text-xs text-gray-300">
-                  {agentStatus.status === 'waiting' && 'Esperando activación...'}
+                  {agentStatus.status === 'waiting' && 'Esperando...'}
                   {agentStatus.status === 'working' && agentStatus.isActive && (
                     <>
-                      {agent.abilityType === 'data' && 'Recolectando datos del asteroide...'}
-                      {agent.abilityType === 'trajectory' && 'Calculando trayectoria orbital...'}
-                      {agent.abilityType === 'impact' && 'Analizando efectos del impacto...'}
-                      {agent.abilityType === 'mitigation' && 'Desarrollando estrategia de mitigación...'}
+                      {agent.abilityType === 'data' && 'Recolectando datos...'}
+                      {agent.abilityType === 'trajectory' && 'Calculando trayectoria...'}
+                      {agent.abilityType === 'impact' && 'Analizando impacto...'}
+                      {agent.abilityType === 'mitigation' && 'Planificando mitigación...'}
+                      {agent.abilityType === 'visualization' && 'Creando visualizaciones...'}
+                      {agent.abilityType === 'ml' && 'Ejecutando ML...'}
+                      {agent.abilityType === 'explainer' && 'Generando reporte...'}
                     </>
                   )}
-                  {agentStatus.status === 'completed' && 'Tarea completada exitosamente'}
+                  {agentStatus.status === 'completed' && 'Completado'}
                 </div>
               </div>
 
@@ -144,7 +171,7 @@ export default function AgentStatusPanel({ currentPhase, progress }: AgentStatus
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
-                  className="mt-3 pt-3 border-t border-gray-600"
+                  className="mt-2 pt-2 border-t border-gray-600"
                 >
                   <div className="text-xs text-gray-400 space-y-1">
                     {agent.abilityType === 'data' && (
@@ -175,6 +202,27 @@ export default function AgentStatusPanel({ currentPhase, progress }: AgentStatus
                         <div>• Éxito: {Math.floor(Math.random() * 30 + 70)}%</div>
                       </>
                     )}
+                    {agent.abilityType === 'visualization' && (
+                      <>
+                        <div>• Render 3D: {Math.floor(Math.random() * 80 + 20)}%</div>
+                        <div>• Mapas: {Math.floor(Math.random() * 5 + 3)} capas</div>
+                        <div>• Resolución: {Math.floor(Math.random() * 2000 + 1000)}px</div>
+                      </>
+                    )}
+                    {agent.abilityType === 'ml' && (
+                      <>
+                        <div>• Modelo: Neural Network</div>
+                        <div>• Precisión: {Math.floor(Math.random() * 20 + 80)}%</div>
+                        <div>• Predicción: {Math.floor(Math.random() * 100 + 50)} días</div>
+                      </>
+                    )}
+                    {agent.abilityType === 'explainer' && (
+                      <>
+                        <div>• Audiencia: Público general</div>
+                        <div>• Nivel: Básico</div>
+                        <div>• Idiomas: {Math.floor(Math.random() * 3 + 2)}</div>
+                      </>
+                    )}
                   </div>
                 </motion.div>
               )}
@@ -184,25 +232,28 @@ export default function AgentStatusPanel({ currentPhase, progress }: AgentStatus
       </div>
 
       {/* Resumen del progreso general */}
-      <div className="mt-6 p-4 bg-gray-800/50 rounded-lg">
+      <div className="mt-4 p-3 bg-gray-800/50 rounded-lg">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-white font-bold">Progreso General de la Simulación</span>
-          <span className="text-cyan-400 font-bold">{progress}%</span>
+          <span className="text-white font-bold text-sm">Progreso General</span>
+          <span className="text-cyan-400 font-bold text-sm">{progress}%</span>
         </div>
-        <div className="w-full bg-gray-700 rounded-full h-3">
+        <div className="w-full bg-gray-700 rounded-full h-2">
           <motion.div
-            className="bg-gradient-to-r from-cyan-400 to-green-400 h-3 rounded-full"
+            className="bg-gradient-to-r from-cyan-400 to-green-400 h-2 rounded-full"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           />
         </div>
-        <div className="text-xs text-gray-400 mt-2">
+        <div className="text-xs text-gray-400 mt-1">
           {currentPhase === 'idle' && 'Iniciando simulación...'}
           {currentPhase === 'data_collecting' && 'Recolectando datos del asteroide...'}
           {currentPhase === 'orbital_calculating' && 'Calculando trayectoria orbital...'}
           {currentPhase === 'impact_analyzing' && 'Analizando efectos del impacto...'}
           {currentPhase === 'mitigation_planning' && 'Desarrollando estrategia de mitigación...'}
+          {currentPhase === 'visualization_creating' && 'Creando visualizaciones 3D...'}
+          {currentPhase === 'ml_predicting' && 'Ejecutando predicciones con ML...'}
+          {currentPhase === 'explaining' && 'Generando reporte explicativo...'}
           {currentPhase === 'completed' && 'Simulación completada exitosamente'}
         </div>
       </div>

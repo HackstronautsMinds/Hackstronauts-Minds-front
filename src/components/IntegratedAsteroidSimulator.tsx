@@ -75,7 +75,7 @@ export default function IntegratedAsteroidSimulator({
   };
 
   // Estados para la simulación de agentes
-  const [simulationPhase, setSimulationPhase] = useState<'idle' | 'data_collecting' | 'orbital_calculating' | 'impact_analyzing' | 'mitigation_planning' | 'completed'>('idle');
+  const [simulationPhase, setSimulationPhase] = useState<'idle' | 'data_collecting' | 'orbital_calculating' | 'impact_analyzing' | 'mitigation_planning' | 'visualization_creating' | 'ml_predicting' | 'explaining' | 'completed'>('idle');
   const [simulationProgress, setSimulationProgress] = useState(0);
   const [isSimulationRunning, setIsSimulationRunning] = useState(false);
   
@@ -138,6 +138,21 @@ export default function IntegratedAsteroidSimulator({
         phase: 'mitigation_planning' as const, 
         duration: 2000,
         metrics: { mitigationTime: Math.floor(baseEnergy / 100) }
+      },
+      { 
+        phase: 'visualization_creating' as const, 
+        duration: 3000,
+        metrics: { visualizationProgress: 100 }
+      },
+      { 
+        phase: 'ml_predicting' as const, 
+        duration: 2500,
+        metrics: { predictionAccuracy: Math.floor(Math.random() * 20 + 80) }
+      },
+      { 
+        phase: 'explaining' as const, 
+        duration: 2000,
+        metrics: { reportGenerated: true }
       },
       { 
         phase: 'completed' as const, 
@@ -281,16 +296,15 @@ export default function IntegratedAsteroidSimulator({
                     showAsteroidLauncher={true}
                   />
                   
-                  {/* Instrucciones flotantes */}
-                  <div className="absolute top-4 left-4 z-50 bg-black/90 backdrop-blur-md text-white p-4 rounded-lg border-2 border-cyan-400/50 pointer-events-auto shadow-2xl">
-                    <div className="flex items-center gap-2 mb-2">
+                  {/* Instrucciones flotantes - Parte Superior */}
+                  <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 bg-black/90 backdrop-blur-md text-white p-2 rounded-lg border-2 border-cyan-400/50 pointer-events-auto shadow-2xl">
+                    <div className="flex items-center gap-2 mb-1">
                       <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                      <span className="font-bold text-cyan-400 text-lg">INSTRUCCIONES</span>
+                      <span className="font-bold text-cyan-400 text-sm">INSTRUCCIONES</span>
                     </div>
-                    <p className="text-sm mb-2 text-white font-medium">🖱️ Haz clic en cualquier parte del mapa para lanzar un asteroide</p>
-                    <p className="text-sm mb-2 text-white font-medium">⚙️ Usa el panel de configuración para personalizar el asteroide</p>
-                    <p className="text-sm text-cyan-300 font-bold">
-                      📍 Ubicación: {selectedLocation.lat.toFixed(2)}°, {selectedLocation.lng.toFixed(2)}°
+                    <p className="text-xs mb-1 text-white">🖱️ Haz clic en el mapa para lanzar asteroide</p>
+                    <p className="text-xs text-cyan-300">
+                      📍 {selectedLocation.lat.toFixed(2)}°, {selectedLocation.lng.toFixed(2)}°
                     </p>
                   </div>
 
@@ -306,59 +320,59 @@ export default function IntegratedAsteroidSimulator({
                     🌍 Volver al Globo
                   </button>
 
-                  {/* Panel de configuración flotante */}
-                  <div className="absolute bottom-4 right-4 z-50 bg-black/90 backdrop-blur-md text-white p-4 rounded-lg border-2 border-cyan-400/50 w-80 pointer-events-auto shadow-2xl">
-                    <h3 className="font-bold text-cyan-400 mb-3 flex items-center gap-2">
-                      ⚙️ Configuración del Asteroide
+                  {/* Panel de configuración flotante - Lado Derecho */}
+                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-50 bg-black/90 backdrop-blur-md text-white p-3 rounded-lg border-2 border-cyan-400/50 w-72 pointer-events-auto shadow-2xl">
+                    <h3 className="font-bold text-cyan-400 mb-2 text-sm flex items-center gap-2">
+                      ⚙️ Configuración
                     </h3>
                     
                     {/* Diámetro */}
-                    <div className="mb-4">
-                      <label className="block text-sm mb-2 text-white font-medium">Diámetro: <span className="text-cyan-400 font-bold">{asteroidConfig.diameter}m</span></label>
+                    <div className="mb-3">
+                      <label className="block text-xs mb-1 text-white font-medium">Diámetro: <span className="text-cyan-400 font-bold">{asteroidConfig.diameter}m</span></label>
                       <input
                         type="range"
                         min="10"
                         max="200"
                         value={asteroidConfig.diameter}
                         onChange={(e) => setAsteroidConfig(prev => ({ ...prev, diameter: parseInt(e.target.value) }))}
-                        className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+                        className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
                         style={{
                           background: `linear-gradient(to right, #06b6d4 0%, #06b6d4 ${(asteroidConfig.diameter - 10) / 1.9}%, #374151 ${(asteroidConfig.diameter - 10) / 1.9}%, #374151 100%)`
                         }}
                       />
-                      <div className="flex justify-between text-xs text-gray-300 mt-1">
+                      <div className="flex justify-between text-xs text-gray-400 mt-1">
                         <span>10m</span>
                         <span>200m</span>
                       </div>
                     </div>
 
                     {/* Velocidad */}
-                    <div className="mb-4">
-                      <label className="block text-sm mb-2 text-white font-medium">Velocidad: <span className="text-cyan-400 font-bold">{asteroidConfig.speed}%</span></label>
+                    <div className="mb-3">
+                      <label className="block text-xs mb-1 text-white font-medium">Velocidad: <span className="text-cyan-400 font-bold">{asteroidConfig.speed}%</span></label>
                       <input
                         type="range"
                         min="25"
                         max="200"
                         value={asteroidConfig.speed}
                         onChange={(e) => setAsteroidConfig(prev => ({ ...prev, speed: parseInt(e.target.value) }))}
-                        className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+                        className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
                         style={{
                           background: `linear-gradient(to right, #06b6d4 0%, #06b6d4 ${(asteroidConfig.speed - 25) / 1.75}%, #374151 ${(asteroidConfig.speed - 25) / 1.75}%, #374151 100%)`
                         }}
                       />
-                      <div className="flex justify-between text-xs text-gray-300 mt-1">
+                      <div className="flex justify-between text-xs text-gray-400 mt-1">
                         <span>25%</span>
                         <span>200%</span>
                       </div>
                     </div>
 
                     {/* Material */}
-                    <div className="mb-4">
-                      <label className="block text-sm mb-2 text-white font-medium">Material</label>
+                    <div className="mb-3">
+                      <label className="block text-xs mb-1 text-white font-medium">Material</label>
                       <select
                         value={asteroidConfig.material}
                         onChange={(e) => setAsteroidConfig(prev => ({ ...prev, material: e.target.value as any }))}
-                        className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white"
+                        className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white text-xs"
                       >
                         {Object.entries(asteroidMaterials).map(([key, material]) => (
                           <option key={key} value={key}>
@@ -368,17 +382,17 @@ export default function IntegratedAsteroidSimulator({
                       </select>
                       
                       {/* Información del material seleccionado */}
-                      <div className="mt-2 p-2 bg-gray-800 rounded text-xs">
-                        <div className="flex items-center gap-2 mb-1">
+                      <div className="mt-1 p-1 bg-gray-800 rounded text-xs">
+                        <div className="flex items-center gap-1 mb-1">
                           <span style={{ color: asteroidMaterials[asteroidConfig.material].color }}>
                             {asteroidMaterials[asteroidConfig.material].icon}
                           </span>
                           <span className="text-gray-300">{asteroidMaterials[asteroidConfig.material].name}</span>
                         </div>
-                        <div className="text-gray-400">
-                          Densidad: {asteroidMaterials[asteroidConfig.material].density}x | 
-                          Energía: {asteroidMaterials[asteroidConfig.material].effects.energy}x | 
-                          Cráter: {asteroidMaterials[asteroidConfig.material].effects.crater}x
+                        <div className="text-gray-400 text-xs">
+                          D: {asteroidMaterials[asteroidConfig.material].density}x | 
+                          E: {asteroidMaterials[asteroidConfig.material].effects.energy}x | 
+                          C: {asteroidMaterials[asteroidConfig.material].effects.crater}x
                         </div>
                       </div>
                     </div>
@@ -409,22 +423,22 @@ export default function IntegratedAsteroidSimulator({
                           onImpact?.(mockImpact);
                         }
                       }}
-                      className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2 px-4 rounded transition-colors mb-2"
+                      className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-1 px-2 rounded text-xs transition-colors mb-2"
                     >
-                      🚀 Lanzar Asteroide Aquí
+                      🚀 Lanzar Asteroide
                     </button>
 
                     {/* Botón para simular solo agentes */}
                     <button
                       onClick={startAgentSimulation}
                       disabled={isSimulationRunning}
-                      className={`w-full font-bold py-2 px-4 rounded transition-colors ${
+                      className={`w-full font-bold py-1 px-2 rounded text-xs transition-colors ${
                         isSimulationRunning 
                           ? 'bg-gray-600 text-gray-400 cursor-not-allowed' 
                           : 'bg-purple-600 hover:bg-purple-500 text-white'
                       }`}
                     >
-                      {isSimulationRunning ? '🤖 Agentes Trabajando...' : '🤖 Simular Solo Agentes'}
+                      {isSimulationRunning ? '🤖 Trabajando...' : '🤖 Solo Agentes'}
                     </button>
                   </div>
                 </div>
@@ -447,52 +461,51 @@ export default function IntegratedAsteroidSimulator({
                 />
               </div>
 
-              {/* Panel de Métricas en Tiempo Real */}
-              <div className="absolute top-20 left-4 z-50 bg-black/90 backdrop-blur-md text-white p-4 rounded-lg border-2 border-cyan-400/50 pointer-events-auto shadow-2xl w-80">
-                <h3 className="font-bold text-cyan-400 mb-3 flex items-center gap-2">
-                  📊 Métricas en Tiempo Real
+              {/* Panel de Métricas en Tiempo Real - Lado Izquierdo */}
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-50 bg-black/90 backdrop-blur-md text-white p-3 rounded-lg border-2 border-cyan-400/50 pointer-events-auto shadow-2xl w-64">
+                <h3 className="font-bold text-cyan-400 mb-2 text-sm flex items-center gap-2">
+                  📊 Métricas
                 </h3>
                 
-                <div className="space-y-3">
+                <div className="space-y-2 text-xs">
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-300">Energía:</span>
+                    <span className="text-gray-300">Energía:</span>
                     <span className="text-cyan-400 font-bold">{liveMetrics.energy.toFixed(0)} MJ</span>
                   </div>
                   
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-300">Tamaño del Cráter:</span>
+                    <span className="text-gray-300">Cráter:</span>
                     <span className="text-red-400 font-bold">{liveMetrics.craterSize.toFixed(0)}m</span>
                   </div>
                   
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-300">Área Afectada:</span>
+                    <span className="text-gray-300">Área:</span>
                     <span className="text-orange-400 font-bold">{liveMetrics.affectedArea.toFixed(0)} km²</span>
                   </div>
                   
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-300">Población en Riesgo:</span>
+                    <span className="text-gray-300">Población:</span>
                     <span className="text-yellow-400 font-bold">{liveMetrics.populationAtRisk.toLocaleString()}</span>
                   </div>
                   
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-300">Daño a Infraestructura:</span>
+                    <span className="text-gray-300">Daño:</span>
                     <span className="text-pink-400 font-bold">{liveMetrics.infrastructureDamage.toFixed(0)}%</span>
                   </div>
                   
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-300">Tiempo de Mitigación:</span>
+                    <span className="text-gray-300">Mitigación:</span>
                     <span className="text-green-400 font-bold">{liveMetrics.mitigationTime} días</span>
                   </div>
                 </div>
 
                 {/* Indicador de agente seleccionado */}
                 {selectedAgent && (
-                  <div className="mt-4 pt-3 border-t border-cyan-400/30">
+                  <div className="mt-3 pt-2 border-t border-cyan-400/30">
                     <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: selectedAgent.color }}></div>
-                      <span className="text-sm text-cyan-300">Agente: {selectedAgent.name}</span>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: selectedAgent.color }}></div>
+                      <span className="text-xs text-cyan-300">{selectedAgent.name}</span>
                     </div>
-                    <p className="text-xs text-gray-400 mt-1">{selectedAgent.specialty}</p>
                   </div>
                 )}
               </div>
