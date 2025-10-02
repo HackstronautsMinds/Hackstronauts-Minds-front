@@ -5,7 +5,7 @@ import { mockAsteroids, fetchAsteroidData, calculateImpactData } from '../data/m
 import AgentStatusPanel from './AgentStatusPanel';
 import IntegratedAsteroidSimulator from './IntegratedAsteroidSimulator';
 import { CurvedMonitorWall } from './CurvedMonitorWall';
-import { AgentMonitorGrid } from './AgentMonitorGrid';
+import { MonitorAgentes } from './MonitorAgentes';
 
 export default function AsteroidSimulatorSection() {
   const [selectedAsteroid, setSelectedAsteroid] = useState<AsteroidData | null>(null);
@@ -294,7 +294,7 @@ export default function AsteroidSimulatorSection() {
         {/* Sistema de Monitores de Agentes AI */}
         {selectedAsteroid && (
           <div className="mt-8">
-            <AgentMonitorGrid />
+            <MonitorAgentes />
           </div>
         )}
 
