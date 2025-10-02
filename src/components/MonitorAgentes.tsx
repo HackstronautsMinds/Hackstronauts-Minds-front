@@ -278,7 +278,7 @@ export function MonitorAgentes() {
       >
         {/* Top row - single monitor */}
         <div className="w-full flex justify-center">
-          <div className="w-[40%] max-w-[28rem] h-[22rem]">
+          <div style={{ width: '40%', maxWidth: '28rem', height: '22rem' }}>
             <VintageMonitor agentName="DRA. ORBITAL" status="online" size="large">
               <div style={{ 
                 color: '#4ade80', 
@@ -297,7 +297,7 @@ export function MonitorAgentes() {
         
         {/* Middle row - two monitors */}
         <div className="w-full flex justify-center gap-6 sm:gap-8 md:gap-12">
-          <div className="w-[35%] max-w-[24rem] h-[20rem]">
+          <div style={{ width: '35%', maxWidth: '24rem', height: '20rem' }}>
             <VintageMonitor agentName="DRA. MITIGATION" status="processing" size="large">
               <div style={{ 
                 color: '#4ade80', 
@@ -314,7 +314,7 @@ export function MonitorAgentes() {
             </VintageMonitor>
           </div>
           
-          <div className="w-[35%] max-w-[24rem] h-[20rem]">
+          <div style={{ width: '35%', maxWidth: '24rem', height: '20rem' }}>
             <VintageMonitor agentName="DR. IMPACT" status="online" size="large">
               <div style={{ 
                 color: '#4ade80', 
@@ -335,7 +335,7 @@ export function MonitorAgentes() {
         
         {/* Bottom row - four monitors */}
         <div className="w-full flex justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-12">
-          <div className="w-[22%] max-w-[18rem] h-[20rem]">
+          <div style={{ width: '22%', maxWidth: '18rem', height: '20rem' }}>
             <VintageMonitor agentName="DRA. ML" status="processing" size="large">
               <div style={{ 
                 color: '#4ade80', 
@@ -352,7 +352,7 @@ export function MonitorAgentes() {
             </VintageMonitor>
           </div>
           
-          <div className="w-[22%] max-w-[18rem] h-[20rem]">
+          <div style={{ width: '22%', maxWidth: '18rem', height: '20rem' }}>
             <VintageMonitor agentName="DR. DATA" status="online" size="large">
               <div style={{ 
                 color: '#4ade80', 
@@ -370,7 +370,7 @@ export function MonitorAgentes() {
             </VintageMonitor>
           </div>
           
-          <div className="w-[22%] max-w-[18rem] h-[20rem]">
+          <div style={{ width: '22%', maxWidth: '18rem', height: '20rem' }}>
             <VintageMonitor agentName="DR. VISUALIZATION" status="processing" size="large">
               <div style={{ 
                 color: '#4ade80', 
@@ -388,7 +388,7 @@ export function MonitorAgentes() {
             </VintageMonitor>
           </div>
           
-          <div className="w-[22%] max-w-[18rem] h-[20rem]">
+          <div style={{ width: '22%', maxWidth: '18rem', height: '20rem' }}>
             <VintageMonitor agentName="DR. EXPLAINER" status="online" size="large">
               <div style={{ 
                 color: '#4ade80', 

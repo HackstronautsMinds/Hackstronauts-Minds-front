@@ -11,10 +11,10 @@ export const NEOList: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
 
-  // Usar React Query para obtener los datos del backend real
+  // Usar React Query para obtener los datos de la NASA API
   const { data, isLoading, error } = useQuery({
-    queryKey: ['neos', 1, 20],
-    queryFn: () => neoService.getNEOs(1, 20),
+    queryKey: ['neos', 0, 20],
+    queryFn: () => neoService.getNEOsList(0, 20),
     staleTime: 5 * 60 * 1000,
   });
 
