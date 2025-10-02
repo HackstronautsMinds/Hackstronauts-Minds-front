@@ -5,6 +5,7 @@ import { mockAsteroids, fetchAsteroidData, calculateImpactData } from '../data/m
 import AgentStatusPanel from './AgentStatusPanel';
 import IntegratedAsteroidSimulator from './IntegratedAsteroidSimulator';
 import { CurvedMonitorWall } from './CurvedMonitorWall';
+import { CinematicControlRoom } from './CinematicControlRoom';
 
 export default function AsteroidSimulatorSection() {
   const [selectedAsteroid, setSelectedAsteroid] = useState<AsteroidData | null>(null);
@@ -290,12 +291,13 @@ export default function AsteroidSimulatorSection() {
           </div>
         )}
 
-        {/* Panel de Agentes */}
+        {/* Sala de Control Cinematográfica - Reemplaza el panel de agentes */}
         {selectedAsteroid && (
-          <div className="mt-8">
-            <AgentStatusPanel 
-              currentPhase={simulationState.phase}
-              progress={simulationState.progress}
+          <div className="mt-8 relative" style={{ position: 'relative' }}>
+            <CinematicControlRoom 
+              simulationPhase={simulationState.phase}
+              simulationProgress={simulationState.progress}
+              isSimulationRunning={simulationState.isRunning}
             />
           </div>
         )}
