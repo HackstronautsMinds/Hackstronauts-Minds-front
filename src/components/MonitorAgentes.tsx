@@ -29,30 +29,42 @@ const VintageMonitor: React.FC<MonitorProps> = ({ agentName, status, size = 'med
   };
   
   return (
-    <div className={`relative ${sizeClasses[size]} rounded-lg shadow-lg overflow-hidden`}>
+    <div className={`relative ${sizeClasses[size]} rounded-lg shadow-2xl overflow-hidden border-2 border-gray-700`}>
       {/* Monitor frame */}
-      <div className="bg-gray-600 p-2 rounded-t-lg flex justify-between items-center">
+      <div className="bg-gray-600 p-2 rounded-t-lg flex justify-between items-center border border-gray-700">
         <div className="text-white font-mono text-sm font-bold">{agentName}</div>
-        <div className={`w-2 h-2 rounded-full ${statusColors[status]}`}></div>
+        <div className={`w-2 h-2 rounded-full ${statusColors[status]} shadow-lg`}></div>
       </div>
       
       {/* Screen */}
       <div className="bg-black p-3 border-l-2 border-r-2 border-gray-800">
-        <div className="bg-gray-900 p-2 rounded h-full">
+        <div className="bg-gray-900 p-2 rounded h-full border border-gray-700 relative">
+          {/* Scanlines effect */}
+          <div className="absolute inset-0 opacity-10">
+            {[...Array(20)].map((_, i) => (
+              <div key={i} className="w-full h-0.5 bg-green-400 mb-1"></div>
+            ))}
+          </div>
           {children}
         </div>
       </div>
       
       {/* Monitor base */}
-      <div className="bg-gray-600 h-4 rounded-b-lg flex justify-center items-center space-x-1 mt-1">
+      <div className="bg-gray-600 h-4 rounded-b-lg flex justify-center items-center space-x-1 mt-1 border border-gray-700">
         {statusIndicators[status].map((color, index) => (
-          <div key={index} className={`w-2 h-2 rounded-full ${color}`}></div>
+          <div key={index} className={`w-2 h-2 rounded-full ${color} shadow-sm`}></div>
         ))}
       </div>
       
       {/* Side buttons */}
-      <div className="absolute left-1 top-1/2 transform -translate-y-1/2 w-2 h-8 bg-gray-700 rounded-full"></div>
-      <div className="absolute right-1 top-1/2 transform -translate-y-1/2 w-2 h-8 bg-gray-700 rounded-full"></div>
+      <div className="absolute left-1 top-1/2 transform -translate-y-1/2 w-2 h-8 bg-gray-700 rounded-full border border-gray-600"></div>
+      <div className="absolute right-1 top-1/2 transform -translate-y-1/2 w-2 h-8 bg-gray-700 rounded-full border border-gray-600"></div>
+      
+      {/* Corner lights - green dots */}
+      <div className="absolute top-1 left-1 w-1.5 h-1.5 bg-green-400 rounded-full shadow-lg animate-pulse"></div>
+      <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-green-400 rounded-full shadow-lg animate-pulse"></div>
+      <div className="absolute bottom-1 left-1 w-1.5 h-1.5 bg-green-400 rounded-full shadow-lg animate-pulse"></div>
+      <div className="absolute bottom-1 right-1 w-1.5 h-1.5 bg-green-400 rounded-full shadow-lg animate-pulse"></div>
     </div>
   );
 };
@@ -78,9 +90,9 @@ export function MonitorAgentes() {
       
       <div className="relative z-10 p-8 h-full flex flex-col justify-center">
         {/* Top row - single monitor */}
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center mb-12">
           <VintageMonitor agentName="DRA. ORBITAL" status="online" size="medium">
-            <div className="space-y-1 text-green-400 text-xs">
+            <div className="space-y-1 text-green-400 text-xs font-mono">
               <div>ORBITAL RECONNAISSANCE</div>
               <div>• TRACKING AVG47 OBJECTS</div>
               <div>• ALTITUDE AVG 2,340 KM</div>
@@ -90,9 +102,9 @@ export function MonitorAgentes() {
         </div>
         
         {/* Middle row - two monitors */}
-        <div className="flex justify-center gap-8 mb-8">
+        <div className="flex justify-center gap-12 mb-12">
           <VintageMonitor agentName="DRA. MITIGATION" status="processing" size="medium">
-            <div className="space-y-1 text-green-400 text-xs">
+            <div className="space-y-1 text-green-400 text-xs font-mono">
               <div>RISK MITIGATION</div>
               <div>• CONTAINMENT 12</div>
               <div>PROTOCOLS</div>
@@ -102,7 +114,7 @@ export function MonitorAgentes() {
           </VintageMonitor>
           
           <VintageMonitor agentName="DR. IMPACT" status="online" size="medium">
-            <div className="space-y-1 text-green-400 text-xs">
+            <div className="space-y-1 text-green-400 text-xs font-mono">
               <div>IMPACT ASSESSMENT</div>
               <div>• COLLISION 0.03%</div>
               <div>PROBABILITY</div>
@@ -114,9 +126,9 @@ export function MonitorAgentes() {
         </div>
         
         {/* Bottom row - four monitors */}
-        <div className="flex justify-center gap-6">
+        <div className="flex justify-center gap-8">
           <VintageMonitor agentName="DRA. ML" status="processing" size="medium">
-            <div className="space-y-1 text-green-400 text-xs">
+            <div className="space-y-1 text-green-400 text-xs font-mono">
               <div>MACHINE LEARNING</div>
               <div>• TRAINING 1,247</div>
               <div>ITERATIONS</div>
@@ -126,7 +138,7 @@ export function MonitorAgentes() {
           </VintageMonitor>
           
           <VintageMonitor agentName="DR. DATA" status="online" size="medium">
-            <div className="space-y-1 text-green-400 text-xs">
+            <div className="space-y-1 text-green-400 text-xs font-mono">
               <div>NEURAL NETWORK</div>
               <div>ANALYSIS</div>
               <div>• PATTERN 94%</div>
@@ -137,7 +149,7 @@ export function MonitorAgentes() {
           </VintageMonitor>
           
           <VintageMonitor agentName="DR. VISUALIZATION" status="processing" size="medium">
-            <div className="space-y-1 text-green-400 text-xs">
+            <div className="space-y-1 text-green-400 text-xs font-mono">
               <div>3D RENDERING ENGINE</div>
               <div>• REAL TIME ACTIVE</div>
               <div>VISUALIZATION</div>
@@ -148,7 +160,7 @@ export function MonitorAgentes() {
           </VintageMonitor>
           
           <VintageMonitor agentName="DR. EXPLAINER" status="online" size="medium">
-            <div className="space-y-1 text-green-400 text-xs">
+            <div className="space-y-1 text-green-400 text-xs font-mono">
               <div>AI INTERPRETATION</div>
               <div>• NATURAL LANGUAGE</div>
               <div>ACTIVE</div>
