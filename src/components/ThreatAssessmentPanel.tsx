@@ -61,7 +61,7 @@ export const ThreatAssessmentPanel: React.FC = () => {
   const velocity = metrics.trainingIterations / 100; // K KM/H
   
   return (
-    <div className="bg-gray-900/90 backdrop-blur-lg border border-cyan-400/30 rounded-lg p-6 w-full">
+    <div className="w-full">
       
       
       <div className="flex justify-around">

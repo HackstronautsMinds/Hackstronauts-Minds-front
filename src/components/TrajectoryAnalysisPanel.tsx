@@ -21,7 +21,7 @@ export const TrajectoryAnalysisPanel: React.FC = () => {
   }, [metrics.trackingObjects, metrics.collisionProbability]);
   
   return (
-    <div className="bg-gray-900/90 backdrop-blur-lg border border-cyan-400/30 rounded-lg p-6 w-full">
+    <div className="w-full">
       
       
       <div className="relative h-48 bg-black/50 rounded border border-gray-700">

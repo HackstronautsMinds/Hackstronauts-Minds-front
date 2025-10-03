@@ -38,7 +38,7 @@ export const DefenseSystemsPanel: React.FC = () => {
   const communication = metrics.processedQueries > 5000 ? 100 : (metrics.processedQueries / 5000) * 100;
   
   return (
-    <div className="bg-gray-900/90 backdrop-blur-lg border border-cyan-400/30 rounded-lg p-6 w-full">
+    <div className="w-full">
      
       <div className="space-y-4">
         <SystemBar

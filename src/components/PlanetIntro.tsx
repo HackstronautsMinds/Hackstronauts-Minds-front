@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 
 interface PlanetIntroProps {
@@ -8,6 +8,7 @@ interface PlanetIntroProps {
 export function PlanetIntro({ onComplete }: PlanetIntroProps) {
   const [scrollY, setScrollY] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
+  const [shouldRender, setShouldRender] = useState(true);
 
   // Scroll personalizado que no mueve la página
   useEffect(() => {
@@ -26,7 +27,11 @@ export function PlanetIntro({ onComplete }: PlanetIntroProps) {
             // Cuando el scroll llega al máximo, completamos la intro
             if (newScroll >= 999 && !isComplete) {
               setIsComplete(true);
-              setTimeout(() => onComplete(), 200);
+              // Fade out primero, luego desmontar
+              setTimeout(() => {
+                setShouldRender(false);
+                setTimeout(() => onComplete(), 300); // Esperar a que termine la animación
+              }, 100);
             }
             
             return newScroll;
@@ -53,10 +58,14 @@ export function PlanetIntro({ onComplete }: PlanetIntroProps) {
   const currentOpacity = scrollY > 800 ? Math.max(0, 1 - ((scrollY - 800) / 200)) : 1;
   const currentTextOpacity = scrollY > 300 ? Math.max(0, 1 - ((scrollY - 300) / 300)) : 1;
 
-  if (isComplete) return null;
+  if (!shouldRender) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900 flex items-center justify-center overflow-hidden">
+    <motion.div 
+      className="fixed inset-0 z-50 bg-slate-900 flex items-center justify-center overflow-hidden"
+      animate={{ opacity: shouldRender ? 1 : 0 }}
+      transition={{ duration: 0.3 }}
+    >
       {/* Fondo estrellado */}
       <div className="absolute inset-0">
         {[...Array(100)].map((_, i) => (
@@ -188,12 +197,17 @@ export function PlanetIntro({ onComplete }: PlanetIntroProps) {
         style={{ opacity: currentTextOpacity }}
       >
         <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
           className="text-blue-300 text-sm mb-2"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 3 }}
+          animate={{ 
+            opacity: 1,
+            y: [0, 10, 0]
+          }}
+          transition={{ 
+            duration: 2, 
+            repeat: Infinity,
+            delay: 3
+          }}
         >
           Desliza para continuar
         </motion.div>
@@ -215,6 +229,6 @@ export function PlanetIntro({ onComplete }: PlanetIntroProps) {
           />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

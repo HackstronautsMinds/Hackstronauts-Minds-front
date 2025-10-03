@@ -95,7 +95,7 @@ export default function AgentStatusPanel({ currentPhase, progress }: AgentStatus
   };
 
   return (
-    <div className="bg-gray-900/50 backdrop-blur-lg rounded-2xl border border-cyan-400/30 p-4">
+    <div>
       <h2 className="text-lg font-bold text-white mb-4">🤖 Agentes de IA (Automáticos)</h2>
       
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
