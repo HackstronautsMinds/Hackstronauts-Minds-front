@@ -105,19 +105,19 @@ export default function AgentSelector() {
       </div>
 
       {/* Contenedor principal - para mover todo el bloque */}
-      <div className="relative z-10 w-full min-h-screen flex items-end justify-center px-8 pb-32">
+      <div className="relative z-10 w-full min-h-screen flex items-end justify-center px-4 sm:px-8 pb-32">
         
         {/* CONTENEDOR PRINCIPAL - envuelve animación central y científicos */}
-        <div className="relative w-full max-w-5xl flex flex-col items-center" style={{ marginRight: 'min(800px, max(50px, 25vw))', marginLeft: 'min(-500px, max(-50px, -15vw))' }}>
+        <div className="relative w-full max-w-5xl flex flex-col items-center mx-auto lg:mr-[200px] xl:mr-[300px] lg:ml-[-100px] xl:ml-[-200px]">
           
           {/* CONTENEDOR DE ANIMACIÓN CENTRAL */}
-          <div className="absolute z-0 flex items-center justify-center pointer-events-none" style={{ top: '50%', transform: 'translateY(-170%)' }}>
+          <div className="absolute z-0 flex items-center justify-center pointer-events-none " style={{ top: '50%', transform: 'translateY(-170%)' }}>
             <AnimatePresence mode="wait">
               {hoveredScientist && (
                 <motion.div
                   key={hoveredScientist.id}
                   initial={{ scale: 0.5, opacity: 0, y: 30 }}
-                  animate={{ scale: 1.5, opacity: 1, y: 0 }}
+                  animate={{ scale: 1.2, opacity: 1, y: 0 }}
                   exit={{ scale: 0.5, opacity: 0, y: 30 }}
                   transition={{ 
                     type: 'spring', 
@@ -125,7 +125,10 @@ export default function AgentSelector() {
                     damping: 25,
                     duration: 0.3
                   }}
-                  className="relative"
+                  className="relative top-[220px]"
+                  style={{
+                    top: '200px'
+                  }}
                 >
                   {/* Imagen grande - avatar1.png */}
                   <img
@@ -194,7 +197,7 @@ export default function AgentSelector() {
         </div>
 
             {/* CONTENEDOR SEPARADO PARA VENTANA DE GLASSMORPHISM */}
-            <div className="absolute top-0 left-[70%] right-8 h-full z-20 flex items-center justify-start pl-8">
+            <div className="absolute top-0 !right-[10px] h-full z-20 flex items-center justify-start pl-8" style={{ right: '100px' }}>
               <AnimatePresence>
                 {hoveredScientist && (
                   <motion.div
@@ -340,7 +343,7 @@ function ScientistInfoWindow({ scientist }: ScientistInfoWindowProps) {
         <div className="flex flex-col">
           {/* Header épico */}
           <div className="flex items-center gap-3 mb-4">
-            <div className="relative">
+            <div className="relative ">
               <motion.div
                 className="absolute -inset-1 rounded-full"
                 style={{

@@ -66,14 +66,14 @@ export const NEODetailModal: React.FC<NEODetailModalProps> = ({ neo, isOpen, onC
     : 0;
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-gray-900 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-white/20">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4">
+      <div className="bg-gray-900 rounded-lg max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto border border-white/20 mx-2 sm:mx-0">
         {/* Header */}
-        <div className="p-6 border-b border-white/10">
-          <div className="flex items-start justify-between">
-            <div>
-              <h2 className="text-2xl font-bold text-white mb-2">{data.name}</h2>
-              <div className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+        <div className="p-4 sm:p-6 border-b border-white/10">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-2 break-words">{data.name}</h2>
+              <div className={`inline-block px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${
                 data.is_potentially_hazardous 
                   ? 'text-red-400 bg-red-500/20' 
                   : 'text-green-400 bg-green-500/20'
@@ -83,7 +83,7 @@ export const NEODetailModal: React.FC<NEODetailModalProps> = ({ neo, isOpen, onC
             </div>
             <button
               onClick={onClose}
-              className="text-white/60 hover:text-white text-2xl"
+              className="text-white/60 hover:text-white text-2xl flex-shrink-0 w-8 h-8 flex items-center justify-center"
             >
               ×
             </button>
@@ -91,43 +91,43 @@ export const NEODetailModal: React.FC<NEODetailModalProps> = ({ neo, isOpen, onC
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {loading ? (
             <div className="text-center py-8">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-              <p className="mt-4 text-white/60">Obteniendo datos detallados...</p>
+              <p className="mt-4 text-white/60 text-sm sm:text-base">Obteniendo datos detallados...</p>
             </div>
           ) : (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Características físicas */}
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-3">Características Físicas</h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-white/60">Diámetro promedio:</span>
-                      <span className="text-white font-mono">{averageDiameter.toFixed(0)}m</span>
+                  <h3 className="text-base sm:text-lg font-semibold text-white mb-3">Características Físicas</h3>
+                  <div className="space-y-3">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-4">
+                      <span className="text-white/60 text-sm sm:text-base">Diámetro promedio:</span>
+                      <span className="text-white font-mono text-sm sm:text-base">{averageDiameter.toFixed(0)}m</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-white/60">Rango de diámetro:</span>
-                      <span className="text-white font-mono">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-4">
+                      <span className="text-white/60 text-sm sm:text-base">Rango de diámetro:</span>
+                      <span className="text-white font-mono text-sm sm:text-base">
                         {data.diameter_min_m.toFixed(0)}m - {data.diameter_max_m.toFixed(0)}m
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-white/60">Composición estimada:</span>
-                      <span className="text-white">{data.composition_estimate || 'No disponible'}</span>
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-4">
+                      <span className="text-white/60 text-sm sm:text-base">Composición estimada:</span>
+                      <span className="text-white text-sm sm:text-base break-words">{data.composition_estimate || 'No disponible'}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Datos orbitales */}
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-3">Datos Orbitales</h3>
-                  <div className="space-y-2">
+                  <h3 className="text-base sm:text-lg font-semibold text-white mb-3">Datos Orbitales</h3>
+                  <div className="space-y-3">
                     {data.close_approach_date && (
-                    <div className="flex justify-between">
-                      <span className="text-white/60">Último acercamiento:</span>
-                        <span className="text-white">{data.close_approach_date}</span>
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-4">
+                      <span className="text-white/60 text-sm sm:text-base">Último acercamiento:</span>
+                        <span className="text-white text-sm sm:text-base">{data.close_approach_date}</span>
                     </div>
                     )}
                   </div>
@@ -135,32 +135,32 @@ export const NEODetailModal: React.FC<NEODetailModalProps> = ({ neo, isOpen, onC
 
                 {/* Datos de aproximación */}
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-3">Última Aproximación</h3>
-                  <div className="space-y-2">
+                  <h3 className="text-base sm:text-lg font-semibold text-white mb-3">Última Aproximación</h3>
+                  <div className="space-y-3">
                     {data.velocity_km_s && (
-                    <div className="flex justify-between">
-                      <span className="text-white/60">Velocidad relativa:</span>
-                      <span className="text-white font-mono">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-4">
+                      <span className="text-white/60 text-sm sm:text-base">Velocidad relativa:</span>
+                      <span className="text-white font-mono text-sm sm:text-base">
                           {data.velocity_km_s.toFixed(2)} km/s
                       </span>
                     </div>
                     )}
                     {data.miss_distance_km && (
-                    <div className="flex justify-between">
-                      <span className="text-white/60">Distancia de aproximación:</span>
-                      <span className="text-white font-mono">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-4">
+                      <span className="text-white/60 text-sm sm:text-base">Distancia de aproximación:</span>
+                      <span className="text-white font-mono text-sm sm:text-base">
                           {(data.miss_distance_km / 1000).toFixed(2)} km
                       </span>
                     </div>
                     )}
-                    <div className="flex justify-between">
-                      <span className="text-white/60">Probabilidad de impacto:</span>
-                      <span className={`font-mono ${
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-4">
+                      <span className="text-white/60 text-sm sm:text-base">Probabilidad de impacto:</span>
+                      <span className={`font-mono text-sm sm:text-base ${
                         data.impact_probability && data.impact_probability > 0.001 
                           ? 'text-red-400' 
                           : 'text-green-400'
                       }`}>
-                        {data.impact_probability ? `${(data.impact_probability * 100).toFixed(6)}%` : '0%'}
+                        {data.impact_probability ? `${(data.impact_probability * 100).toFixed(6)}%`  : '0%'}
                       </span>
                   </div>
                 </div>
