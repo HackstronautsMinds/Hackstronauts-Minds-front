@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { PlanetIntro } from './components/PlanetIntro';
 import { AnimatedBackground } from './components/AnimatedBackground';
 import NASAScientistSelector from './components/NASAScientistSelector';
@@ -91,21 +92,41 @@ const AppContent: React.FC = () => {
 
 export default function App() {
   const [showMainContent, setShowMainContent] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handleIntroComplete = () => {
-    setShowMainContent(true);
+    setIsTransitioning(true);
+    // Pequeño delay para que la transición sea suave
+    setTimeout(() => {
+      setShowMainContent(true);
+      setIsTransitioning(false);
+    }, 300);
   };
 
   return (
     <>
       {/* Intro con planeta que se encoge */}
-      {!showMainContent && <PlanetIntro onComplete={handleIntroComplete} />}
+      {!showMainContent && (
+        <motion.div
+          initial={{ opacity: 1 }}
+          animate={{ opacity: isTransitioning ? 0 : 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <PlanetIntro onComplete={handleIntroComplete} />
+        </motion.div>
+      )}
       
       {/* Contenido principal */}
       {showMainContent && (
-        <SimulationProvider>
-          <AppContent />
-        </SimulationProvider>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <SimulationProvider>
+            <AppContent />
+          </SimulationProvider>
+        </motion.div>
       )}
     </>
   );

@@ -26,7 +26,7 @@ export function PlanetIntro({ onComplete }: PlanetIntroProps) {
             // Cuando el scroll llega al máximo, completamos la intro
             if (newScroll >= 999 && !isComplete) {
               setIsComplete(true);
-              setTimeout(() => onComplete(), 500);
+              setTimeout(() => onComplete(), 200);
             }
             
             return newScroll;
