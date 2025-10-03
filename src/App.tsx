@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { PlanetIntro } from './components/PlanetIntro';
 import { AnimatedBackground } from './components/AnimatedBackground';
-import { HeroSection } from './components/HeroSection';
 import NASAScientistSelector from './components/NASAScientistSelector';
 import { BackendTest } from './components/BackendTest';
 import { NEOList } from './components/NEOList';
@@ -20,9 +19,6 @@ const AppContent: React.FC = () => {
             
       {/* Contenido principal */}
       <div className="relative z-10">
-        {/* Sección Hero */}
-        <HeroSection />
-        
         {/* Sección de Selección de Científicos NASA */}
         <NASAScientistSelector />
         
