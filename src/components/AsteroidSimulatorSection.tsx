@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { AsteroidData, ImpactData, SimulationState, LiveMetrics, TrajectoryPoint } from '../types/simulation.types';
-import { fetchAsteroidData, calculateImpactData } from '../data/mockAsteroidData';
-import AgentStatusPanel from './AgentStatusPanel';
 import IntegratedAsteroidSimulator from './IntegratedAsteroidSimulator';
 import { CurvedMonitorWall } from './CurvedMonitorWall';
 import { MonitorAgentes } from './MonitorAgentes';
-import { MainMetricsPanel } from './MainMetricsPanel';
 import { useSimulation } from '../contexts/SimulationContext';
 
 export default function AsteroidSimulatorSection() {
   const { selectedAsteroid: contextAsteroid, isSimulationActive } = useSimulation();
-  const [selectedAsteroid, setSelectedAsteroid] = useState<AsteroidData | null>(null);
   const [simulationState, setSimulationState] = useState<SimulationState>({
     phase: 'idle',
     progress: 0,
@@ -53,7 +49,7 @@ export default function AsteroidSimulatorSection() {
 
   // Simular datos del backend
   const simulateBackendData = async () => {
-    if (!selectedAsteroid) return;
+    if (!contextAsteroid) return;
     
     // Generar trayectoria
     setTrajectory(generateTrajectory());
@@ -94,7 +90,7 @@ export default function AsteroidSimulatorSection() {
 
 
   const handleStartSimulation = () => {
-    if (selectedAsteroid || contextAsteroid) {
+    if (contextAsteroid) {
       simulateBackendData();
     }
   };
@@ -138,8 +134,8 @@ export default function AsteroidSimulatorSection() {
        
 
 
-        {/* Controles de Simulación */}
-        {(selectedAsteroid || contextAsteroid) && (
+          {/* Controles de Simulación */}
+          {contextAsteroid && (
           <div className="mb-8 text-center">
             <button
               onClick={handleStartSimulation}

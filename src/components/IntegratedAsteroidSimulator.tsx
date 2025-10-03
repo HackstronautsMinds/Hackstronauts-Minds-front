@@ -3,13 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Earth3DGlobe from './Earth3DGlobe';
 import LeafletMapComponent from './LeafletMapComponent';
 import { AsteroidLauncher } from './AsteroidLauncher';
-import AgentStatusPanel from './AgentStatusPanel';
-import { CurvedMonitorWall } from './CurvedMonitorWall';
 import { useSimulation } from '../contexts/SimulationContext';
 import { AsteroidData } from '../types/simulation.types';
 
 interface IntegratedAsteroidSimulatorProps {
-  selectedAgent?: any; // Agente seleccionado desde la sección principal
   onImpact?: (impactData: any) => void;
 }
 
@@ -21,7 +18,6 @@ function latLngToXY(lat: number, lng: number): { x: number, y: number } {
 }
 
 export default function IntegratedAsteroidSimulator({ 
-  selectedAgent,
   onImpact 
 }: IntegratedAsteroidSimulatorProps) {
   const { selectedAsteroid, setImpactCoordinates, setSimulationStep } = useSimulation();
