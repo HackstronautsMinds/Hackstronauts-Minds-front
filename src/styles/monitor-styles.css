@@ -83,7 +83,7 @@
 
 .left-position {
   transform: 
-    translateX(-225px) 
+    translateX(-140px) 
     translateZ(-60px) 
     rotateY(25deg);
   transform-origin: right center;
@@ -100,15 +100,15 @@
 
 .right-position {
   transform: 
-    translateX(225px) 
+    translateX(140px) 
     translateZ(-60px) 
     rotateY(-25deg);
   transform-origin: left center;
 }
 
 .curved-monitor {
-  width: 450px;
-  height: 340px;
+  width: 380px;
+  height: 290px;
   filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.3));
   transform-style: preserve-3d;
 }

@@ -269,9 +269,9 @@ export function MonitorAgentes() {
       <div 
         className="relative z-10 w-full h-full flex flex-col justify-center items-center"
         style={{
-          padding: 'clamp(1rem, 3vw, 3rem)',
+          padding: 'clamp(1rem, 2vw, 2rem)',
           minHeight: '100vh',
-          gap: 'clamp(3rem, 6vw, 6rem)',
+          gap: 'clamp(1rem, 2vw, 2rem)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
