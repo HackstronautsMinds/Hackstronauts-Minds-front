@@ -1,4 +1,5 @@
 import { GaugeMonitor, ChartMonitor, LevelMonitor } from './Monitor';
+import { useLiveMetrics } from '../hooks/useLiveMetrics';
 
 interface GaugeData {
   value: number;
@@ -35,6 +36,8 @@ export function CurvedMonitorWall({
   impactZone,
   className = "" 
 }: CurvedMonitorWallProps) {
+  const liveMetrics = useLiveMetrics();
+  
   return (
     <div className={`curved-monitor-wall ${className}`}>
       {/* Background curved surface */}
@@ -46,7 +49,11 @@ export function CurvedMonitorWall({
       <div className="monitor-arrangement">
         <div className="monitor-position left-position">
           <div className="monitor-mount">
-            <GaugeMonitor data={gaugeData} className="curved-monitor" />
+            <GaugeMonitor 
+              data={gaugeData} 
+              liveMetrics={liveMetrics}
+              className="curved-monitor" 
+            />
           </div>
         </div>
         
@@ -56,6 +63,7 @@ export function CurvedMonitorWall({
               trajectory={trajectoryData}
               impactTime={impactTime}
               impactZone={impactZone}
+              liveMetrics={liveMetrics}
               className="curved-monitor center-main" 
             />
           </div>
@@ -63,7 +71,11 @@ export function CurvedMonitorWall({
         
         <div className="monitor-position right-position">
           <div className="monitor-mount">
-            <LevelMonitor data={levelData} className="curved-monitor" />
+            <LevelMonitor 
+              data={levelData} 
+              liveMetrics={liveMetrics}
+              className="curved-monitor" 
+            />
           </div>
         </div>
       </div>

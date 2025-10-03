@@ -30,6 +30,12 @@ interface LiveMetrics {
   // Métricas de explicación
   processedQueries: number;
   responseTime: number;
+  
+  // Métricas de amenaza (para los monitores)
+  energyMT: number;
+  distanceKm: number;
+  velocityKmh: number;
+  timeToImpact: number;
 }
 
 export const useLiveMetrics = () => {
@@ -49,7 +55,11 @@ export const useLiveMetrics = () => {
     renderedObjects: 0,
     fps: 0,
     processedQueries: 0,
-    responseTime: 0
+    responseTime: 0,
+    energyMT: 0,
+    distanceKm: 0,
+    velocityKmh: 0,
+    timeToImpact: 0
   });
 
   const updateMetrics = useCallback(() => {
@@ -94,6 +104,12 @@ export const useLiveMetrics = () => {
     const processedQueries = Math.floor(Math.random() * 2000) + 4000; // 4000-6000 consultas
     const responseTime = Math.random() * 0.1 + 0.05; // 0.05-0.15s
 
+    // Métricas de amenaza (para los monitores)
+    const energyMT = diameter * velocity * 0.1; // Energía basada en diámetro y velocidad
+    const distanceKm = averageAltitude; // Distancia = altitud promedio
+    const velocityKmh = velocity * 3600; // Convertir km/s a km/h
+    const timeToImpact = Math.floor(Math.random() * 30) + 10; // 10-40 segundos
+
     setMetrics({
       trackingObjects,
       averageAltitude,
@@ -109,7 +125,11 @@ export const useLiveMetrics = () => {
       renderedObjects,
       fps,
       processedQueries,
-      responseTime
+      responseTime,
+      energyMT,
+      distanceKm,
+      velocityKmh,
+      timeToImpact
     });
   }, [selectedAsteroid, impactCoordinates]);
 

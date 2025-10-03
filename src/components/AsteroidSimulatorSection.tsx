@@ -6,6 +6,7 @@ import AgentStatusPanel from './AgentStatusPanel';
 import IntegratedAsteroidSimulator from './IntegratedAsteroidSimulator';
 import { CurvedMonitorWall } from './CurvedMonitorWall';
 import { MonitorAgentes } from './MonitorAgentes';
+import { MainMetricsPanel } from './MainMetricsPanel';
 import { useSimulation } from '../contexts/SimulationContext';
 
 export default function AsteroidSimulatorSection() {
@@ -225,9 +226,11 @@ export default function AsteroidSimulatorSection() {
           </div>
         )}
 
+
         {/* Sistema de Monitores de Agentes AI */}
         {contextAsteroid && (
           <div className="mt-8 -mx-6">
+            
             <MonitorAgentes />
           </div>
         )}
