@@ -18,42 +18,6 @@ const AppContent: React.FC = () => {
       {/* Fondo animado con partículas */}
       <AnimatedBackground />
       
-            {/* Debug del contexto - temporal */}
-            <div style={{ 
-              position: 'fixed', 
-              top: '20px', 
-              left: '20px', 
-              background: 'rgba(0, 0, 0, 0.95)', 
-              color: '#00ff00', 
-              padding: '15px', 
-              borderRadius: '8px',
-              border: '2px solid #00ff00',
-              zIndex: 10000,
-              fontSize: '14px',
-              fontFamily: 'monospace',
-              boxShadow: '0 0 20px rgba(0, 255, 0, 0.5)',
-              minWidth: '250px'
-            }}>
-              <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#00ffff' }}>
-                🚀 SIMULATION DEBUG
-              </div>
-              <div>📡 Asteroide: {selectedAsteroid ? selectedAsteroid.name : 'Ninguno'}</div>
-              <div>🎯 Paso: {simulationStep}</div>
-              <div>⚡ Activo: {isSimulationActive ? 'Sí' : 'No'}</div>
-              {impactCoordinates && (
-                <div style={{ marginTop: '8px', padding: '8px', background: 'rgba(0, 255, 255, 0.1)', borderRadius: '4px' }}>
-                  <div>🌍 Lat: {impactCoordinates.lat.toFixed(4)}°</div>
-                  <div>🌍 Lng: {impactCoordinates.lng.toFixed(4)}°</div>
-                </div>
-              )}
-              {selectedAsteroid && (
-                <div style={{ marginTop: '8px', padding: '8px', background: 'rgba(0, 255, 0, 0.1)', borderRadius: '4px' }}>
-                  <div>💥 Diámetro: {selectedAsteroid.diameter}</div>
-                  <div>🏃 Velocidad: {selectedAsteroid.velocity}</div>
-                  <div>⚠️ Peligroso: {selectedAsteroid.is_hazardous ? 'Sí' : 'No'}</div>
-                </div>
-              )}
-            </div>
             
       {/* Contenido principal */}
       <div className="relative z-10">
