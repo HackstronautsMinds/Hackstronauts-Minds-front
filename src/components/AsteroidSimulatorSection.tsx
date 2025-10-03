@@ -134,14 +134,7 @@ export default function AsteroidSimulatorSection() {
       {/* Contenido Principal */}
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-white mb-4">
-            🛡️ Asteroid Impact Simulator
-          </h1>
-          <p className="text-xl text-gray-300">
-            Simulación en tiempo real de impactos de asteroides
-          </p>
-        </div>
+       
 
 
         {/* Controles de Simulación */}
@@ -179,25 +172,9 @@ export default function AsteroidSimulatorSection() {
 
             {/* Panel Derecho - Sistema de Monitores de Control */}
             <div className="bg-gray-900/50 backdrop-blur-lg rounded-2xl border border-cyan-400/30 p-6 col-span-2">
-              <h2 className="text-2xl font-bold text-white mb-4">🎛️ Mission Control - Meteorite Defense System</h2>
+             
               
-              {/* Estado de la simulación */}
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className={`w-3 h-3 rounded-full ${
-                    simulationState.isRunning ? 'bg-green-500 animate-pulse' : 'bg-gray-500'
-                  }`} />
-                  <span className="text-white font-bold">
-                    STATUS: {simulationState.isRunning ? 'OPERATIONAL' : 'STANDBY'}
-                  </span>
-                </div>
-                <div className="w-full bg-gray-700 rounded-full h-3">
-                  <div 
-                    className="bg-cyan-500 h-3 rounded-full transition-all duration-500"
-                    style={{ width: `${simulationState.progress}%` }}
-                  />
-                </div>
-              </div>
+            
 
               {/* Sistema de Monitores */}
               <div className="w-full h-[60vh]">

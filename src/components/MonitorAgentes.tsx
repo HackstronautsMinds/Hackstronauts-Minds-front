@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLiveMetrics } from '../hooks/useLiveMetrics';
 
 // Define types for our components
 interface MonitorProps {
@@ -245,6 +246,8 @@ document.head.appendChild(style);
 
 // Main Component
 export function MonitorAgentes() {
+  const metrics = useLiveMetrics();
+  
   return (
     <div 
       className="relative overflow-hidden" 
@@ -287,9 +290,9 @@ export function MonitorAgentes() {
                 lineHeight: '1.25' 
               }}>
                 <div>ORBITAL RECONNAISSANCE</div>
-                <div>• TRACKING AVG47 OBJECTS</div>
-                <div>• ALTITUDE AVG 2,340 KM</div>
-                <div>ALTITUDE: 408.2 KM</div>
+                <div>• TRACKING {metrics.trackingObjects} OBJECTS</div>
+                <div>• ALTITUDE AVG {metrics.averageAltitude.toLocaleString()} KM</div>
+                <div>ALTITUDE: {metrics.currentAltitude.toLocaleString()} KM</div>
               </div>
             </VintageMonitor>
           </div>
@@ -306,10 +309,10 @@ export function MonitorAgentes() {
                 lineHeight: '1.25' 
               }}>
                 <div>RISK MITIGATION</div>
-                <div>• CONTAINMENT 12</div>
+                <div>• CONTAINMENT {metrics.containmentProtocols}</div>
                 <div>PROTOCOLS</div>
-                <div>• DAMAGE OUTPUT REDUC47%</div>
-                <div>ALTITUDE: 408.2 KM</div>
+                <div>• DAMAGE OUTPUT REDUC{metrics.damageReduction}%</div>
+                <div>STATUS: ACTIVE</div>
               </div>
             </VintageMonitor>
           </div>
@@ -323,11 +326,11 @@ export function MonitorAgentes() {
                 lineHeight: '1.25' 
               }}>
                 <div>IMPACT ASSESSMENT</div>
-                <div>• COLLISION 0.03%</div>
+                <div>• COLLISION {(metrics.collisionProbability * 100).toFixed(2)}%</div>
                 <div>PROBABILITY</div>
-                <div>• IMPACT PACIFIC</div>
-                <div>LOCATION OCEAN</div>
-                <div>ALTITUDE: 408.2 KM</div>
+                <div>• IMPACT {metrics.impactLocation}</div>
+                <div>LOCATION DETECTED</div>
+                <div>STATUS: MONITORING</div>
               </div>
             </VintageMonitor>
           </div>
@@ -344,10 +347,10 @@ export function MonitorAgentes() {
                 lineHeight: '1.25' 
               }}>
                 <div>MACHINE LEARNING</div>
-                <div>• TRAINING 1,247</div>
+                <div>• TRAINING {metrics.trainingIterations.toLocaleString()}</div>
                 <div>ITERATIONS</div>
-                <div>• MODEL ACCURACY 97.8%</div>
-                <div>ALTITUDE: 408.2 KM</div>
+                <div>• MODEL ACCURACY {metrics.modelAccuracy.toFixed(1)}%</div>
+                <div>STATUS: TRAINING</div>
               </div>
             </VintageMonitor>
           </div>
@@ -362,9 +365,9 @@ export function MonitorAgentes() {
               }}>
                 <div>NEURAL NETWORK</div>
                 <div>ANALYSIS</div>
-                <div>• PATTERN 94%</div>
+                <div>• PATTERN {metrics.patternRecognition.toFixed(0)}%</div>
                 <div>RECOGNITION</div>
-                <div>• DATA MINING YES</div>
+                <div>• DATA MINING {metrics.dataMiningActive ? 'YES' : 'NO'}</div>
                 <div>ACTIVE</div>
               </div>
             </VintageMonitor>
@@ -381,9 +384,9 @@ export function MonitorAgentes() {
                 <div>3D RENDERING ENGINE</div>
                 <div>• REAL TIME ACTIVE</div>
                 <div>VISUALIZATION</div>
-                <div>• RENDERED 527</div>
+                <div>• RENDERED {metrics.renderedObjects}</div>
                 <div>OBJECTS</div>
-                <div>• FPS 144</div>
+                <div>• FPS {metrics.fps}</div>
               </div>
             </VintageMonitor>
           </div>
@@ -399,9 +402,9 @@ export function MonitorAgentes() {
                 <div>AI INTERPRETATION</div>
                 <div>• NATURAL LANGUAGE</div>
                 <div>ACTIVE</div>
-                <div>• QUERIES 5,894</div>
+                <div>• QUERIES {metrics.processedQueries.toLocaleString()}</div>
                 <div>PROCESSED</div>
-                <div>• RESPONSE TIME 0.12s</div>
+                <div>• RESPONSE TIME {metrics.responseTime.toFixed(2)}s</div>
               </div>
             </VintageMonitor>
           </div>

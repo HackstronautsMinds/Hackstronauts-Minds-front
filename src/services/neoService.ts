@@ -1,5 +1,4 @@
-// NASA API Service - Direct integration
-const NASA_API_KEY = 'DEMO_KEY'; // Using demo key for hackathon
+const NASA_API_KEY = import.meta.env.VITE_NASA_API_KEY;; 
 
 export const nasaApiService = {
   // Obtener lista de NEOs de la NASA
@@ -21,8 +20,9 @@ export const nasaApiService = {
         size: data.page.size
       };
     } catch (error) {
-      console.error('Error fetching NASA data:', error);
+      console.warn('NASA API limit reached, using mock data:', error.message);
       // Fallback to mock data if NASA API fails
+      
       const { mockNEOs } = await import('../data/mockNEOData');
       return {
         neos: mockNEOs.slice(page * size, (page + 1) * size),
@@ -47,7 +47,7 @@ export const nasaApiService = {
       const data = await response.json();
       return this.transformNASAData(data);
     } catch (error) {
-      console.error('Error fetching NEO details:', error);
+      console.warn('NASA API limit reached, using mock data for NEO details:', error.message);
       // Fallback to mock data
       const { mockNEOs } = await import('../data/mockNEOData');
       return mockNEOs.find(neo => neo.id === neoId) || null;
