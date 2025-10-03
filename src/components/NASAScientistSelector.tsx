@@ -108,7 +108,7 @@ export default function AgentSelector() {
       <div className="relative z-10 w-full min-h-screen flex items-end justify-center px-8 pb-32">
         
         {/* CONTENEDOR PRINCIPAL - envuelve animación central y científicos */}
-        <div className="relative w-full max-w-5xl flex flex-col items-center" style={{ marginRight: '800px', marginLeft: '-500px' }}>
+        <div className="relative w-full max-w-5xl flex flex-col items-center" style={{ marginRight: 'min(800px, max(50px, 25vw))', marginLeft: 'min(-500px, max(-50px, -15vw))' }}>
           
           {/* CONTENEDOR DE ANIMACIÓN CENTRAL */}
           <div className="absolute z-0 flex items-center justify-center pointer-events-none" style={{ top: '50%', transform: 'translateY(-170%)' }}>
@@ -131,7 +131,7 @@ export default function AgentSelector() {
                   <img
                     src="/src/assets/images/avatar1.png"
                     alt="Avatar"
-                    className="w-[350px] h-[450px] sm:w-[400px] sm:h-[500px] md:w-[450px] md:h-[550px] object-cover rounded-3xl border-4 border-pink-500 shadow-[0_0_40px_rgba(255,28,141,0.9)] "
+                    className="w-[120px] h-[150px] sm:w-[150px] sm:h-[188px] md:w-[180px] md:h-[225px] lg:w-[200px] lg:h-[250px] xl:w-[220px] xl:h-[275px] object-cover rounded-3xl border-4 border-pink-500 shadow-[0_0_40px_rgba(255,28,141,0.9)]"
                   />
                 </motion.div>
               )}
@@ -139,13 +139,13 @@ export default function AgentSelector() {
           </div>
 
           {/* CONTENEDOR DE CIENTÍFICOS - abarca todas las imágenes de científicos */}
-          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center" style={{ bottom: '60px' }}>
+          <div className="absolute bottom-0 left-[70%] z-10 flex flex-col items-center" style={{ bottom: '60px' }}>
             
             {/* CONTENEDOR FILA SUPERIOR - 2+2 científicos */}
-            <div className="flex justify-between items-center mb-16" style={{ width: '100%', gap: '200px' }}>
+            <div className="flex justify-between items-center mb-8 sm:mb-12 lg:mb-16" style={{ width: '100%', gap: 'min(200px, max(50px, 15vw))' }}>
               
                   {/* Fila izquierda: 2 agentes */}
-                  <div className="flex gap-2">
+                  <div className="flex gap-1 sm:gap-2">
                     {agents.slice(0, 2).map((scientist) => (
                   <ScientistCard
                     key={scientist.id}
@@ -159,7 +159,7 @@ export default function AgentSelector() {
               </div>
 
                   {/* Fila derecha: 2 agentes */}
-                  <div className="flex gap-2">
+                  <div className="flex gap-1 sm:gap-2">
                     {agents.slice(2, 4).map((scientist) => (
                   <ScientistCard
                     key={scientist.id}
@@ -175,7 +175,7 @@ export default function AgentSelector() {
 
                 {/* CONTENEDOR FILA INFERIOR - 3 agentes */}
                 <div className="flex justify-center">
-                  <div className="flex gap-2">
+                  <div className="flex gap-1 sm:gap-2">
                     {agents.slice(4).map((scientist) => (
                   <ScientistCard
                     key={scientist.id}
@@ -194,7 +194,7 @@ export default function AgentSelector() {
         </div>
 
             {/* CONTENEDOR SEPARADO PARA VENTANA DE GLASSMORPHISM */}
-            <div className="absolute top-0 left-1/2 right-8 h-full z-20 flex items-center justify-start pl-8">
+            <div className="absolute top-0 left-[70%] right-8 h-full z-20 flex items-center justify-start pl-8">
               <AnimatePresence>
                 {hoveredScientist && (
                   <motion.div
@@ -202,7 +202,7 @@ export default function AgentSelector() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 100 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
-                    className="w-full max-w-md"
+                    className="w-full max-w-xs sm:max-w-sm lg:max-w-md"
                   >
                     <ScientistInfoWindow scientist={hoveredScientist} />
                   </motion.div>
@@ -241,8 +241,8 @@ function ScientistCard({ scientist, isSelected, isDimmed, onMouseEnter, onMouseL
           : 'opacity-100'
       }`}
       style={{
-        width: '140px',
-        height: '175px',
+        width: 'min(140px, max(105px, 8vw))',
+        height: 'min(175px, max(131px, 10vw))',
         borderRadius: '16px',
         overflow: 'hidden'
       }}

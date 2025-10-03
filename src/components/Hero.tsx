@@ -14,7 +14,7 @@ export const Hero: React.FC = () => {
       {/* Contenido principal */}
       <div className="relative z-10">
         {/* Sección 1: Selección de Científicos NASA */}
-        <section className="relative w-full min-h-screen overflow-hidden bg-black py-8 lg:py-20">
+        <section className="relative w-full min-h-screen bg-black py-8 lg:py-20">
           <div>
             <motion.div 
               className="text-center mb-8 lg:mb-16"
@@ -22,12 +22,7 @@ export const Hero: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-3xl md:text-4xl lg:text-6xl font-bold text-white mb-4 lg:mb-6">
-                Selección de Científicos NASA
-              </h2>
-              <p className="text-lg md:text-xl text-white/70 max-w-3xl mx-auto">
-                Elige tu equipo de expertos para la misión de defensa planetaria
-              </p>
+
             </motion.div>
             <NASAScientistSelector />
           </div>
