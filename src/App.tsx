@@ -3,7 +3,6 @@ import { PlanetIntro } from './components/PlanetIntro';
 import { AnimatedBackground } from './components/AnimatedBackground';
 import { HeroSection } from './components/HeroSection';
 import NASAScientistSelector from './components/NASAScientistSelector';
-import { CTASection } from './components/CTASection';
 import { BackendTest } from './components/BackendTest';
 import { NEOList } from './components/NEOList';
 import AsteroidSimulatorSection from './components/AsteroidSimulatorSection';
@@ -27,9 +26,7 @@ const AppContent: React.FC = () => {
         {/* Sección de Selección de Científicos NASA */}
         <NASAScientistSelector />
         
-        {/* Sección de Call to Action */}
-        <CTASection />
-        
+     
         {/* Lista de NEOs */}
         <NEOList />
         
