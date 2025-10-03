@@ -7,46 +7,72 @@ import { CTASection } from './components/CTASection';
 import { BackendTest } from './components/BackendTest';
 import { NEOList } from './components/NEOList';
 import AsteroidSimulatorSection from './components/AsteroidSimulatorSection';
+import { SimulationProvider, useSimulation } from './contexts/SimulationContext';
 import './styles/monitor-styles.css';
 
-export default function App() {
-  const [showMainContent, setShowMainContent] = useState(false);
-
-  const handleIntroComplete = () => {
-    setShowMainContent(true);
-  };
-
+const AppContent: React.FC = () => {
+  const { selectedAsteroid, simulationStep, isSimulationActive, impactCoordinates } = useSimulation();
+  
   return (
-    <>
-      {/* Intro con planeta que se encoge */}
-      {!showMainContent && <PlanetIntro onComplete={handleIntroComplete} />}
+    <div className="relative min-h-screen bg-black text-white overflow-x-hidden" style={{ position: 'relative' }}>
+      {/* Fondo animado con partículas */}
+      <AnimatedBackground />
       
+            {/* Debug del contexto - temporal */}
+            <div style={{ 
+              position: 'fixed', 
+              top: '20px', 
+              left: '20px', 
+              background: 'rgba(0, 0, 0, 0.95)', 
+              color: '#00ff00', 
+              padding: '15px', 
+              borderRadius: '8px',
+              border: '2px solid #00ff00',
+              zIndex: 10000,
+              fontSize: '14px',
+              fontFamily: 'monospace',
+              boxShadow: '0 0 20px rgba(0, 255, 0, 0.5)',
+              minWidth: '250px'
+            }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#00ffff' }}>
+                🚀 SIMULATION DEBUG
+              </div>
+              <div>📡 Asteroide: {selectedAsteroid ? selectedAsteroid.name : 'Ninguno'}</div>
+              <div>🎯 Paso: {simulationStep}</div>
+              <div>⚡ Activo: {isSimulationActive ? 'Sí' : 'No'}</div>
+              {impactCoordinates && (
+                <div style={{ marginTop: '8px', padding: '8px', background: 'rgba(0, 255, 255, 0.1)', borderRadius: '4px' }}>
+                  <div>🌍 Lat: {impactCoordinates.lat.toFixed(4)}°</div>
+                  <div>🌍 Lng: {impactCoordinates.lng.toFixed(4)}°</div>
+                </div>
+              )}
+              {selectedAsteroid && (
+                <div style={{ marginTop: '8px', padding: '8px', background: 'rgba(0, 255, 0, 0.1)', borderRadius: '4px' }}>
+                  <div>💥 Diámetro: {selectedAsteroid.diameter}</div>
+                  <div>🏃 Velocidad: {selectedAsteroid.velocity}</div>
+                  <div>⚠️ Peligroso: {selectedAsteroid.is_hazardous ? 'Sí' : 'No'}</div>
+                </div>
+              )}
+            </div>
+            
       {/* Contenido principal */}
-      {showMainContent && (
-        <div className="relative min-h-screen bg-black text-white overflow-x-hidden" style={{ position: 'relative' }}>
-          {/* Fondo animado con partículas */}
-          <AnimatedBackground />
-          
-          {/* Contenido principal */}
-          <div className="relative z-10">
-            {/* Sección Hero */}
-            <HeroSection />
-            
-            {/* Sección de Selección de Científicos NASA */}
-            <NASAScientistSelector />
-            
-            {/* Sección de Call to Action */}
-            <CTASection />
-            
-            {/* Lista de NEOs */}
-            <NEOList />
-            
-            {/* Simulador de Impacto de Asteroides */}
-            <AsteroidSimulatorSection />
-            
-           
-            
-            {/* Footer minimalista estilo Cult Holdings */}
+      <div className="relative z-10">
+        {/* Sección Hero */}
+        <HeroSection />
+        
+        {/* Sección de Selección de Científicos NASA */}
+        <NASAScientistSelector />
+        
+        {/* Sección de Call to Action */}
+        <CTASection />
+        
+        {/* Lista de NEOs */}
+        <NEOList />
+        
+        {/* Simulador de Impacto de Asteroides */}
+        <AsteroidSimulatorSection />
+        
+        {/* Footer minimalista estilo Cult Holdings */}
             <footer className="relative py-16 px-6 border-t border-white/10">
               <div className="max-w-6xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
@@ -100,9 +126,29 @@ export default function App() {
                   </div>
                 </div>
               </div>
-            </footer>
-          </div>
-        </div>
+        </footer>
+      </div>
+    </div>
+  );
+};
+
+export default function App() {
+  const [showMainContent, setShowMainContent] = useState(false);
+
+  const handleIntroComplete = () => {
+    setShowMainContent(true);
+  };
+
+  return (
+    <>
+      {/* Intro con planeta que se encoge */}
+      {!showMainContent && <PlanetIntro onComplete={handleIntroComplete} />}
+      
+      {/* Contenido principal */}
+      {showMainContent && (
+        <SimulationProvider>
+          <AppContent />
+        </SimulationProvider>
       )}
     </>
   );

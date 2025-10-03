@@ -5,10 +5,10 @@ import LeafletMapComponent from './LeafletMapComponent';
 import { AsteroidLauncher } from './AsteroidLauncher';
 import AgentStatusPanel from './AgentStatusPanel';
 import { CurvedMonitorWall } from './CurvedMonitorWall';
+import { useSimulation } from '../contexts/SimulationContext';
 import { AsteroidData } from '../types/simulation.types';
 
 interface IntegratedAsteroidSimulatorProps {
-  selectedAsteroid: AsteroidData | null;
   selectedAgent?: any; // Agente seleccionado desde la sección principal
   onImpact?: (impactData: any) => void;
 }
@@ -21,60 +21,17 @@ function latLngToXY(lat: number, lng: number): { x: number, y: number } {
 }
 
 export default function IntegratedAsteroidSimulator({ 
-  selectedAsteroid, 
   selectedAgent,
   onImpact 
 }: IntegratedAsteroidSimulatorProps) {
+  const { selectedAsteroid, setImpactCoordinates, setSimulationStep } = useSimulation();
   const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [showMap, setShowMap] = useState(false);
   const [showAsteroidLauncher, setShowAsteroidLauncher] = useState(false);
   const [impactData, setImpactData] = useState<any>(null);
   const [mapClickPosition, setMapClickPosition] = useState<{ x: number; y: number } | null>(null);
   
-  const [asteroidConfig, setAsteroidConfig] = useState({
-    diameter: 50,
-    speed: 100,
-    material: 'iron' as 'iron' | 'stone' | 'ice' | 'gold' | 'diamond'
-  });
 
-  // Configuraciones de materiales de asteroides
-  const asteroidMaterials = {
-    iron: { 
-      name: 'Hierro', 
-      color: '#8B4513', 
-      density: 1.0, 
-      icon: '🦾',
-      effects: { energy: 1.2, crater: 1.1, area: 1.0 }
-    },
-    stone: { 
-      name: 'Piedra', 
-      color: '#696969', 
-      density: 0.8, 
-      icon: '🪨',
-      effects: { energy: 0.8, crater: 0.9, area: 0.8 }
-    },
-    ice: { 
-      name: 'Hielo', 
-      color: '#B0E0E6', 
-      density: 0.5, 
-      icon: '🧊',
-      effects: { energy: 0.6, crater: 0.7, area: 1.2 }
-    },
-    gold: { 
-      name: 'Oro', 
-      color: '#FFD700', 
-      density: 1.5, 
-      icon: '🏆',
-      effects: { energy: 1.5, crater: 1.3, area: 1.1 }
-    },
-    diamond: { 
-      name: 'Diamante', 
-      color: '#B9F2FF', 
-      density: 2.0, 
-      icon: '💎',
-      effects: { energy: 2.0, crater: 1.5, area: 1.3 }
-    }
-  };
 
   // Estados para la simulación de agentes
   const [simulationPhase, setSimulationPhase] = useState<'idle' | 'data_collecting' | 'orbital_calculating' | 'impact_analyzing' | 'mitigation_planning' | 'visualization_creating' | 'ml_predicting' | 'explaining' | 'completed'>('idle');
@@ -113,6 +70,10 @@ export default function IntegratedAsteroidSimulator({
   const handleLocationSelect = useCallback((lat: number, lng: number) => {
     setSelectedLocation({ lat, lng });
     
+    // Guardar coordenadas en el contexto
+    setImpactCoordinates({ lat, lng });
+    setSimulationStep('simulation');
+    
     // Convertir lat/lng a coordenadas del mapa
     const mapCoords = latLngToXY(lat, lng);
     setMapClickPosition(mapCoords);
@@ -122,7 +83,7 @@ export default function IntegratedAsteroidSimulator({
       setShowMap(true);
       setShowAsteroidLauncher(true);
     }, 1500);
-  }, []);
+  }, [setImpactCoordinates, setSimulationStep]);
 
   // Función para simular el trabajo de los agentes
   const startAgentSimulation = useCallback(() => {
@@ -132,11 +93,10 @@ export default function IntegratedAsteroidSimulator({
     setSimulationPhase('data_collecting');
     setSimulationProgress(0);
 
-    // Calcular métricas basadas en la configuración del asteroide y material
-    const material = asteroidMaterials[asteroidConfig.material];
-    const baseEnergy = (asteroidConfig.diameter * asteroidConfig.speed) / 10 * material.effects.energy;
-    const baseCrater = asteroidConfig.diameter * 2 * material.effects.crater;
-    const baseArea = Math.PI * Math.pow(baseCrater / 2, 2) * material.effects.area;
+    // Calcular métricas basadas en el asteroide seleccionado
+    const baseEnergy = 100; // Valor fijo para simplificar
+    const baseCrater = 50; // Valor fijo para simplificar
+    const baseArea = Math.PI * Math.pow(baseCrater / 2, 2);
     
     // Simular progreso de los agentes con métricas dinámicas
     const phases = [
@@ -214,7 +174,7 @@ export default function IntegratedAsteroidSimulator({
     };
 
     updateProgress();
-  }, [isSimulationRunning, asteroidConfig]);
+  }, [isSimulationRunning]);
 
   const handleMapClick = useCallback((lat: number, lng: number, coords?: {x: number, y: number}) => {
     // Usar las coordenadas calculadas del clic o convertir lat/lng
@@ -345,127 +305,6 @@ export default function IntegratedAsteroidSimulator({
                     🌍 Volver al Globo
                   </button>
 
-                  {/* Panel de configuración flotante - Lado Derecho */}
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-50 bg-black/90 backdrop-blur-md text-white p-3 rounded-lg border-2 border-cyan-400/50 w-72 pointer-events-auto shadow-2xl">
-                    <h3 className="font-bold text-cyan-400 mb-2 text-sm flex items-center gap-2">
-                      ⚙️ Configuración
-                    </h3>
-                    
-                    {/* Diámetro */}
-                    <div className="mb-3">
-                      <label className="block text-xs mb-1 text-white font-medium">Diámetro: <span className="text-cyan-400 font-bold">{asteroidConfig.diameter}m</span></label>
-                      <input
-                        type="range"
-                        min="10"
-                        max="200"
-                        value={asteroidConfig.diameter}
-                        onChange={(e) => setAsteroidConfig(prev => ({ ...prev, diameter: parseInt(e.target.value) }))}
-                        className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
-                        style={{
-                          background: `linear-gradient(to right, #06b6d4 0%, #06b6d4 ${(asteroidConfig.diameter - 10) / 1.9}%, #374151 ${(asteroidConfig.diameter - 10) / 1.9}%, #374151 100%)`
-                        }}
-                      />
-                      <div className="flex justify-between text-xs text-gray-400 mt-1">
-                        <span>10m</span>
-                        <span>200m</span>
-                      </div>
-                    </div>
-
-                    {/* Velocidad */}
-                    <div className="mb-3">
-                      <label className="block text-xs mb-1 text-white font-medium">Velocidad: <span className="text-cyan-400 font-bold">{asteroidConfig.speed}%</span></label>
-                      <input
-                        type="range"
-                        min="25"
-                        max="200"
-                        value={asteroidConfig.speed}
-                        onChange={(e) => setAsteroidConfig(prev => ({ ...prev, speed: parseInt(e.target.value) }))}
-                        className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
-                        style={{
-                          background: `linear-gradient(to right, #06b6d4 0%, #06b6d4 ${(asteroidConfig.speed - 25) / 1.75}%, #374151 ${(asteroidConfig.speed - 25) / 1.75}%, #374151 100%)`
-                        }}
-                      />
-                      <div className="flex justify-between text-xs text-gray-400 mt-1">
-                        <span>25%</span>
-                        <span>200%</span>
-                      </div>
-                    </div>
-
-                    {/* Material */}
-                    <div className="mb-3">
-                      <label className="block text-xs mb-1 text-white font-medium">Material</label>
-                      <select
-                        value={asteroidConfig.material}
-                        onChange={(e) => setAsteroidConfig(prev => ({ ...prev, material: e.target.value as any }))}
-                        className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white text-xs"
-                      >
-                        {Object.entries(asteroidMaterials).map(([key, material]) => (
-                          <option key={key} value={key}>
-                            {material.icon} {material.name}
-                          </option>
-                        ))}
-                      </select>
-                      
-                      {/* Información del material seleccionado */}
-                      <div className="mt-1 p-1 bg-gray-800 rounded text-xs">
-                        <div className="flex items-center gap-1 mb-1">
-                          <span style={{ color: asteroidMaterials[asteroidConfig.material].color }}>
-                            {asteroidMaterials[asteroidConfig.material].icon}
-                          </span>
-                          <span className="text-gray-300">{asteroidMaterials[asteroidConfig.material].name}</span>
-                        </div>
-                        <div className="text-gray-400 text-xs">
-                          D: {asteroidMaterials[asteroidConfig.material].density}x | 
-                          E: {asteroidMaterials[asteroidConfig.material].effects.energy}x | 
-                          C: {asteroidMaterials[asteroidConfig.material].effects.crater}x
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Botón de lanzamiento manual */}
-                    <button
-                      onClick={() => {
-                        if (selectedLocation) {
-                          // Usar la configuración actual del asteroide
-                          const mapCoords = latLngToXY(selectedLocation.lat, selectedLocation.lng);
-                          setMapClickPosition(mapCoords);
-                          setShowAsteroidLauncher(true);
-                          
-                          // Iniciar simulación de agentes
-                          startAgentSimulation();
-                          
-                          // Simular impacto con configuración personalizada
-                          const mockImpact = {
-                            energy: (asteroidConfig.diameter * asteroidConfig.speed) / 10,
-                            craterSize: asteroidConfig.diameter * 2,
-                            location: { lat: selectedLocation.lat, lng: selectedLocation.lng },
-                            x: mapCoords.x,
-                            y: mapCoords.y,
-                            material: asteroidConfig.material
-                          };
-                          
-                          setImpactData(mockImpact);
-                          onImpact?.(mockImpact);
-                        }
-                      }}
-                      className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-1 px-2 rounded text-xs transition-colors mb-2"
-                    >
-                      🚀 Lanzar Asteroide
-                    </button>
-
-                    {/* Botón para simular solo agentes */}
-                    <button
-                      onClick={startAgentSimulation}
-                      disabled={isSimulationRunning}
-                      className={`w-full font-bold py-1 px-2 rounded text-xs transition-colors ${
-                        isSimulationRunning 
-                          ? 'bg-gray-600 text-gray-400 cursor-not-allowed' 
-                          : 'bg-purple-600 hover:bg-purple-500 text-white'
-                      }`}
-                    >
-                      {isSimulationRunning ? '🤖 Trabajando...' : '🤖 Solo Agentes'}
-                    </button>
-                  </div>
                 </div>
               )}
               
@@ -476,7 +315,7 @@ export default function IntegratedAsteroidSimulator({
                   isVisible={showAsteroidLauncher}
                   mapClickPosition={mapClickPosition}
                   onPositionUsed={() => setMapClickPosition(null)}
-                  asteroidMaterial={asteroidConfig.material}
+                  asteroidMaterial="iron"
                 />
               )}
 
@@ -499,48 +338,6 @@ export default function IntegratedAsteroidSimulator({
                 </div>
               </div>
 
-              {/* Panel de configuración */}
-              <div className="absolute top-4 right-4 z-30">
-                <div className="bg-gray-800/90 text-white p-4 rounded-lg backdrop-blur-sm w-64">
-                  <h3 className="font-bold text-lg mb-3">Configuración del Asteroide</h3>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-sm mb-1">Diámetro: {asteroidConfig.diameter}m</label>
-                      <input 
-                        type="range" 
-                        min="10" 
-                        max="200" 
-                        value={asteroidConfig.diameter}
-                        onChange={(e) => setAsteroidConfig(prev => ({ ...prev, diameter: parseInt(e.target.value) }))}
-                        className="w-full" 
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm mb-1">Velocidad: {asteroidConfig.speed}%</label>
-                      <input 
-                        type="range" 
-                        min="25" 
-                        max="200" 
-                        value={asteroidConfig.speed}
-                        onChange={(e) => setAsteroidConfig(prev => ({ ...prev, speed: parseInt(e.target.value) }))}
-                        className="w-full" 
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm mb-1">Material: {asteroidConfig.material}</label>
-                      <select 
-                        value={asteroidConfig.material}
-                        onChange={(e) => setAsteroidConfig(prev => ({ ...prev, material: e.target.value as 'iron' | 'stone' | 'ice' }))}
-                        className="w-full bg-gray-700 rounded px-2 py-1"
-                      >
-                        <option value="iron">Hierro</option>
-                        <option value="stone">Piedra</option>
-                        <option value="ice">Hielo</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
               {/* Panel de resultados de impacto */}
               {impactData && (

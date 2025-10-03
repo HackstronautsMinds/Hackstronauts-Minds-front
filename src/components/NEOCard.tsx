@@ -6,9 +6,10 @@ import { Asteroid3D } from './Asteroid3D';
 interface NEOCardProps {
   neo: NEO;
   onClick?: () => void;
+  onSimulate?: (neo: NEO) => void;
 }
 
-export const NEOCard: React.FC<NEOCardProps> = ({ neo, onClick }) => {
+export const NEOCard: React.FC<NEOCardProps> = ({ neo, onClick, onSimulate }) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const averageDiameter = neo.diameter_min_m && neo.diameter_max_m 
@@ -307,8 +308,13 @@ export const NEOCard: React.FC<NEOCardProps> = ({ neo, onClick }) => {
       {/* Botón SIMULAR IMPACTO debajo de la card - solo en el front */}
       {!isFlipped && (
         <div className="mt-4 flex justify-center">
-          <button className="btn-sim">SIMULAR IMPACTO</button>
-    </div>
+          <button 
+            className="btn-sim"
+            onClick={() => onSimulate?.(neo)}
+          >
+            SIMULAR IMPACTO
+          </button>
+        </div>
       )}
 
     </>

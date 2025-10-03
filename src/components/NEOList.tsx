@@ -4,12 +4,13 @@ import { neoService } from '../services/neoService';
 import { NEOCard } from './NEOCard';
 import { NEODetailModal } from './NEODetailModal';
 import { Carousel } from './Carousel';
+import { useSimulation } from '../contexts/SimulationContext';
 import type { NEO } from '../types/api.types';
 
 export const NEOList: React.FC = () => {
   const [selectedNEO, setSelectedNEO] = useState<NEO | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const { setSelectedAsteroid, setIsSimulationActive, setSimulationStep } = useSimulation();
 
   // Usar React Query para obtener los datos de la NASA API
   const { data, isLoading, error } = useQuery({
@@ -26,6 +27,30 @@ export const NEOList: React.FC = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedNEO(null);
+  };
+
+  const handleSimulateImpact = (neo: NEO) => {
+    console.log('Asteroide seleccionado:', neo); // Debug
+    
+    // Guardar el asteroide seleccionado en el contexto
+    setSelectedAsteroid({
+      id: neo.id || neo.neo_id || 'unknown',
+      name: neo.name || 'Unknown',
+      diameter: neo.diameter || 'N/A',
+      velocity: neo.velocity || 'N/A',
+      is_hazardous: neo.is_hazardous || neo.is_potentially_hazardous || false,
+      approach_date: neo.approach_date,
+      miss_distance: neo.miss_distance
+    });
+    
+    // Activar la simulación
+    setIsSimulationActive(true);
+    setSimulationStep('impact');
+    
+    // Scroll hacia el simulador 3D
+    setTimeout(() => {
+      document.getElementById('simulator-section')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
   };
 
 
@@ -100,6 +125,7 @@ export const NEOList: React.FC = () => {
             key={neo.neo_id} 
               neo={neo} 
               onClick={() => handleNEOClick(neo)}
+              onSimulate={handleSimulateImpact}
             />
         )}
         keyExtractor={(neo) => neo.neo_id}

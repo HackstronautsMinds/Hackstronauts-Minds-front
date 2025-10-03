@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { AsteroidData, ImpactData, SimulationState, LiveMetrics, TrajectoryPoint } from '../types/simulation.types';
-import { mockAsteroids, fetchAsteroidData, calculateImpactData } from '../data/mockAsteroidData';
+import { fetchAsteroidData, calculateImpactData } from '../data/mockAsteroidData';
 import AgentStatusPanel from './AgentStatusPanel';
 import IntegratedAsteroidSimulator from './IntegratedAsteroidSimulator';
 import { CurvedMonitorWall } from './CurvedMonitorWall';
 import { MonitorAgentes } from './MonitorAgentes';
+import { useSimulation } from '../contexts/SimulationContext';
 
 export default function AsteroidSimulatorSection() {
+  const { selectedAsteroid: contextAsteroid, isSimulationActive } = useSimulation();
   const [selectedAsteroid, setSelectedAsteroid] = useState<AsteroidData | null>(null);
   const [simulationState, setSimulationState] = useState<SimulationState>({
     phase: 'idle',
@@ -89,32 +91,15 @@ export default function AsteroidSimulatorSection() {
     }));
   };
 
-  const handleAsteroidSelect = (asteroid: AsteroidData) => {
-    setSelectedAsteroid(asteroid);
-    setSimulationState({
-      phase: 'idle',
-      progress: 0,
-      currentAgent: null,
-      isRunning: false
-    });
-    setLiveMetrics({
-      riskLevel: 'low',
-      impactProbability: 0,
-      energyMT: 0,
-      distanceKm: 0,
-      velocityKmh: 0,
-      timeToImpact: 0
-    });
-  };
 
   const handleStartSimulation = () => {
-    if (selectedAsteroid) {
+    if (selectedAsteroid || contextAsteroid) {
       simulateBackendData();
     }
   };
 
   return (
-    <section className="relative w-full min-h-screen overflow-hidden bg-black py-20">
+    <section id="simulator-section" className="relative w-full min-h-screen overflow-hidden bg-black py-20">
       {/* Fondo negro sólido */}
       <div className="absolute inset-0 bg-black" />
       
@@ -158,36 +143,9 @@ export default function AsteroidSimulatorSection() {
           </p>
         </div>
 
-        {/* Selector de Asteroides */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-white mb-6">Selecciona un Asteroide</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {mockAsteroids.map((asteroid) => (
-              <motion.div
-                key={asteroid.id}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => handleAsteroidSelect(asteroid)}
-                className={`p-6 rounded-xl border-2 cursor-pointer transition-all ${
-                  selectedAsteroid?.id === asteroid.id
-                    ? 'border-cyan-400 bg-cyan-400/10'
-                    : 'border-gray-600 bg-gray-800/50 hover:border-cyan-400/50'
-                }`}
-              >
-                <h3 className="text-xl font-bold text-white mb-2">{asteroid.name}</h3>
-                <div className="space-y-2 text-sm text-gray-300">
-                  <div>ID: {asteroid.id}</div>
-                  <div>Diámetro: {asteroid.diameter.toLocaleString()} m</div>
-                  <div>Velocidad: {asteroid.velocity} km/s</div>
-                  <div>Densidad: {asteroid.density} kg/m³</div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
 
         {/* Controles de Simulación */}
-        {selectedAsteroid && (
+        {(selectedAsteroid || contextAsteroid) && (
           <div className="mb-8 text-center">
             <button
               onClick={handleStartSimulation}
@@ -203,15 +161,14 @@ export default function AsteroidSimulatorSection() {
           </div>
         )}
 
-        {/* Panel Principal de Simulación */}
-        {selectedAsteroid && (
+        {/* Panel Principal de Simulación - Mostrar siempre si hay asteroide del contexto */}
+        {contextAsteroid && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Panel Izquierdo - Simulador 3D */}
             <div className="bg-gray-900/50 backdrop-blur-lg rounded-2xl border border-cyan-400/30 p-6 col-span-2">
               <h2 className="text-2xl font-bold text-white mb-4">🌍 Simulador 3D</h2>
               <div className="w-full h-[80vh]">
                 <IntegratedAsteroidSimulator 
-                  selectedAsteroid={selectedAsteroid}
                   onImpact={(impactData) => {
                     console.log('Impact detected:', impactData);
                     // Aquí puedes manejar los datos del impacto
@@ -292,7 +249,7 @@ export default function AsteroidSimulatorSection() {
         )}
 
         {/* Sistema de Monitores de Agentes AI */}
-        {selectedAsteroid && (
+        {contextAsteroid && (
           <div className="mt-8 -mx-6">
             <MonitorAgentes />
           </div>
