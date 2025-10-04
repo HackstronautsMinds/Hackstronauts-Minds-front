@@ -7,6 +7,7 @@ import { CTASection } from './components/CTASection';
 import { BackendTest } from './components/BackendTest';
 import { NEOList } from './components/NEOList';
 import AsteroidSimulatorSection from './components/AsteroidSimulatorSection';
+import { ResourcesSection } from './components/ResourcesSection';
 import './styles/monitor-styles.css';
 
 export default function App() {
@@ -44,13 +45,16 @@ export default function App() {
             {/* Simulador de Impacto de Asteroides */}
             <AsteroidSimulatorSection />
             
+            {/* Sección de Recursos y Blog */}
+            <ResourcesSection />
+            
             {/* Prueba de conexión backend - TEMPORAL */}
             <div className="py-16 px-6">
               <div className="max-w-6xl mx-auto">
                 <BackendTest />
               </div>
             </div>
-            
+
             {/* Footer minimalista estilo Cult Holdings */}
             <footer className="relative py-16 px-6 border-t border-white/10">
               <div className="max-w-6xl mx-auto">
