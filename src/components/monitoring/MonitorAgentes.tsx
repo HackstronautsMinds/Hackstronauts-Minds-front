@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLiveMetrics } from '../hooks/useLiveMetrics';
+import { useLiveMetrics } from '../../hooks/useLiveMetrics';
 
 // Define types for our components
 interface MonitorProps {

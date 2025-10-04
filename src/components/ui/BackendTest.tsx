@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { testConnection } from '../services/api';
+import { testConnection } from '../../services/api';
 
 // Componente simple para probar la conexión con el backend
 export const BackendTest = () => {

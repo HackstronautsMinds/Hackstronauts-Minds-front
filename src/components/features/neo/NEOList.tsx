@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { neoService } from '../services/neoService';
-import { NEOCard } from './NEOCard';
-import { NEODetailModal } from './NEODetailModal';
-import { Carousel } from './Carousel';
-import { useSimulation } from '../contexts/SimulationContext';
-import type { NEO } from '../types/api.types';
+import { neoService } from '../../../services/neoService';
+import { NEOCard } from '../../ui/cards/NEOCard';
+import { NEODetailModal } from '../../ui/modals/NEODetailModal';
+import { Carousel } from '../carousel/Carousel';
+import { useSimulation } from '../../../contexts/SimulationContext';
+import type { NEO } from '../../../types/api.types';
 
 export const NEOList: React.FC = () => {
   const [selectedNEO, setSelectedNEO] = useState<NEO | null>(null);

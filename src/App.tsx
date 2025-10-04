@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { PlanetIntro } from './components/PlanetIntro';
-import { Hero } from './components/Hero';
+import { PlanetIntro, Hero } from './components/sections';
 import { SimulationProvider } from './contexts/SimulationContext';
 import './styles/monitor-styles.css';
 

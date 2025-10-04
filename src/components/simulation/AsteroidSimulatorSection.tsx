@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { AsteroidData, ImpactData, SimulationState, LiveMetrics, TrajectoryPoint } from '../types/simulation.types';
+import { AsteroidData, ImpactData, SimulationState, LiveMetrics, TrajectoryPoint } from '../../types/simulation.types';
 import IntegratedAsteroidSimulator from './IntegratedAsteroidSimulator';
 import { CurvedMonitorWall } from './CurvedMonitorWall';
-import { MonitorAgentes } from './MonitorAgentes';
-import { useSimulation } from '../contexts/SimulationContext';
+import { MonitorAgentes } from '../monitoring/MonitorAgentes';
+import { useSimulation } from '../../contexts/SimulationContext';
 
 export default function AsteroidSimulatorSection() {
   const { selectedAsteroid: contextAsteroid, isSimulationActive } = useSimulation();

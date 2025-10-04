@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { agents, Agent } from '../data/agents';
-import NEOSection from './NEOSection';
+import { agents, Agent } from '../../../data/agents';
+import NEOSection from '../../sections/NEOSection';
 
 
 export default function AgentSelector() {

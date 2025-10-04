@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { useLiveMetrics } from '../hooks/useLiveMetrics';
+import { useLiveMetrics } from '../../hooks/useLiveMetrics';
 import { ThreatAssessmentPanel } from './ThreatAssessmentPanel';
 import { TrajectoryAnalysisPanel } from './TrajectoryAnalysisPanel';
 import { DefenseSystemsPanel } from './DefenseSystemsPanel';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { asteroidImageService } from '../services/asteroidImageService';
-import type { NEO } from '../types/api.types';
+import { asteroidImageService } from '../../../services/asteroidImageService';
+import type { NEO } from '../../../types/api.types';
 
 interface NEODetailModalProps {
   neo: NEO;

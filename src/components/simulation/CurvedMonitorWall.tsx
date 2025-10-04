@@ -1,5 +1,5 @@
-import { GaugeMonitor, ChartMonitor, LevelMonitor } from './Monitor';
-import { useLiveMetrics } from '../hooks/useLiveMetrics';
+import { GaugeMonitor, ChartMonitor, LevelMonitor } from '../monitoring/Monitor';
+import { useLiveMetrics } from '../../hooks/useLiveMetrics';
 
 interface GaugeData {
   value: number;

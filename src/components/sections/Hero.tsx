@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { AnimatedBackground } from './AnimatedBackground';
-import NASAScientistSelector from './NASAScientistSelector';
-import { NEOList } from './NEOList';
-import AsteroidSimulatorSection from './AsteroidSimulatorSection';
+import { AnimatedBackground } from '../3d/AnimatedBackground';
+import NASAScientistSelector from '../features/neo/NASAScientistSelector';
+import { NEOList } from '../features/neo/NEOList';
+import AsteroidSimulatorSection from '../simulation/AsteroidSimulatorSection';
 
 export const Hero: React.FC = () => {
   return (

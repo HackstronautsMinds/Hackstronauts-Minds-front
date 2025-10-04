@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { RotateCw, X } from 'lucide-react';
-import type { NEO } from '../types/api.types';
-import { Asteroid3D } from './Asteroid3D';
+import type { NEO } from '../../../types/api.types';
+import { Asteroid3D } from '../../3d/Asteroid3D';
 
 interface NEOCardProps {
   neo: NEO;

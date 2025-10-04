@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLiveMetrics } from '../hooks/useLiveMetrics';
+import { useLiveMetrics } from '../../hooks/useLiveMetrics';
 
 export const TrajectoryAnalysisPanel: React.FC = () => {
   const metrics = useLiveMetrics();

@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Earth3DGlobe from './Earth3DGlobe';
-import LeafletMapComponent from './LeafletMapComponent';
+import Earth3DGlobe from '../3d/Earth3DGlobe';
+import LeafletMapComponent from '../features/maps/LeafletMapComponent';
 import { AsteroidLauncher } from './AsteroidLauncher';
-import { useSimulation } from '../contexts/SimulationContext';
-import { AsteroidData } from '../types/simulation.types';
+import { useSimulation } from '../../contexts/SimulationContext';
+import { AsteroidData } from '../../types/simulation.types';
 
 interface IntegratedAsteroidSimulatorProps {
   onImpact?: (impactData: any) => void;
