@@ -1,3 +1,4 @@
+import React from 'react';
 import { GaugeMonitor, ChartMonitor, LevelMonitor } from '../monitoring/Monitor';
 import { useLiveMetrics } from '../../hooks/useLiveMetrics';
 
@@ -39,6 +40,7 @@ export function CurvedMonitorWall({
   const liveMetrics = useLiveMetrics();
   
   return (
+    
     <div className={`curved-monitor-wall ${className}`}>
       {/* Background curved surface */}
       <div className="monitor-wall-surface">
@@ -87,5 +89,6 @@ export function CurvedMonitorWall({
         <div className="light-beam right-beam"></div>
       </div>
     </div>
+    
   );
 }

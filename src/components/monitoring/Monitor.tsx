@@ -38,11 +38,12 @@ interface GaugeData {
 interface GaugeMonitorProps {
   data?: GaugeData[];
   liveMetrics?: any; // Añadimos prop para recibir datos reales
+  className?: string;
 }
 
-export function GaugeMonitor({ data, liveMetrics }: GaugeMonitorProps) {
+export function GaugeMonitor({ data, liveMetrics, className = "" }: GaugeMonitorProps) {
   return (
-    <div className="main-monitor">
+    <div className={`main-monitor ${className}`}>
       <div className="main-monitor-frame">
         <div className="main-monitor-bezel">
           <div className="main-monitor-screen">
@@ -68,11 +69,12 @@ interface ChartMonitorProps {
   impactTime?: string;
   impactZone?: string;
   liveMetrics?: any; // Añadimos prop para recibir datos reales
+  className?: string;
 }
 
-export function ChartMonitor({ trajectory, impactTime = "T-00:00:00", impactZone = "IMPACT ZONE", liveMetrics }: ChartMonitorProps) {
+export function ChartMonitor({ trajectory, impactTime = "T-00:00:00", impactZone = "IMPACT ZONE", liveMetrics, className = "" }: ChartMonitorProps) {
   return (
-    <div className="main-monitor">
+    <div className={`main-monitor ${className}`}>
       <div className="main-monitor-frame">
         <div className="main-monitor-bezel">
           <div className="main-monitor-screen">
@@ -97,11 +99,12 @@ interface LevelData {
 interface LevelMonitorProps {
   data?: LevelData[];
   liveMetrics?: any; // Añadimos prop para recibir datos reales
+  className?: string;
 }
 
-export function LevelMonitor({ data, liveMetrics }: LevelMonitorProps) {
+export function LevelMonitor({ data, liveMetrics, className = "" }: LevelMonitorProps) {
   return (
-    <div className="main-monitor">
+    <div className={`main-monitor ${className}`}>
       <div className="main-monitor-frame">
         <div className="main-monitor-bezel">
           <div className="main-monitor-screen">

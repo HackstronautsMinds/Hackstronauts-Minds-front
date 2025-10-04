@@ -7,14 +7,14 @@ export const TrajectoryAnalysisPanel: React.FC = () => {
   
   useEffect(() => {
     // Generar puntos de trayectoria basados en las métricas
-    const points = [];
+    const points: Array<{x: number, y: number, color: string}> = [];
     const numPoints = 20;
     
     for (let i = 0; i < numPoints; i++) {
       const x = (i / (numPoints - 1)) * 100;
       const y = 20 + Math.sin((i / numPoints) * Math.PI) * 30 + Math.random() * 10;
       const color = i < numPoints - 3 ? '#10b981' : '#ef4444'; // Verde al inicio, rojo al final
-      points.push({ x, y, color });
+      points.push({ x, y, color }); 
     }
     
     setTrajectoryPoints(points);

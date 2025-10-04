@@ -25,7 +25,7 @@ export default function IntegratedAsteroidSimulator({
   const [showMap, setShowMap] = useState(false);
   const [showAsteroidLauncher, setShowAsteroidLauncher] = useState(false);
   const [impactData, setImpactData] = useState<any>(null);
-  const [mapClickPosition, setMapClickPosition] = useState<{ x: number; y: number } | null>(null);
+  const [mapClickPosition, setMapClickPosition] = useState<{ x: number; y: number } | undefined>(undefined);
   
 
 
@@ -207,7 +207,7 @@ export default function IntegratedAsteroidSimulator({
     setShowAsteroidLauncher(false);
     setSelectedLocation(null);
     setImpactData(null);
-    setMapClickPosition(null);
+    setMapClickPosition(undefined);
   }, []);
 
   return (
@@ -294,7 +294,7 @@ export default function IntegratedAsteroidSimulator({
                     onClick={() => {
                       setShowMap(false);
                       setSelectedLocation(null);
-                      setMapClickPosition(null);
+                      setMapClickPosition(undefined);
                     }}
                     className="absolute top-4 right-4 z-50 bg-red-600/80 hover:bg-red-600 text-white p-3 rounded-lg backdrop-blur-sm transition-colors pointer-events-auto"
                   >
@@ -310,7 +310,7 @@ export default function IntegratedAsteroidSimulator({
                   onMapClick={handleMapClick}
                   isVisible={showAsteroidLauncher}
                   mapClickPosition={mapClickPosition}
-                  onPositionUsed={() => setMapClickPosition(null)}
+                  onPositionUsed={() => setMapClickPosition(undefined)}
                   asteroidMaterial="iron"
                 />
               )}
